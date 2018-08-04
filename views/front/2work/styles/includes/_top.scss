@@ -1,0 +1,83 @@
+.text-regular{
+  font-weight:400;
+}
+.text-bold{
+  font-weight:700;
+}
+.text-semibold{
+  font-weight:600;
+}
+.text-light{
+  font-weight:300;
+}
+.text-italic{
+  font-style:italic;
+}
+
+//font-size
+@for $i from 8 through 40 {
+  .text#{$i}{
+      font-size:#{$i}px;
+  }
+}
+
+//line-height
+@for $i from 0 through 50 {
+  .lh#{$i}{
+      line-height:#{$i}px;
+  }
+}
+
+//vertical-align
+.vamiddle{
+  vertical-align: middle;
+}
+.vatop{
+  vertical-align: top;
+}
+@for $i from 0 through 15 {
+  .va#{$i}{
+      vertical-align:#{$i}px;
+  }
+    .va#{$i}m{
+      vertical-align:-#{$i}px;
+  }
+}
+
+//margin, width
+@for $i from 0 through 100 {
+  .mt#{$i}{
+      margin-top:#{$i}px;
+  }
+    .mb#{$i}{
+      margin-bottom:#{$i}px;
+  }
+    .ml#{$i}{
+      margin-left:#{$i}px;
+  }
+    .mr#{$i}{
+      margin-right:#{$i}px;
+  }
+  .w#{$i}{
+    width:$i*1%;
+  }
+  .opc#{$i}{
+      opacity:$i / 100;
+  }
+}
+.wauto{width:auto;}
+
+.dblock{
+  display:block;
+}
+.diblock{
+  display:inline-block;
+}
+
+.cpointer{
+  cursor: pointer;
+}
+
+.ovh{
+  overflow: hidden;
+}

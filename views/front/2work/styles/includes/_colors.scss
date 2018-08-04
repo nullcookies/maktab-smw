@@ -1,0 +1,234 @@
+.param-color.pblack{background:#000;}
+.param-color.pabby-wood{background:#B36827;}
+.param-color.pantique-bronze{background:#D8A645;}
+.param-color.pavailable-in-different-colors, .param-color.pmulticolor, .param-color.pavailable-in-multiple-colors, .param-color.pmulti{background-image:linear-gradient(180deg, #5DBD3E 0px, #5DBD3E 4px, #FFB900 5px, #FFB900 10px, #F88300 11px, #F88300 16px, #E23837 17px, #E23837 22px, #983898 23px);background-size:cover;}
+.param-color.pbeige{background:#F4F4D8;}
+.param-color.pblue{background:#44A9FF;}
+.param-color.pbronze, .param-color.pantique-brass{background:#BD8248;}
+.param-color.pbrown, .param-color.pdark-finish, .param-color.pcognac{background:#844903;}
+.param-color.pcappuccino{background:#462E22;}
+.param-color.pcherry, .param-color.pburgundy{background:#8E1F40;}
+.param-color.pchocolate, .param-color.pmocha{background:#45302B;}
+.param-color.pcream, .param-color.pteak{background:#F1DBC6;}
+.param-color.pdark, .param-color.pebony, .param-color.pjava{background:#272727;}
+.param-color.pespresso, .param-color.ptobacco{background:#512A0D;}
+.param-color.pgold, .param-color.phoney{background:#FDCE3A;}
+.param-color.pgrey, .param-color.pgray{background:#7F7F7F;}
+.param-color.ppurple{background:#8900FF;}
+.param-color.pgreen{background:#00CD00;}
+.param-color.pivory, .param-color.plight-finish{background:#F2EBD9;}
+.param-color.pjura-block{background:#CCB5A7;}
+.param-color.plight{background:#F3F3F3;}
+.param-color.pmahogany, .param-color.pbordeaux{background:#B32019;}
+.param-color.pmaple{background:#E6C896;}
+.param-color.pnatural{background:#BE895D;}
+.param-color.poak, .param-color.pmerlot{background:#994604;}
+.param-color.porange{background:#FBA500;}
+.param-color.ppink{background:#FFC2D1;}
+.param-color.pred, .param-color.prose{background:#E20000;}
+.param-color.psilver-chrome, .param-color.psilver, .param-color.pchrome, .param-color.paluminum{background:#D2D2D2;}
+.param-color.ptan{background:#E98046;}
+.param-color.ptransparent{background:#E2E2E2;}
+.param-color.pwalnut{background:#9C7951;}
+.param-color.pwenge, .param-color.palder{background:#45372C;}
+.param-color.pwhite, .param-color.pclear{background:#fff;}
+.param-color.pwood{background:#6E421F;}
+.param-color.pyellow{background:#FFFF00;}
+.param-color.pmetal{background:#D2D2D2;}
+.param-color.pfrost{background:#C5E5FE;}
+.param-color.pdriftwood{background:#B09872;}
+
+option.pblack { 
+  padding-left: 18px; 
+  background: url("colors/black.jpg") no-repeat left center; 
+}
+
+option.pabby-wood { 
+  padding-left: 18px; 
+  background: url("colors/abby-wood.jpg") no-repeat left center; 
+}
+
+option.pantique-bronze { 
+  padding-left: 18px; 
+  background: url("colors/antique-bronze.jpg") no-repeat left center; 
+}
+
+option.pavailable-in-different-colors, option.pmulticolor, option.pavailable-in-multiple-colors, option.pmulti { 
+  padding-left: 18px; 
+  background: url("colors/available-in-different-colors.jpg") no-repeat left center; 
+}
+
+option.pbeige { 
+  padding-left: 18px; 
+  background: url("colors/beige.jpg") no-repeat left center; 
+}
+
+option.pblue { 
+  padding-left: 18px; 
+  background: url("colors/blue.jpg") no-repeat left center; 
+}
+
+option.pbronze, option.pantique-brass  { 
+  padding-left: 18px; 
+  background: url("colors/bronze.jpg") no-repeat left center; 
+}
+
+option.pbrown, option.pdark-finish, option.pcognac { 
+  padding-left: 18px; 
+  background: url("colors/brown.jpg") no-repeat left center; 
+}
+
+option.pcappuccino { 
+  padding-left: 18px; 
+  background: url("colors/cappuccino.jpg") no-repeat left center; 
+}
+
+option.pcherry, option.pburgundy { 
+  padding-left: 18px; 
+  background: url("colors/cherry.jpg") no-repeat left center; 
+}
+
+option.pchocolate, option.pmocha { 
+  padding-left: 18px; 
+  background: url("colors/chocolate.jpg") no-repeat left center; 
+}
+
+option.pcream, option.pteak { 
+  padding-left: 18px; 
+  background: url("colors/cream.jpg") no-repeat left center; 
+}
+
+option.pdark, option.pebony, option.pjava { 
+  padding-left: 18px; 
+  background: url("colors/dark.jpg") no-repeat left center; 
+}
+
+option.pespresso, option.ptobacco { 
+  padding-left: 18px; 
+  background: url("colors/espresso.jpg") no-repeat left center; 
+}
+
+option.pgold, option.phoney { 
+  padding-left: 18px; 
+  background: url("colors/gold.jpg") no-repeat left center; 
+}
+
+option.pgrey, option.pgray { 
+  padding-left: 18px; 
+  background: url("colors/gray.jpg") no-repeat left center; 
+}
+
+option.ppurple { 
+  padding-left: 18px; 
+  background: url("colors/purple.jpg") no-repeat left center; 
+}
+
+option.pgreen { 
+  padding-left: 18px; 
+  background: url("colors/green.jpg") no-repeat left center; 
+}
+
+option.pivory, option.plight-finish { 
+  padding-left: 18px; 
+  background: url("colors/ivory.jpg") no-repeat left center; 
+}
+
+option.pjura-block { 
+  padding-left: 18px; 
+  background: url("colors/jura-block.jpg") no-repeat left center; 
+}
+
+option.plight { 
+  padding-left: 18px; 
+  background: url("colors/light.jpg") no-repeat left center; 
+}
+
+option.pmahogany, option.pbordeaux { 
+  padding-left: 18px; 
+  background: url("colors/mahogany.jpg") no-repeat left center; 
+}
+
+option.pmaple { 
+  padding-left: 18px; 
+  background: url("colors/maple.jpg") no-repeat left center; 
+}
+
+option.pnatural { 
+  padding-left: 18px; 
+  background: url("colors/natural.jpg") no-repeat left center; 
+}
+
+option.pmaple { 
+  padding-left: 18px; 
+  background: url("colors/maple.jpg") no-repeat left center; 
+}
+
+option.poak, option.pmerlot { 
+  padding-left: 18px; 
+  background: url("colors/oak.jpg") no-repeat left center; 
+}
+
+option.porange { 
+  padding-left: 18px; 
+  background: url("colors/orange.jpg") no-repeat left center; 
+}
+
+option.ppink { 
+  padding-left: 18px; 
+  background: url("colors/pink.jpg") no-repeat left center; 
+}
+
+option.pred, option.prose { 
+  padding-left: 18px; 
+  background: url("colors/red.jpg") no-repeat left center; 
+}
+
+option.psilver-chrome, option.psilver, option.pchrome, option.paluminum { 
+  padding-left: 18px; 
+  background: url("colors/silver.jpg") no-repeat left center; 
+}
+
+option.ptan { 
+  padding-left: 18px; 
+  background: url("colors/tan.jpg") no-repeat left center; 
+}
+
+option.ptransparent { 
+  padding-left: 18px; 
+  background: url("colors/transparent.jpg") no-repeat left center; 
+}
+
+option.pwalnut { 
+  padding-left: 18px; 
+  background: url("colors/walnut.jpg") no-repeat left center; 
+}
+
+option.pwenge, option.palder  { 
+  padding-left: 18px; 
+  background: url("colors/wenge.jpg") no-repeat left center; 
+}
+
+option.pwhite, option.pclear { 
+  padding-left: 18px; 
+  background: url("colors/white.jpg") no-repeat left center; 
+}
+
+option.pwood{ 
+  padding-left: 18px; 
+  background: url("colors/wood.jpg") no-repeat left center; 
+}
+
+option.pyellow { 
+  padding-left: 18px; 
+  background: url("colors/yellow.jpg") no-repeat left center; 
+}
+
+option.pmetal { 
+  padding-left: 18px; 
+  background: url("colors/silver.jpg") no-repeat left center; 
+}
+
+option.pfrost { 
+  padding-left: 18px; 
+  background: url("colors/frost.jpg") no-repeat left center; 
+}

@@ -1,0 +1,70 @@
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        <?=$this->getTranslation('edit gallery file');?>
+        <!-- <small>Optional description</small> -->
+      </h1>
+      <?php 
+          if(isset($breadcrumbs)){ 
+            $this->renderBreadcrumbs($breadcrumbs);
+          }
+      ?>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+
+        <?=$this->renderNotifications($successText, $errorText)?>
+    
+        <form id="gallery-edit-form" role="form" action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="id" value="<?=$gallery['id']?>" />
+            
+            <div class="form-group">
+                <a class="btn btn-default btn-app" href="<?=$controls['back']?>">
+                    <i class="fa fa-arrow-left"></i>
+                    <?=$this->getTranslation('btn back')?>
+                </a>
+                <button class="btn btn-success btn-app" type="submit">
+                    <i class="fa fa-save"></i>
+                    <?=$this->getTranslation('btn save')?>
+                </button>
+                <input type="hidden" name="btn_edit" value="<?=$this->getTranslation('btn save')?>" />
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="box box-info">
+                        <div class="box-body">
+                            <?php foreach($this->lang() as $l_key => $l_value){ ?>
+                            <div class="form-group<?php if($errors['name'][$l_key]) { ?> has-error<?php } ?>">
+                                <label for="name<?=$l_key?>"><?=$this->getTranslation('gallery name')?> (<?=$l_value?>) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="name[<?=$l_key?>]" id="name<?=$l_key?>" value="<?=( (isset($fileName[$l_key])) ? $fileName[$l_key] : '')?>" />
+                                <?php if($errors['name'][$l_key]) { ?>
+                                    <div class="help-block"><?=$this->getTranslation($errors['name'][$l_key])?></div>
+                                <?php } ?>
+                            </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <a class="btn btn-default btn-app" href="<?=$controls['back']?>">
+                    <i class="fa fa-arrow-left"></i>
+                    <?=$this->getTranslation('btn back')?>
+                </a>
+                <button class="btn btn-success btn-app" type="submit">
+                    <i class="fa fa-save"></i>
+                    <?=$this->getTranslation('btn save')?>
+                </button>
+                <input type="hidden" name="btn_edit" value="<?=$this->getTranslation('btn save')?>" />
+            </div>
+
+        </form>
+    </section>
+    <!-- /.content -->
+</div>
+
+        

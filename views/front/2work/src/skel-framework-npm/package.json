@@ -1,0 +1,57 @@
+{
+  "_from": "skel-framework-npm",
+  "_id": "skel-framework-npm@1.0.1",
+  "_inBundle": false,
+  "_integrity": "sha1-C8ymdhh0AV+ChRu6+Te0fUm2N3c=",
+  "_location": "/skel-framework-npm",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "skel-framework-npm",
+    "name": "skel-framework-npm",
+    "escapedName": "skel-framework-npm",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/skel-framework-npm/-/skel-framework-npm-1.0.1.tgz",
+  "_shasum": "0bcca6761874015f82851bbaf937b47d49b63777",
+  "_spec": "skel-framework-npm",
+  "_where": "D:\\Servers\\OpenServer\\domains\\2work\\views\\front\\2work",
+  "author": {
+    "name": "Sean Hellebusch",
+    "email": "sahellebusch@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/sahellebusch/skel-framework-npm/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A lightweight responsive framework for the www.",
+  "directories": {
+    "doc": "docs"
+  },
+  "homepage": "http://skel.io",
+  "keywords": [
+    "framework",
+    "responsive",
+    "grid",
+    "skeljs"
+  ],
+  "license": "MIT",
+  "main": "./dist/skel.min.js",
+  "name": "skel-framework-npm",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sahellebusch/skel-framework-npm.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.1"
+}

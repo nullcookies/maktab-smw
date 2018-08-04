@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /install*
+Disallow: /admin*
+Disallow: /account*
+Disallow: /login*
+Disallow: /register*
+Disallow: /search*
+Disallow: /api*
+
+Sitemap: http://smartweb.uz/sitemap.xml

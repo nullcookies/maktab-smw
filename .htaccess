@@ -1,0 +1,31 @@
+AddDefaultCharset UTF-8
+
+DirectoryIndex index.php index.html index.htm
+
+<IfModule mod_rewrite.c>
+RewriteEngine On
+
+Options +FollowSymlinks
+Options -Indexes
+
+RewriteBase /
+
+#redirect from www to non www
+RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
+
+#redirect to HTTPS
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
+
+#add slash at the end if not a real file
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(.*)(/|\.(|jpe?g|png|gif|js|txt|css|xml|html|mp3|ogg))$
+RewriteRule ^(.*[^/])$ $1/ [L]
+
+#redirect to the main script
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php [L]
+
+</IfModule>
