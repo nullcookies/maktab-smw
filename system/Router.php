@@ -107,6 +107,7 @@ class Router extends Component {
             
 
             if(isset($_SESSION['usergroup']) && isset($_SESSION['user_id'])){
+                //TODO: add check usergroup has admin access?
                 if($_SESSION['usergroup'] <= 3){
                     if(isset($_COOKIE['PHPSESSID'])){
                         $phpsessid = $_COOKIE['PHPSESSID'];

@@ -10,6 +10,9 @@ defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
 class TranslationModel extends Model {
 
+    //admin pages contexts
+    public $adminContext = ['back'];
+
     public function index() {
         
         $data = [];
@@ -49,7 +52,13 @@ class TranslationModel extends Model {
         $data['langId'] = $langId;
 
         $words = [];
-        $getWords = $this->qb->where([['lang', '?'], ['side', 'front']])->order('name')->get('??translation', [$langId]);
+        $where = [];
+        
+        $where[] = ['lang', '?'];
+        if(USERGROUP != 1){
+            $where[] = ['context NOT IN', $this->adminContext];
+        }
+        $getWords = $this->qb->where($where)->order('name')->get('??translation', [$langId]);
         if($getWords->rowCount() > 0){
             $words = $getWords->fetchAll();
         }

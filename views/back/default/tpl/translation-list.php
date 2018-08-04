@@ -50,6 +50,7 @@
                     <tr>
                       <th><?=$this->getTranslation('word')?></th>
                       <th><?=$this->getTranslation('content')?></th>
+                      <th><?=$this->getTranslation('context')?></th>
                       <th><?=$this->getTranslation('control buttons')?></th>
                     </tr>
                 </thead>
@@ -57,11 +58,14 @@
                     <?php if($words){ ?>
                     <?php foreach($words as $value){ ?>
                     <tr>
-                      <td class="td-shrink">
+                      <td class="td-shrink" style="min-width: 200px;max-width: 400px;white-space: normal;">
                         <?=$value['name']?>
                       </td>
-                      <td data-order="<?=$value['content']?>">
+                      <td data-order="<?=$value['content']?>" style="max-width: 400px;">
                         <input class="form-control translation-input" type="text" data-id="<?=$value['id']?>" id="word<?=$value['id']?>" name="word<?=$value['id']?>" value="<?=htmlspecialchars($value['content'], ENT_QUOTES)?>">
+                      </td>
+                      <td class="td-shrink">
+                        <p class="form-control-static"><?=$value['context']?></p>
                       </td>
 
                       <td class="td-shrink">
@@ -81,6 +85,7 @@
                     <tr>
                       <th><?=$this->getTranslation('word')?></th>
                       <th><?=$this->getTranslation('content')?></th>
+                      <th><?=$this->getTranslation('context')?></th>
                       <th><?=$this->getTranslation('control buttons')?></th>
                     </tr>
                 </tfoot>

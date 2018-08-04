@@ -10,7 +10,7 @@ defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
 class UserModel extends Model {
     
-    public $usergroups = [1, 2, 3, 4, 5, 6];
+    public $usergroups = [1, 2, 3, 4, 5, 10];
 
     public function index() {
         
@@ -35,9 +35,7 @@ class UserModel extends Model {
         
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/jquery.dataTables.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/slimScroll/jquery.slimscroll.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/fastclick/fastclick.js');
-
+        
         $controls = [];
 
         $controls['add'] = $this->linker->getUrl($this->control . '/add', true);
@@ -47,6 +45,7 @@ class UserModel extends Model {
         $data['controls'] = $controls;
 
         $users = [];
+        //TODO: user module access
         if($_SESSION['usergroup'] > 0 && $_SESSION['usergroup'] <= 3){
             if($_SESSION['usergroup'] > 1){
                 $this->qb->where('usergroup >=', $_SESSION['usergroup']);
@@ -272,6 +271,7 @@ class UserModel extends Model {
                 //'name' => ['isRequired'],
                 'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
                 'username' => ['isRequired', 'isUsername', ['isUnique', $isUniqueParams]],
+                'usergroup' => ['isRequired'],
             ],
             'files' => [
                 

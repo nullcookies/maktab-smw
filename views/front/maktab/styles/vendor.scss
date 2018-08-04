@@ -1,0 +1,49 @@
+//@import "./includes/_fonts.scss";
+//@import "./includes/_top.scss";
+
+//sprite
+@import "./includes/sprite-mixin";
+@import "./includes/sprite";
+@include sprites($spritesheet-sprites);
+
+@import '../src/bootstrap/scss/bootstrap.scss';
+@import '../src/font-awesome/scss/font-awesome.scss';
+@import '../src/slick-carousel/slick/slick.scss';
+//@import '../src/ion.rangeSlider-2.2.0/css/ion.rangeSlider';
+//@import '../src/ion.rangeSlider-2.2.0/css/ion.rangeSlider.skinFlat';
+@import '../src/fancybox-master/dist/jquery.fancybox.scss';
+//@import '../src/video.js/dist/video-js.css';
+
+
+//@import './includes/_vars.scss';
+//@import './includes/_functions.scss';
+//@import './includes/_mixins.scss';
+//@import "./includes/_skel.scss";
+
+	// @include skel-breakpoints((
+	// 	wide: '(max-width: 1680px)',
+	// 	normal: '(max-width: 1280px)',
+	// 	narrow: '(max-width: 980px)',
+	// 	narrower: '(max-width: 840px)',
+	// 	mobile: '(max-width: 736px)',
+	// 	mobilep: '(max-width: 480px)'
+	// ));
+
+	// @include skel-layout((
+	// 	reset: 'full',
+	// 	boxModel: 'border',
+	// 	grid: ( gutters: 2em ),
+	// 	conditionals: true,
+	// 	containers: 60em,
+	// 	breakpoints: (
+	// 		narrow: (
+	// 			containers: 90%,
+	// 		),
+	// 		narrower: (
+	// 			containers: (90%, true),
+	// 		),
+	// 		mobile: (
+	// 			containers: (100%, true),
+	// 		),
+	// 	)
+	// ));

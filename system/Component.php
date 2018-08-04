@@ -71,20 +71,20 @@ abstract class Component {
 	}
 	
 	
-    protected function translation($name, $side = 'front', $lang = LANG_ID) {
+    protected function translation($name, $context = 'front', $lang = LANG_ID) {
         $translation = $name;
-        if(isset(self::$translations[$side][$lang][$name])){
-            $translation = self::$translations[$side][$lang][$name];
+        if(isset(self::$translations[$context][$lang][$name])){
+            $translation = self::$translations[$context][$lang][$name];
         }
         else{
-            $checkWord = $this->qb->where([['name', '?'], ['lang', '?'], ['side', '?']])->get('??translation', [$name, $lang, $side])->fetch();
+            $checkWord = $this->qb->where([['name', '?'], ['lang', '?'], ['context', '?']])->get('??translation', [$name, $lang, $context])->fetch();
 
             if(!$checkWord){
                 $insertWord = [
                     'lang' => $lang,
                     'name' => $name,
                     'content' => $name,
-                    'side' => $side
+                    'context' => $context
                 ];
                 $this->qb->insert('??translation', $insertWord);
             }
@@ -92,11 +92,11 @@ abstract class Component {
         return $translation;
     }
 
-    protected function t($name, $side = 'front', $lang = LANG_ID) {
-        return $this->translation($name, $side, $lang);
+    protected function t($name, $context = 'front', $lang = LANG_ID) {
+        return $this->translation($name, $context, $lang);
     }
-    protected function getTranslation($name, $side = 'back', $lang = LANG_ID) {
-        return $this->translation($name, $side, $lang);
+    protected function getTranslation($name, $context = 'back', $lang = LANG_ID) {
+        return $this->translation($name, $context, $lang);
     }
 
 	protected function lang() {

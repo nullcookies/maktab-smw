@@ -9,6 +9,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class UserModel extends Model {
     
+    public $defaultUsergroup = 10;
+
     public function index(){
         $data = [];
         $this->document = new Document();
@@ -437,7 +439,7 @@ class UserModel extends Model {
                 $insert['email'] = $username;
                 $insert['firstname'] = $name;
                 $insert['password'] = $password;
-                $insert['usergroup'] = 6;
+                $insert['usergroup'] = $this->defaultUsergroup;
 
                 $insert['status'] = 0;
                 $insert['activationkey'] = $activationkey;

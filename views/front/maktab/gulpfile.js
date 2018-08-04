@@ -10,17 +10,17 @@ const $ 				= gulpLoadPlugins();
 
 var vendorScripts = [
 	'src/jquery/dist/jquery.min.js',
-	//'src/popper.js/dist/umd/popper.min.js',
-	//'src/bootstrap/dist/js/bootstrap.min.js',
+	'src/popper.js/dist/umd/popper.min.js',
+	'src/bootstrap/dist/js/bootstrap.min.js',
 	'src/slick-carousel/slick/slick.min.js',
 	//'src/ion.rangeSlider-2.2.0/js/ion-rangeSlider/ion.rangeSlider.min.js',
 	//'src/fancybox-master/dist/jquery.fancybox.min.js',
-	'src/jquery.dropotron.min.js',
-	'src/jquery.scrollgress.min.js',
-	'src/skel.min.js',
-	'src/util.js',
+	//'src/jquery.dropotron.min.js',
+	//'src/jquery.scrollgress.min.js',
+	//'src/skel.min.js',
+	//'src/util.js',
 	//'src/video.js/dist/video.js',
-	//'src/modernizr.js',
+	'src/modernizr.js',
 ];
  
 gulp.task('sass', function () {

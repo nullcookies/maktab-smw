@@ -137,7 +137,7 @@ class UserContractModel extends Model {
         $data['categories'] = $categories;
 
         $users = [];
-        $getUsers = $this->qb->select('id, company_name')->where('usergroup', '6')->order('company_name')->get('??user');
+        $getUsers = $this->qb->select('id, company_name')->where('usergroup', '10')->order('company_name')->get('??user');
         if($getUsers->rowCount() > 0){
             $users = $getUsers->fetchAll();
         }
@@ -250,7 +250,7 @@ class UserContractModel extends Model {
         $data['categories'] = $categories;
 
         $users = [];
-        $getUsers = $this->qb->select('id, company_name')->where('usergroup', '6')->order('company_name')->get('??user');
+        $getUsers = $this->qb->select('id, company_name')->where('usergroup', '10')->order('company_name')->get('??user');
         if($getUsers->rowCount() > 0){
             $users = $getUsers->fetchAll();
         }

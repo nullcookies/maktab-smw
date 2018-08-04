@@ -57,15 +57,17 @@
                                 <?php if($errors['email']) { ?><div class="help-block"><?=$this->getTranslation($errors['email'])?></div><?php } ?>
                             </div>
                             
-                            <div class="form-group">
+                            <div class="form-group <?php if($errors['usergroup']) { ?>has-error<?php } ?>">
                                 <label for=""><?=$this->getTranslation('user type')?></label>
                                 <select name="usergroup" class="form-control selectpicker">
+                                    <option value=""><?=$this->t('choose usergroup', 'back')?></option>
                                     <?php if($usergroups){ ?>
                                     <?php foreach($usergroups as $value){ ?>
                                     <option value="<?=$value?>" <?php if($value == $user['usergroup']){ ?>selected<?php } ?> ><?=$this->getTranslation('usergroup ' . $value)?></option>
                                     <?php } ?>
                                     <?php } ?>
                                 </select>
+                                <?php if($errors['usergroup']) { ?><div class="help-block"><?=$this->getTranslation($errors['usergroup'])?></div><?php } ?>
                             </div>
 
                             

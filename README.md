@@ -1,2 +1,2 @@
-# smartweb-store
-Smartweb Store CMS
+# maktab smw
+Maktab
