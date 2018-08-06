@@ -291,7 +291,7 @@ class UserModel extends Model {
         $_POST = $this->cleanForm($_POST);
 
         $_POST['username'] = strtolower($_POST['username']);
-        if(isset($_POST['usergroup'])){
+        if(!empty($_POST['usergroup'])){
             if($_POST['usergroup'] < $_SESSION['usergroup']){
                 $_POST['usergroup'] = $_SESSION['usergroup'];
             }

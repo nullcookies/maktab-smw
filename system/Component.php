@@ -58,7 +58,7 @@ abstract class Component {
             if($getTranslations->rowCount() > 0){
                 $rawTranslations = $getTranslations->fetchAll();
                 foreach($rawTranslations as $value){
-                    $translations[$value['side']][$value['lang']][$value['name']] = $value['content'];
+                    $translations[$value['context']][$value['lang']][$value['name']] = $value['content'];
                 }
             }
             self::$translations = $translations;
@@ -87,6 +87,9 @@ abstract class Component {
                     'context' => $context
                 ];
                 $this->qb->insert('??translation', $insertWord);
+            }
+            else{
+                $translation = $checkWord['content'];
             }
         }
         return $translation;
