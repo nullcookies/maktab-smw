@@ -21,6 +21,14 @@ class SmartWeb extends Component {
         define('THEMEPATH', BASEPATH . '/views/front/' . $this->getOption('theme'));
         define('THEMEURL_ADMIN', BASEURL . '/views/back/' . $this->getOption('theme_admin'));
         define('THEMEPATH_ADMIN', BASEPATH . '/views/back/' . $this->getOption('theme_admin'));
+
+        define('DB_DRIVER', $this->config['db']['driver']);
+        define('DB_HOST', $this->config['db']['host']);
+        define('DB_NAME', $this->config['db']['dbname']);
+        define('DB_USER', $this->config['db']['username']);
+        define('DB_PASSWORD', $this->config['db']['password']);
+        define('DB_PREFIX', $this->config['db']['prefix']);
+        
     }
     
     public function run(){

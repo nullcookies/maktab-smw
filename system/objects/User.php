@@ -2,7 +2,8 @@
 
 namespace system\objects;
 
-class User {
-    
+use system\ActiveRecord;
+
+class User extends ActiveRecord{
     
 }

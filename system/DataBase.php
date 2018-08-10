@@ -49,6 +49,10 @@ class DataBase {
         return $this->pdo->query($statement);
     }
 
+    public function errorInfo() {
+        return $this->pdo->errorInfo();
+    }
+
     public function lastInsertId($name = NULL){
         return $this->pdo->lastInsertId($name);
     }

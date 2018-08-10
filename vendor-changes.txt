@@ -1,0 +1,2 @@
+vendor\corneltek\sqlbuilder\src\Universal\Query\UpdateQuery.php:85
+	$setClauses[] = $col.' = '.$driver->deflate($val, $args);
