@@ -2,7 +2,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <?=$this->getTranslation('edit user');?>
+        <?=$this->getTranslation('edit teacher');?>
         <!-- <small>Optional description</small> -->
       </h1>
       <?php 
@@ -17,9 +17,9 @@
 
         <?=$this->renderNotifications($successText, $errorText)?>
     
-        <form id="user-edit-form" role="form" action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
+        <form action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
             
-            <input type="hidden" name="id" value="<?=$user['id']?>" />
+            <input type="hidden" name="teacher[id]" value="<?=$teacher->id?>" />
             
             <div class="form-group">
                 <a class="btn btn-default btn-app" href="<?=$controls['back']?>">
@@ -30,28 +30,14 @@
                     <i class="fa fa-save"></i>
                     <?=$this->getTranslation('btn save')?>
                 </button>
-                <input type="hidden" name="btn_edit" value="<?=$this->getTranslation('btn save')?>" />
+                <input type="hidden" name="btn_save" value="<?=$this->getTranslation('btn save')?>" />
             </div>
 
             <div class="row">
                 <div class="col-sm-6">
                     <div class="box box-success">
                         <div class="box-body">
-                            <div class="form-group <?php if($errors['username']) { ?>has-error<?php } ?>">
-                                <label for="username">
-                                    <?=$this->getTranslation('username')?> <span class="text-danger">*</span>
-                                </label>
-                                <input type="text" class="form-control" name="username" id="username" value="<?= $user['username']; ?>" />
-                                <?php if($errors['username']) { ?><div class="help-block"><?=$this->getTranslation($errors['username'])?></div><?php } ?>
-                            </div>
-                            <!-- <input type="password" class="form-control" name="password" id="password" value="" /> -->
-                            <div class="form-group <?php if($errors['new_password']) { ?>has-error<?php } ?>">
-                                <label for="new_password">
-                                    <?=$this->getTranslation('new password')?>
-                                </label>
-                                <input type="password" class="form-control" name="new_password" id="new_password" value="<?= $user['new_password']; ?>" />
-                                <?php if($errors['new_password']) { ?><div class="help-block"><?=$this->getTranslation($errors['new_password'])?></div><?php } ?>
-                            </div>
+
                             <div class="form-group <?php if($errors['email']) { ?>has-error<?php } ?>">
                                 <label for="email">
                                     <?=$this->getTranslation('email')?> <span class="text-danger">*</span>

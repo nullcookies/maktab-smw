@@ -4,7 +4,8 @@ namespace models\back;
 
 use \system\Document;
 use \system\Model;
-use \system\objects\User;
+use \models\objects\User;
+use \models\objects\Teacher;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
@@ -18,24 +19,6 @@ class TeacherModel extends Model {
 
     public function index() {
 
-        $user = new User;
-        //$user->findOne(1);
-        $user->username = $user->email = 'ulugbek.yu@gmail.com';
-        $user->phone = '+9989908081239';
-        $user->password = $this->hashPassword('test');
-        $user->status = 1;
-        $user->date_reg = time();
-        $user->save();
-        if(!$user->savedSuccess){
-            $this->ppp($user->errorInfo);
-        }
-        else{
-            echo 'success!';
-        }
-        //var_dump($user->email);
-        //$user->test();
-        exit;
-        
         $data = [];
 
         $breadcrumbs = [];
@@ -60,25 +43,20 @@ class TeacherModel extends Model {
         
         $controls = [];
 
-        $controls['add'] = $this->linker->getUrl($this->control . '/add', true);
-        $controls['edit'] = $this->linker->getUrl($this->control . '/edit', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
 
         $data['controls'] = $controls;
 
         $users = [];
-        //TODO: user module access
-        if($_SESSION['usergroup'] > 0 && $_SESSION['usergroup'] <= 3){
-            if($_SESSION['usergroup'] > 1){
-                $this->qb->where('usergroup >=', $_SESSION['usergroup']);
-            }
-            
-            $this->qb->order('id', true);
-            $getUsers = $this->qb->get('??user');
-            if($getUsers->rowCount() > 0){
-                $users = $getUsers->fetchAll();
-            }
+
+        $this->qb->where('usergroup', $this->usergroup);
+        $this->qb->order([['lastname', false], ['id', true]]);
+        $getUsers = $this->qb->get('??user');
+        if($getUsers->rowCount() > 0){
+            $users = $getUsers->fetchAll();
         }
+
 
         $data['users'] = $users;
 
@@ -86,19 +64,21 @@ class TeacherModel extends Model {
         $data['errorText'] = $this->errorText;
         $data['successText'] = $this->successText;
 
-
         $this->data = $data;
 
         return $this;
     }
     
-    public function edit() {
+    public function view() {
         
-        $id = (int)$_GET['param1'];
-        if(!$id){
-            $id = (int)$_POST['id'];
+        $id = !empty($_GET['param1']) ? (int)$_GET['param1'] : (!empty($_POST['id']) ? (int)$_POST['id'] : 0);
+        
+        $teacher = new Teacher();
+
+        if($id){
+            $teacher->findOne($id);
         }
-        
+
         $data = [];
 
         $breadcrumbs = [];
@@ -111,7 +91,7 @@ class TeacherModel extends Model {
             'url' => $this->linker->getUrl($this->control, true)
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('edit ' . $this->control),
+            'name' => $this->getTranslation('view ' . $this->control),
             'url' => 'active'
         ];
 
@@ -124,61 +104,37 @@ class TeacherModel extends Model {
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/iCheck/all.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/timepicker/bootstrap-timepicker.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/select2/select2.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/css/fileinput.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.css');
         
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/select2/select2.full.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.date.extensions.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.extensions.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/min/moment.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/ru.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/'.LANG_PREFIX.'.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/timepicker/bootstrap-timepicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/slimScroll/jquery.slimscroll.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/iCheck/icheck.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/plugins/sortable.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/fileinput.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/locales/'.LANG_PREFIX.'.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/ckeditor.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/fastclick/fastclick.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/adapters/jquery.js');
         
         $controls = [];
-
         $controls['back'] = $this->linker->getUrl($this->control, true);
-        $controls['action'] = $this->linker->getUrl($this->control . '/edit/' . $id, true);
-
+        $controls['action'] = $this->linker->getUrl($this->control . '/save', true);
         $data['controls'] = $controls;
 
-        $current = [];
-        if($id){
-            $getuser = $this->qb->where('id', '?')->order('name')->get('??user', [$id]);
-            if($getuser->rowCount() > 0){
-                $user = $getuser->fetchAll();
-                $current = $user[0];
-            }
+        if(!empty($_POST['teacher'])){
+            $teacher->setFields($_POST['teacher']);
         }
-        if($_POST){
-            $current = $_POST;
-        }
-        $current['icon'] = $this->linker->getIcon($this->media->resize($current['image'], 150, 150, NULL, true));
 
-        $usergroups = $this->usergroups;
-        foreach ($usergroups as $key => $value) {
-            if($value < $_SESSION['usergroup']){
-                unset($usergroups[$key]);
-            }
-        }
-        $data['usergroups'] = $usergroups;
-
-        $data[$this->control] = $current;
+        $data['teacher'] = $teacher;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -216,7 +172,6 @@ class TeacherModel extends Model {
             'files' => [
                 
             ]
-
         ];
 
         if($_FILES['image']['error'] == 0){
@@ -410,67 +365,6 @@ class TeacherModel extends Model {
             $this->successText = $this->getTranslation('success delete ' . $this->control);
             return true;
         }
-    }
-
-    public function login(){
-        $data = [];
-
-        $this->document = new Document();
-        $this->document->title = $this->getTranslation('login page');
-        $this->document->bodyClass = 'login-page';
-
-        foreach($_POST as $key => $value){
-        	$_POST[$key] = trim($value);
-        }
-        $errors = [];
-        $username = '';
-        if(isset($_POST['username']) && isset($_POST['password'])){
-        	$username = strtolower($_POST['username']);
-        	$password = $_POST['password'];
-        	if(empty($_POST['username'])) $errors['username'] = $this->getTranslation('error username empty');
-        	if(empty($_POST['password'])) $errors['password'] = $this->getTranslation('error password empty');
-        	$checkUserExist = $this->qb->where('username', '?')->get('??user', [$username]);
-			if($checkUserExist->rowCount() == 0){
-				$errors['username'] = $this->getTranslation('error no such username');
-			}
-        	if(!$errors){
-        		$password = $this->hashPassword($password);
-        		$checkUser = $this->qb->where([['username', '?'], ['password', '?']])->get('??user', [$username, $password]);
-        		
-        		if($checkUser->rowCount() > 0){
-        			$user = $checkUser->fetch();
-        			$_SESSION['user_id'] = $user['id'];
-        			$_SESSION['usergroup'] = $user['usergroup'];
-        			$update = [
-        				'phpsessid' => $_COOKIE['PHPSESSID'],
-        				'last_ip' => $_SERVER['REMOTE_ADDR'],
-        				'last_login' => time(),
-        				'date_activity' => time()
-        			];
-        			$this->qb->where('id', '?')->update('??user', $update, [$user['id']]);
-        			header('Location: ' . BASEURL_ADMIN . '/');
-    				exit;
-        		}
-        	}
-        	if(!empty($_POST['password'])) $errors['password'] = $this->getTranslation('error password');
-        	
-        }
-        $data['username'] = $_POST['username'];
-        $data['errors'] = $errors;
-
-        $data['action'] = BASEURL_ADMIN . '/user/login/';
-
-        $this->data = $data;
-
-        return $this;
-    }
-
-    public function logout(){
-    	unset($_SESSION['user_id']);
-    	unset($_SESSION['usergroup']);
-    	session_destroy();
-    	header('Location: ' . BASEURL_ADMIN . '/');
-    	exit;
     }
 
 }

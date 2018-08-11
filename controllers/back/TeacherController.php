@@ -33,15 +33,14 @@ class TeacherController extends Controller {
     	];
         $model = new TeacherModel;
 
-        if($model){
-            $model->index();
-            $this->data = $model->data;
-            $this->document = $model->document;
-        }
+        $model->index();
+        $this->data = $model->data;
+        $this->document = $model->document;
+
         $this->content = $this->render('teacher-list');
     }
     
-    public function edit() {    
+    public function view() {    
         
         $this->modules = [
             [
@@ -66,27 +65,14 @@ class TeacherController extends Controller {
 
         $model = new TeacherModel;
 
-        $viewFile = 'user-edit';
-        if($model){
-            if(isset($_POST['btn_edit'])){
-                $id = (int)$_POST['id'];
-                if(!$id){
-                    $this->index();
-                    return;
-                }
-                $result = $model->save();
-            }
-            if($result){
-                $model->index();
-                $viewFile = 'user-list';
-            }
-            else{
-                $model->edit();
-            }
-        
-            $this->data = $model->data;
-            $this->document = $model->document;
+        $viewFile = 'teacher-view';
+        $model->edit();
+        if(isset($_POST['btn_save'])){
+            $result = $model->save();
         }
+    
+        $this->data = $model->data;
+        $this->document = $model->document;
 
         $this->content = $this->render($viewFile);
         
@@ -129,7 +115,7 @@ class TeacherController extends Controller {
             $this->data = $model->data;
             $this->document = $model->document;
         }
-        $this->content = $this->render('user-list');
+        $this->content = $this->render('teacher-list');
     }
 
 
