@@ -4,6 +4,7 @@ namespace models\back;
 
 use \system\Document;
 use \system\Model;
+use \models\objects\User;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
@@ -11,6 +12,7 @@ defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 class UserModel extends Model {
     
     public $usergroups = [1, 2, 3, 4, 5, 10];
+    public $fullAccess = [1, 2];
 
     public function index() {
         
@@ -47,9 +49,13 @@ class UserModel extends Model {
         $users = [];
         //TODO: user module access
         if($_SESSION['usergroup'] > 0 && $_SESSION['usergroup'] <= 3){
-            if($_SESSION['usergroup'] > 1){
+            if(!in_array($_SESSION['usergroup'], $this->fullAccess)){
                 $this->qb->where('usergroup >=', $_SESSION['usergroup']);
             }
+            else{
+                $this->qb->where('usergroup >', $_SESSION['usergroup']);
+            }
+            
             
             $this->qb->order('id', true);
             $getUsers = $this->qb->get('??user');
@@ -97,31 +103,26 @@ class UserModel extends Model {
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/iCheck/all.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/timepicker/bootstrap-timepicker.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/select2/select2.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/css/fileinput.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.css');
         
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/select2/select2.full.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.date.extensions.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.extensions.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/min/moment.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/ru.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/'.LANG_PREFIX.'.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/timepicker/bootstrap-timepicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/slimScroll/jquery.slimscroll.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/iCheck/icheck.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/plugins/sortable.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/fileinput.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/locales/'.LANG_PREFIX.'.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/ckeditor.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/fastclick/fastclick.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/adapters/jquery.js');
         
         $controls = [];
 
@@ -153,10 +154,42 @@ class UserModel extends Model {
     }
     
     public function edit() {
+
+        // $mysql = new \SQLBuilder\Driver\MySQLDriver;
+        // $args = new \SQLBuilder\ArgumentArray;
+
+        // $query = new \SQLBuilder\Universal\Query\SelectQuery;
+        // $query->select(array('id', 'name', 'phone', 'address','confirmed'))
+        //     ->from('users', 'u')
+        //     ->partitions('u1', 'u2', 'u3')
+        //     ->where()
+        //         ->is('confirmed', true)
+        //         ->in('id', [1,2,3])
+        //     ;
+        // $query
+        //     ->join('posts')
+        //         ->as('p')
+        //         ->on('p.user_id = u.id')
+        //     ;
+        // $query
+        //     ->orderBy('rand()')
+        //     ->orderBy('id', 'DESC')
+        //     ;
+
+        // $sql = $query->toSql($mysql, $args);
+
+        // var_dump($sql);
+        // var_dump($args);
         
         $id = (int)$_GET['param1'];
         if(!$id){
             $id = (int)$_POST['id'];
+        }
+
+        $user = new User;
+        $user->find($id);
+        if($user->usergroup < $_SESSION['usergroup']){
+            exit('Access Error');
         }
         
         $data = [];
@@ -184,31 +217,26 @@ class UserModel extends Model {
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/iCheck/all.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/timepicker/bootstrap-timepicker.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/select2/select2.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/css/fileinput.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.css');
         
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/select2/select2.full.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.date.extensions.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/input-mask/jquery.inputmask.extensions.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/min/moment.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/ru.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/'.LANG_PREFIX.'.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/timepicker/bootstrap-timepicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/slimScroll/jquery.slimscroll.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/iCheck/icheck.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/plugins/sortable.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/fileinput.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/locales/'.LANG_PREFIX.'.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/ckeditor.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/fastclick/fastclick.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/adapters/jquery.js');
         
         $controls = [];
 
@@ -219,7 +247,7 @@ class UserModel extends Model {
 
         $current = [];
         if($id){
-            $getuser = $this->qb->where('id', '?')->order('name')->get('??user', [$id]);
+            $getuser = $this->qb->where([['id', '?'], ['usergroup >=', '?']])->get('??user', [$id, $_SESSION['usergroup']]);
             if($getuser->rowCount() > 0){
                 $user = $getuser->fetchAll();
                 $current = $user[0];
@@ -252,6 +280,9 @@ class UserModel extends Model {
     
     public function save($new = false){
         
+        $user = new User;
+        
+
         $isUniqueParams = [
             'table' => '??user',
             'column' => 'username'
@@ -264,14 +295,23 @@ class UserModel extends Model {
             $id = (int)$_POST['id'];
             $isUniqueParams['id'] = $id;
             $isUniqueParamsEmail['id'] = $id;
+            $user->find($id);
         }
+
+        
+        if($user->usergroup < $_SESSION['usergroup']){
+            exit('Access Error');
+        }
+
+        //usergroup 1, 2 - administrator
+        //usergroup access control 1, 2 - full access
 
         $rules = [ 
             'post' => [
                 //'name' => ['isRequired'],
                 'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
                 'username' => ['isRequired', 'isUsername', ['isUnique', $isUniqueParams]],
-                'usergroup' => ['isRequired'],
+                'usergroup' => ['isRequired', [ 'accessControl', ['type' => '>=', 'value' => $_SESSION['usergroup']] ]],
             ],
             'files' => [
                 
@@ -280,7 +320,7 @@ class UserModel extends Model {
         ];
 
         if($_FILES['image']['error'] == 0){
-            $rules['files']['image'] = ['isImage', ['maxSize', 3000000]];
+            $rules['files']['image'] = ['isImage', ['maxSize', $this->config['params']['max_image_size']]];
             $data['files'] = $_FILES;
         }
 
@@ -291,11 +331,6 @@ class UserModel extends Model {
         $_POST = $this->cleanForm($_POST);
 
         $_POST['username'] = strtolower($_POST['username']);
-        if(!empty($_POST['usergroup'])){
-            if($_POST['usergroup'] < $_SESSION['usergroup']){
-                $_POST['usergroup'] = $_SESSION['usergroup'];
-            }
-        }
 
         $data['post'] = $_POST;
         
@@ -316,122 +351,59 @@ class UserModel extends Model {
         }
         else{
 
-            if(!$new) {
+            $user->username = $_POST['username'];
 
-                $update = [];
+            $user->email = $_POST['email'];
+            $user->usergroup = (int)$_POST['usergroup'];
+            $user->phone = $_POST['phone'];
+            $user->address = $_POST['address'];
+            
+            $user->firstname = $_POST['firstname'];
+            $user->lastname = $_POST['lastname'];
+            $user->middlename = $_POST['middlename'];
+
+            $user->status = 1;
+
+            if(!$new) {
+                if(!empty($_POST['new_password'])){
+                    $user->password = $this->hashPassword($_POST['new_password']);
+                }
+            }
+            else{
+                $user->date_reg = time();
+                $user->password = $this->hashPassword($_POST['password']);
+            }
+
+            $user->save();
+
+            if($user->savedSuccess){
+                
                 if($_FILES['image']['error'] == 0){
                     $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
                     if($imageUploaded){
-                        $update['image'] = $_POST['image'] = $imageUploaded;
+                        $user->image = $imageUploaded;
+                        $user->save();
                     }
                 }
-                if($_POST['new_password']){
-                    $update['password'] = $this->hashPassword($_POST['new_password']);
-                }
-                $update['username'] = $_POST['username'];
-                //$update['name'] = $_POST['name'];
-                $update['email'] = $_POST['email'];
-                $update['usergroup'] = (int)$_POST['usergroup'];
-                $update['phone'] = $_POST['phone'];
-                $update['address'] = $_POST['address'];
-                
-                $update['firstname'] = $_POST['firstname'];
-                $update['lastname'] = $_POST['lastname'];
-                $update['middlename'] = $_POST['middlename'];
-                //$update['company_name'] = $_POST['company_name'];
 
-                //$update['balance'] = (int)$_POST['balance'];
-                //$update['bank_name'] = $_POST['bank_name'];
-                //$update['checking_account'] = $_POST['checking_account'];
-                //$update['mfo'] = $_POST['mfo'];
-                //$update['inn'] = $_POST['inn'];
-                //$update['okonx'] = $_POST['okonx'];
-                //$update['requisites'] = $_POST['requisites'];
-                
-                //$update['contract_number'] = $_POST['contract_number'];
-                //$update['contract_date_start'] = $_POST['contract_date_start'];
-                //$update['contract_date_end'] = $_POST['contract_date_end'];
-                
-                //$update['address_jur'] = $_POST['address_jur'];
-                //$update['address_phy'] = $_POST['address_phy'];
-                //$update['license_number'] = $_POST['license_number'];
-                //$update['license_date_end'] = $_POST['license_date_end'];
-
-
-                $updateResult = $this->qb->where('id', '?')->update('??user', $update, [$id]);
-                if(!$updateResult){
-                    $this->errorText = $this->getTranslation('error edit ' . $this->control);
-                    $this->errors['error db'] = $this->getTranslation('error db');
-                    return false;
-                }
-                else{
-                    $this->successText = $this->getTranslation('success edit ' . $this->control);
-                    return true;
-                }
-                
+                $this->successText = $this->getTranslation('success edit ' . $this->control);
             }
             else{
-                $insert = [];
-                
-                $insert['date_reg'] = time();
-                $insert['status'] = 1;
-                $insert['activationkey'] = 1;
-
-                $insert['password'] = $this->hashPassword($_POST['password']);
-                $insert['username'] = htmlspecialchars($_POST['username']);
-                //$insert['name'] = $_POST['name'];
-                $insert['email'] = $_POST['email'];
-                $insert['usergroup'] = (int)$_POST['usergroup'];
-                $insert['phone'] = $_POST['phone'];
-                $insert['address'] = $_POST['address'];
-                
-                $insert['firstname'] = $_POST['firstname'];
-                $insert['lastname'] = $_POST['lastname'];
-                $insert['middlename'] = $_POST['middlename'];
-                //$insert['company_name'] = $_POST['company_name'];
-
-                //$insert['balance'] = (int)$_POST['balance'];
-                //$insert['bank_name'] = $_POST['bank_name'];
-                //$insert['checking_account'] = $_POST['checking_account'];
-                //$insert['mfo'] = $_POST['mfo'];
-                //$insert['inn'] = $_POST['inn'];
-                //$insert['okonx'] = $_POST['okonx'];
-                //$insert['requisites'] = $_POST['requisites'];
-                
-                //$insert['contract_number'] = $_POST['contract_number'];
-                //$insert['contract_date_start'] = $_POST['contract_date_start'];
-                //$insert['contract_date_end'] = $_POST['contract_date_end'];
-                
-                //$insert['address_jur'] = $_POST['address_jur'];
-                //$insert['address_phy'] = $_POST['address_phy'];
-                //$insert['license_number'] = $_POST['license_number'];
-                //$insert['license_date_end'] = $_POST['license_date_end'];
-
-                $insertResult = $this->qb->insert('??user', $insert);
-                
-                if(!$insertResult){
-                    $this->errorText = $this->getTranslation('error add ' . $this->control);
-                    $this->errors['error db'];
-                    return false;
-                }
-                else{
-                    $id = $this->qb->lastInsertId();
-                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
-                    if($imageUploaded){
-                        $update = [];
-                        $update['image'] = $_POST['image'] = $imageUploaded;
-                        $this->qb->where('id', '?')->update('??user', $update, [$id]);
-                    }
-
-                    $this->successText = $this->getTranslation('success add ' . $this->control);
-                    return true;
-                }
+                $this->errorText = $this->getTranslation('error edit ' . $this->control);
+                $this->errors['error db'] = $this->getTranslation('error db');
             }
+            return $user->savedSuccess;
         }
     }
 
     public function toggle() {
         $id = $_GET['param1'];
+        $user = new User;
+        $user->find($id);
+        if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['userid']) ){
+            exit('Access Error');
+        }
+
         $status = (int)$_GET['param2'];
         $return = '';
         if($id){
@@ -446,10 +418,18 @@ class UserModel extends Model {
     public function delete(){
 
         $id = (int)$_GET['param1'];
+        
+        $user = new User;
+        $user->find($id);
+        if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['userid']) ){
+            exit('Access Error');
+        }
+
         if(!$id) {
             $this->errors['error empty id'];
             return false;
         }
+
         $getuser = $this->qb->where('id', '?')->get('??user', [$id]);
         if($getuser->rowCount() > 0){
             $user = $getuser->fetch();

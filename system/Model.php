@@ -2,6 +2,16 @@
 
 namespace system;
 
+use SQLBuilder\ArgumentArray;
+use SQLBuilder\Bind;
+use SQLBuilder\ParamMarker;
+use SQLBuilder\Criteria;
+use SQLBuilder\Driver\MySQLDriver;
+use SQLBuilder\Universal\Query\SelectQuery;
+use SQLBuilder\Universal\Query\InsertQuery;
+use SQLBuilder\Universal\Query\UpdateQuery;
+use SQLBuilder\Universal\Query\DeleteQuery;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Model extends Component {

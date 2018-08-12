@@ -66,7 +66,7 @@ class TeacherController extends Controller {
         $model = new TeacherModel;
 
         $viewFile = 'teacher-view';
-        $model->edit();
+        $model->view();
         if(isset($_POST['btn_save'])){
             $result = $model->save();
         }

@@ -76,7 +76,7 @@ class TeacherModel extends Model {
         $teacher = new Teacher();
 
         if($id){
-            $teacher->findOne($id);
+            $teacher->find($id);
         }
 
         $data = [];
@@ -127,7 +127,7 @@ class TeacherModel extends Model {
         
         $controls = [];
         $controls['back'] = $this->linker->getUrl($this->control, true);
-        $controls['action'] = $this->linker->getUrl($this->control . '/save', true);
+        $controls['save'] = $this->linker->getUrl($this->control . '/save', true);
         $data['controls'] = $controls;
 
         if(!empty($_POST['teacher'])){
@@ -148,6 +148,8 @@ class TeacherModel extends Model {
     
     public function save($new = false){
         
+        $user = new User;
+
         $isUniqueParams = [
             'table' => '??user',
             'column' => 'username'
@@ -160,6 +162,12 @@ class TeacherModel extends Model {
             $id = (int)$_POST['id'];
             $isUniqueParams['id'] = $id;
             $isUniqueParamsEmail['id'] = $id;
+
+            $user->find($id);
+        }
+
+        if($user->usergroup < $_SESSION['usergroup']){
+            exit('Access Error');
         }
 
         $rules = [ 
@@ -167,7 +175,7 @@ class TeacherModel extends Model {
                 //'name' => ['isRequired'],
                 'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
                 'username' => ['isRequired', 'isUsername', ['isUnique', $isUniqueParams]],
-                'usergroup' => ['isRequired'],
+                'usergroup' => ['isRequired', ['accessControl', ['type' => '==', 'value' => $this->usergroup]]],
             ],
             'files' => [
                 
@@ -186,11 +194,6 @@ class TeacherModel extends Model {
         $_POST = $this->cleanForm($_POST);
 
         $_POST['username'] = strtolower($_POST['username']);
-        if(!empty($_POST['usergroup'])){
-            if($_POST['usergroup'] < $_SESSION['usergroup']){
-                $_POST['usergroup'] = $_SESSION['usergroup'];
-            }
-        }
 
         $data['post'] = $_POST;
         
@@ -211,117 +214,48 @@ class TeacherModel extends Model {
         }
         else{
 
-            if(!$new) {
+            $user->username = $_POST['username'];
 
-                $update = [];
+            $user->email = $_POST['email'];
+            $user->usergroup = (int)$_POST['usergroup'];
+            $user->phone = $_POST['phone'];
+            $user->address = $_POST['address'];
+            
+            $user->firstname = $_POST['firstname'];
+            $user->lastname = $_POST['lastname'];
+            $user->middlename = $_POST['middlename'];
+
+            $user->status = 1;
+
+            if(!$new) {
+                if(!empty($_POST['new_password'])){
+                    $user->password = $this->hashPassword($_POST['new_password']);
+                }
+            }
+            else{
+                $user->date_reg = time();
+                $user->password = $this->hashPassword($_POST['password']);
+            }
+
+            $user->save();
+
+            if($user->savedSuccess){
+                
                 if($_FILES['image']['error'] == 0){
                     $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
                     if($imageUploaded){
-                        $update['image'] = $_POST['image'] = $imageUploaded;
+                        $user->image = $imageUploaded;
+                        $user->save();
                     }
                 }
-                if($_POST['new_password']){
-                    $update['password'] = $this->hashPassword($_POST['new_password']);
-                }
-                $update['username'] = $_POST['username'];
-                //$update['name'] = $_POST['name'];
-                $update['email'] = $_POST['email'];
-                $update['usergroup'] = (int)$_POST['usergroup'];
-                $update['phone'] = $_POST['phone'];
-                $update['address'] = $_POST['address'];
-                
-                $update['firstname'] = $_POST['firstname'];
-                $update['lastname'] = $_POST['lastname'];
-                $update['middlename'] = $_POST['middlename'];
-                //$update['company_name'] = $_POST['company_name'];
 
-                //$update['balance'] = (int)$_POST['balance'];
-                //$update['bank_name'] = $_POST['bank_name'];
-                //$update['checking_account'] = $_POST['checking_account'];
-                //$update['mfo'] = $_POST['mfo'];
-                //$update['inn'] = $_POST['inn'];
-                //$update['okonx'] = $_POST['okonx'];
-                //$update['requisites'] = $_POST['requisites'];
-                
-                //$update['contract_number'] = $_POST['contract_number'];
-                //$update['contract_date_start'] = $_POST['contract_date_start'];
-                //$update['contract_date_end'] = $_POST['contract_date_end'];
-                
-                //$update['address_jur'] = $_POST['address_jur'];
-                //$update['address_phy'] = $_POST['address_phy'];
-                //$update['license_number'] = $_POST['license_number'];
-                //$update['license_date_end'] = $_POST['license_date_end'];
-
-
-                $updateResult = $this->qb->where('id', '?')->update('??user', $update, [$id]);
-                if(!$updateResult){
-                    $this->errorText = $this->getTranslation('error edit ' . $this->control);
-                    $this->errors['error db'] = $this->getTranslation('error db');
-                    return false;
-                }
-                else{
-                    $this->successText = $this->getTranslation('success edit ' . $this->control);
-                    return true;
-                }
-                
+                $this->successText = $this->getTranslation('success edit ' . $this->control);
             }
             else{
-                $insert = [];
-                
-                $insert['date_reg'] = time();
-                $insert['status'] = 1;
-                $insert['activationkey'] = 1;
-
-                $insert['password'] = $this->hashPassword($_POST['password']);
-                $insert['username'] = htmlspecialchars($_POST['username']);
-                //$insert['name'] = $_POST['name'];
-                $insert['email'] = $_POST['email'];
-                $insert['usergroup'] = (int)$_POST['usergroup'];
-                $insert['phone'] = $_POST['phone'];
-                $insert['address'] = $_POST['address'];
-                
-                $insert['firstname'] = $_POST['firstname'];
-                $insert['lastname'] = $_POST['lastname'];
-                $insert['middlename'] = $_POST['middlename'];
-                //$insert['company_name'] = $_POST['company_name'];
-
-                //$insert['balance'] = (int)$_POST['balance'];
-                //$insert['bank_name'] = $_POST['bank_name'];
-                //$insert['checking_account'] = $_POST['checking_account'];
-                //$insert['mfo'] = $_POST['mfo'];
-                //$insert['inn'] = $_POST['inn'];
-                //$insert['okonx'] = $_POST['okonx'];
-                //$insert['requisites'] = $_POST['requisites'];
-                
-                //$insert['contract_number'] = $_POST['contract_number'];
-                //$insert['contract_date_start'] = $_POST['contract_date_start'];
-                //$insert['contract_date_end'] = $_POST['contract_date_end'];
-                
-                //$insert['address_jur'] = $_POST['address_jur'];
-                //$insert['address_phy'] = $_POST['address_phy'];
-                //$insert['license_number'] = $_POST['license_number'];
-                //$insert['license_date_end'] = $_POST['license_date_end'];
-
-                $insertResult = $this->qb->insert('??user', $insert);
-                
-                if(!$insertResult){
-                    $this->errorText = $this->getTranslation('error add ' . $this->control);
-                    $this->errors['error db'];
-                    return false;
-                }
-                else{
-                    $id = $this->qb->lastInsertId();
-                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
-                    if($imageUploaded){
-                        $update = [];
-                        $update['image'] = $_POST['image'] = $imageUploaded;
-                        $this->qb->where('id', '?')->update('??user', $update, [$id]);
-                    }
-
-                    $this->successText = $this->getTranslation('success add ' . $this->control);
-                    return true;
-                }
+                $this->errorText = $this->getTranslation('error edit ' . $this->control);
+                $this->errors['error db'] = $this->getTranslation('error db');
             }
+            return $user->savedSuccess;
         }
     }
 

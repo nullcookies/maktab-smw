@@ -165,6 +165,23 @@ class Validator {
         }
         return $return;
     }
+
+    public function accessControl($string, $params)
+    {
+    	$return = false;
+    	if(
+    		($params['type'] == '==' && $string == $params['value']) ||
+    		($params['type'] == '>=' && $string >= $params['value']) ||
+    		($params['type'] == '>' && $string > $params['value'])
+    	){
+    		$return = true;
+    	}
+    	else{
+    		$this->lastError = 'error usergroup';
+    	}
+
+        return $return;
+    }
     
     public function isInt($number) {
         $return = true;

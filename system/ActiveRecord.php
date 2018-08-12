@@ -22,6 +22,7 @@ abstract class ActiveRecord extends Object {
 	protected $fields = [];
 	protected $columns = [];
 	protected $changedColumns = [];
+	protected $secureAssignColumns = [];
 	
 	public function __construct()
 	{
@@ -80,7 +81,7 @@ abstract class ActiveRecord extends Object {
     	if (in_array($name, $this->columns)) {
         	$this->fields[$name] = $value;
         }
-        else{
+        elseif($name != 'fields'){
         	$this->$name = $value;
         }
     }
@@ -90,7 +91,7 @@ abstract class ActiveRecord extends Object {
         if (array_key_exists($name, $this->fields)) {
             return $this->fields[$name];
         }
-        elseif (isset($this->$name)) {
+        elseif (isset($this->$name) && $name != 'fields') {
             return $this->$name;
         }
         return null;
@@ -99,7 +100,7 @@ abstract class ActiveRecord extends Object {
     public function setFields($array = [])
     {
     	foreach ($array as $key => $value) {
-    		if (in_array($key, $this->columns)) {
+    		if (in_array($key, $this->columns) && !in_array($key, $this->secureAssignColumns)) {
 	        	$this->fields[$key] = $value;
 	        }
     	}
@@ -148,6 +149,7 @@ abstract class ActiveRecord extends Object {
     		}
 	        $sql = $query->toSql($this->driver, $args);
 	        $sth = $this->db->prepare($sql);
+	        $this->savedSuccess = false;
 	        if($sth !== false){
 	        	$this->savedSuccess = $sth->execute((array)$args);
 				if(!$this->savedSuccess){
@@ -158,7 +160,28 @@ abstract class ActiveRecord extends Object {
     	return $this;
     }
 
-    public function findOne($id)
+    public function find($id)
+    {
+    	if(!empty($this->primaryKey)){
+    		$args = new ArgumentArray;
+    		$query = new SelectQuery;
+			$query->select('*')
+			    ->from($this->tableName)
+			    ->where()
+			    	->equal($this->primaryKey, new Bind($this->primaryKey, $id));
+			$sql = $query->toSql($this->driver, $args);
+			$sth = $this->db->prepare($sql);
+			if($sth !== false){
+	        	$result = $sth->execute((array)$args);
+				if($result){
+					$this->fields = $sth->fetch(\PDO::FETCH_ASSOC);
+				}
+	        }
+    	}
+    	return $this;
+    }
+
+    public function findAll($id)
     {
     	if(!empty($this->primaryKey)){
     		$args = new ArgumentArray;
