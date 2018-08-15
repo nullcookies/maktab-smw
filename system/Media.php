@@ -31,6 +31,9 @@ class Media {
             $name = $name . $ext;
 
             $dirUpload = BASEPATH . '/uploads/' . $module . '/';
+            if(!is_dir($dirUpload)) {
+                mkdir($dirUpload, 0755, true);
+            }
             if(!$replace){
                 $name = $this->getUniqueName($dirUpload, $name, 1);
             }
@@ -154,7 +157,9 @@ class Media {
         $resized_dir = BASEPATH . '/' . $uploadsDir . '/cache/' . $width . 'x' . $height . '/' . implode('/', $iconDir);
         $resized_file = $resized_dir . '/' . $filename;
 
-        if(!is_dir($resized_dir)) mkdir($resized_dir, 0755, true);
+        if(!is_dir($resized_dir)) {
+            mkdir($resized_dir, 0755, true);
+        }
         
         if(file_exists($resized_file) && !$forceResize) {
             return $resized_icon;
@@ -336,7 +341,9 @@ class Media {
     public function getUniqueName($dirUpload, $name, $i = 1){
         
 
-        if(!is_dir($dirUpload)) mkdir($dirUpload, 0755, true);
+        if(!is_dir($dirUpload)) {
+            mkdir($dirUpload, 0755, true);
+        }
         $i = (int)$i;
         $i_string = (string)$i;
         

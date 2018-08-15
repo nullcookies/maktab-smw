@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Validator {
 
 	public $lastError;
+	public $lastErrorParams = [];
 	public $lastErrors;
 
 	private $blacklist;
@@ -92,6 +93,7 @@ class Validator {
 		}
 		
 		$this->lastError = '';
+		$this->lastErrorParams = [];
 	} 
 
 	public function isRequired($string) {
@@ -308,12 +310,14 @@ class Validator {
 	
 
 	public function maxSize($file, $maxSize = 3000000) {
-		
+		$return = true;
 		$size = $file["size"];
 		if($size > $maxSize){
-			return false;
+			$this->lastError = 'max size';
+			$this->lastErrorParams[] = round($maxSize / 1024 / 1024, 2) . 'MB';
+			$return = false;
 		}
-		return true;
+		return $return;
 	}
     
     public function isSecureMusic($file) {

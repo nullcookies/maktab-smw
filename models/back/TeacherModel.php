@@ -10,55 +10,61 @@ use \models\objects\Teacher;
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class TeacherModel extends Model {
+class TeacherModel extends Model
+{
     
     /**
      * Teacher Usergroup
      */
     public $usergroup = 5;
 
-    public function index() {
+    public function index()
+    {
 
         $data = [];
 
         $breadcrumbs = [];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('main page'),
+            'name' => $this->t('main page', 'back'),
             'url' => $this->linker->getAdminUrl()
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation($this->control . ' page'),
+            'name' => $this->t($this->control . ' page', 'back'),
             'url' => 'active'
         ];
 
         $data['breadcrumbs'] = $breadcrumbs;
         
         $this->document = new Document();
-        $this->document->title = $this->getTranslation('control panel') . ' - ' . $this->getTranslation($this->control . ' page');
+        $this->document->title = $this->t('control panel', 'back') . ' - ' . $this->t($this->control . ' page', 'back');
 
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.css');
         
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/jquery.dataTables.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/mixitup-3/dist/mixitup.min.js');
         
         $controls = [];
-
+        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
         $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
-
         $data['controls'] = $controls;
 
-        $users = [];
+        $dataTableAjaxParams = [];
+        $dataTableAjaxParams['page-start'] = ($_GET['page_start']) ? $_GET['page_start'] : '';
+        $dataTableAjaxParams['page-length'] = ($_GET['page_length']) ? $_GET['page_length'] : '';
+        $dataTableAjaxParams['page-order-column'] = ($_GET['page_order_column']) ? $_GET['page_order_column'] : '';
+        $dataTableAjaxParams['page-order-dir'] = ($_GET['page_order_dir']) ? $_GET['page_order_dir'] : '';
+        $data['dataTableAjaxParams'] = $dataTableAjaxParams;
 
-        $this->qb->where('usergroup', $this->usergroup);
-        $this->qb->order([['lastname', false], ['id', true]]);
-        $getUsers = $this->qb->get('??user');
-        if($getUsers->rowCount() > 0){
-            $users = $getUsers->fetchAll();
-        }
-
-
-        $data['users'] = $users;
+        // $users = [];
+        // $this->qb->where('usergroup', $this->usergroup);
+        // $this->qb->order([['lastname', false], ['id', true]]);
+        // $getUsers = $this->qb->get('??user');
+        // if($getUsers->rowCount() > 0){
+        //     $users = $getUsers->fetchAll();
+        // }
+        // $data['users'] = $users;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -68,10 +74,161 @@ class TeacherModel extends Model {
 
         return $this;
     }
-    
-    public function view() {
+
+    public function list_ajax() {
         
-        $id = !empty($_GET['param1']) ? (int)$_GET['param1'] : (!empty($_POST['id']) ? (int)$_POST['id'] : 0);
+        $data = [];
+
+        $controls = [];
+        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
+        $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
+        $data['controls'] = $controls;
+
+        $_POST = $this->cleanForm($_POST);
+
+        $data['draw'] = (int)$_POST['draw'];
+
+        $totalRows = $this->qb->select('id')->where('usergroup', $this->usergroup)->count('??user');
+        $data['recordsTotal'] = $totalRows;
+
+        $offset = (int)$_POST['start'];
+        // if(isset($_POST['page_start'])){
+        //     $offset = (int)$_POST['page_start'];
+        // }
+
+        $limit = (int)$_POST['length'];
+        // if(isset($_POST['page_length'])){
+        //     $limit = (int)$_POST['page_length'];
+        // }
+        if($limit < 1){
+            $limit = 10;
+        }
+
+        $getOrder = (int)$_POST['order'][0]['column'];
+        // if(isset($_POST['page_order_column'])){
+        //     $getOrder = (int)$_POST['page_order_column'];
+        // }
+        switch ($getOrder) {
+            case 0:
+                $order = 'id';
+                break;
+            
+            case 1:
+                $order = 'lastname';
+                break;
+            
+            case 2:
+                $order = 'firstname';
+                break;
+            
+            case 3:
+                $order = 'username';
+                break;
+            
+            case 4:
+                $order = 'email';
+                break;
+            
+            case 5:
+                $order = 'phone';
+                break;
+            
+            case 6:
+                $order = 'status';
+                break;
+            
+            default:
+                $order = 'lastname';
+                break;
+        }
+
+        $getOrderDir = $_POST['order'][0]['dir'];
+        // if(isset($_POST['page_order_dir'])){
+        //     $getOrderDir = $_POST['page_order_dir'];
+        // }
+        $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
+
+
+        $recordsFiltered = $totalRows;
+
+        $search_where = '';
+        $where_params = null;
+
+        $search = $_POST['search']['value'];
+        $searchText = substr($search, 0, 65536);
+
+        if($searchText){
+            $where_params = [];
+            $search_where = " (username LIKE ? OR email LIKE ? OR phone LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR middlename LIKE ?) ";
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $querySearch = 'SELECT u.id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . 'GROUP BY id';
+            $sth1 = $this->qb->prepare($querySearch);
+            $sth1->execute($where_params);
+            $recordsFiltered = $sth1->rowCount();
+        }
+        $data['recordsFiltered'] = $recordsFiltered;
+
+
+        $query = 'SELECT id, firstname, lastname, middlename, username, phone, email, status, date_activity FROM ??user ';
+
+        $query .= ' WHERE usergroup = ' . $this->usergroup . ' ';
+        if($searchText){
+            $query .= ' AND ' . $search_where;
+        }
+        $query .= ' GROUP BY id';
+        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
+        $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
+
+        $getItems = $this->qb->prepare($query);
+        $getItems->execute($where_params);
+
+        $items = [];
+        if($getItems->rowCount() > 0){
+            $items = $getItems->fetchAll();
+        }
+
+        $itemsData = [];
+        foreach($items as $value){
+            $itemsDataRow = [];
+
+            $itemsDataRow[0] = $value['id'];
+            $itemsDataRow[1] = $value['lastname'];
+            $itemsDataRow[2] = $value['firstname'];
+            $itemsDataRow[3] = $value['username'];
+            $itemsDataRow[4] = $value['phone'];
+            $itemsDataRow[5] = $value['email'];
+            
+            $itemsDataRow[6] =   '<div class="status-change">' . 
+                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="teacher" data-table="user" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
+                                    '</div>';
+            $itemsDataRow[7] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+                                        '<i class="fa fa-edit"></i>' .
+                                    '</a> ' . 
+                                    '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
+                                        '<i title="' . $this->t('btn delete', 'back') . '" class="fa fa-trash-o"></i>' . 
+                                    '</a>';
+            $itemsData[] = $itemsDataRow;
+        }
+
+
+
+        $data['data'] = $itemsData;
+
+        $this->data = $data;
+
+        return $this;
+    }
+    
+    public function view()
+    {
+        
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['id']) ? (int)$_POST['id'] : 0);
         
         $teacher = new Teacher();
 
@@ -79,26 +236,30 @@ class TeacherModel extends Model {
             $teacher->find($id);
         }
 
+        if($teacher->usergroup <= $_SESSION['usergroup']){
+            exit('Access Error');
+        }
+
         $data = [];
 
         $breadcrumbs = [];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('main page'),
+            'name' => $this->t('main page', 'back'),
             'url' => $this->linker->getAdminUrl()
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation($this->control . ' page'),
+            'name' => $this->t($this->control . ' page', 'back'),
             'url' => $this->linker->getUrl($this->control, true)
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('view ' . $this->control),
+            'name' => $this->t('view ' . $this->control, 'back'),
             'url' => 'active'
         ];
 
         $data['breadcrumbs'] = $breadcrumbs;
         
         $this->document = new Document();
-        $this->document->title = $this->getTranslation('control panel') . ' - ' . $this->getTranslation($this->control);
+        $this->document->title = $this->t('control panel', 'back') . ' - ' . $this->t($this->control, 'back');
 
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
@@ -130,9 +291,10 @@ class TeacherModel extends Model {
         $controls['save'] = $this->linker->getUrl($this->control . '/save', true);
         $data['controls'] = $controls;
 
-        if(!empty($_POST['teacher'])){
+        if(!empty($_POST['teacher']) && !$this->savedSuccess){
             $teacher->setFields($_POST['teacher']);
         }
+        $teacher->icon = $this->linker->getIcon($this->media->resize($teacher->image, 150, 150, NULL, true));
 
         $data['teacher'] = $teacher;
 
@@ -146,9 +308,10 @@ class TeacherModel extends Model {
         
     }
     
-    public function save($new = false){
+    public function save()
+    {
         
-        $user = new User;
+        $teacher = new Teacher();
 
         $isUniqueParams = [
             'table' => '??user',
@@ -158,150 +321,158 @@ class TeacherModel extends Model {
             'table' => '??user',
             'column' => 'email'
         ];
-        if(!$new) {
-            $id = (int)$_POST['id'];
+
+        $_POST = $this->cleanForm($_POST);
+        $info = $_POST['teacher'];
+        $info['username'] = strtolower($info['username']);
+        
+        $new = true;
+        $id = (int)$info['id'];
+        if($id && $teacher->find($id)){
             $isUniqueParams['id'] = $id;
             $isUniqueParamsEmail['id'] = $id;
-
-            $user->find($id);
+            $new = false;
         }
 
-        if($user->usergroup < $_SESSION['usergroup']){
+        if($teacher->usergroup <= $_SESSION['usergroup']){
             exit('Access Error');
         }
 
+        $checkData = [];
+        $checkData['info'] = $info;
+
         $rules = [ 
-            'post' => [
+            'info' => [
                 //'name' => ['isRequired'],
                 'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
                 'username' => ['isRequired', 'isUsername', ['isUnique', $isUniqueParams]],
-                'usergroup' => ['isRequired', ['accessControl', ['type' => '==', 'value' => $this->usergroup]]],
             ],
             'files' => [
                 
             ]
         ];
+        if($new){
+            $rules['info']['password'] = ['isRequired'];
+        }
+
 
         if($_FILES['image']['error'] == 0){
-            $rules['files']['image'] = ['isImage', ['maxSize', 3000000]];
-            $data['files'] = $_FILES;
+            $rules['files']['image'] = ['isImage', ['maxSize', $this->config['params']['max_image_size']]];
+            $checkData['files'] = $_FILES;
         }
 
-        if($new){
-            $rules['post']['password'] = ['isRequired'];
-        }
-
-        $_POST = $this->cleanForm($_POST);
-
-        $_POST['username'] = strtolower($_POST['username']);
-
-        $data['post'] = $_POST;
-        
-
-        $valid = $this->validator->validate($rules, $data);
+        $valid = $this->validator->validate($rules, $checkData);
         
         if(!$valid){
 
             if(!$new){
-                $this->errorText = $this->getTranslation('error edit ' . $this->control);
+                $this->errorText = $this->t('error edit ' . $this->control, 'back');
             }
             else{
-                $this->errorText = $this->getTranslation('error add ' . $this->control);
+                $this->errorText = $this->t('error add ' . $this->control, 'back');
             }
             $this->errors = $this->validator->lastErrors;
+
             return false;
 
         }
         else{
 
-            $user->username = $_POST['username'];
-
-            $user->email = $_POST['email'];
-            $user->usergroup = (int)$_POST['usergroup'];
-            $user->phone = $_POST['phone'];
-            $user->address = $_POST['address'];
-            
-            $user->firstname = $_POST['firstname'];
-            $user->lastname = $_POST['lastname'];
-            $user->middlename = $_POST['middlename'];
-
-            $user->status = 1;
-
-            if(!$new) {
-                if(!empty($_POST['new_password'])){
-                    $user->password = $this->hashPassword($_POST['new_password']);
-                }
+            $info = $_POST['teacher'];
+            if(!empty($info['password'])){
+                $info['password'] = $this->hashPassword($info['password']);
             }
-            else{
-                $user->date_reg = time();
-                $user->password = $this->hashPassword($_POST['password']);
+            $teacher->setFields($info);
+
+            $teacher->status = 1;
+
+            if($new) {
+                $teacher->date_reg = time();
             }
 
-            $user->save();
+            $teacher->save();
 
-            if($user->savedSuccess){
+            $this->savedSuccess = $teacher->savedSuccess;
+
+            if($teacher->savedSuccess){
                 
                 if($_FILES['image']['error'] == 0){
                     $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
                     if($imageUploaded){
-                        $user->image = $imageUploaded;
-                        $user->save();
+                        $teacher->image = $imageUploaded;
+                        $teacher->save();
                     }
                 }
 
-                $this->successText = $this->getTranslation('success edit ' . $this->control);
+                $this->successText = $this->t('success edit ' . $this->control, 'back');
             }
             else{
-                $this->errorText = $this->getTranslation('error edit ' . $this->control);
-                $this->errors['error db'] = $this->getTranslation('error db');
+                $this->errorText = $this->t('error edit ' . $this->control, 'back');
+                $this->errors['error db'] = $this->t('error db', 'back');
             }
-            return $user->savedSuccess;
+            return $teacher->savedSuccess;
         }
     }
 
-    public function toggle() {
+    public function toggle()
+    {
         $id = $_GET['param1'];
         $status = (int)$_GET['param2'];
+
         $return = '';
-        if($id){
-            $result = $this->qb->where('id', '?')->update('??user', ['status' => $status], [$id]);
-            if($result){
+
+        $teacher = new Teacher();
+        if($id && $teacher->find($id)){
+
+            if($teacher->usergroup <= $_SESSION['usergroup']){
+                exit('Access Error');
+            }
+            $teacher->status = $status;
+            $teacher->save();
+
+            if($teacher->savedSuccess){
                 $return = ($status) ? 'on' : 'off';
             }
         }
         return $return;
     }
     
-    public function delete(){
+    public function delete()
+    {
+        $return = false;
 
-        $id = (int)$_GET['param1'];
-        if(!$id) {
-            $this->errors['error empty id'];
-            return false;
-        }
-        $getuser = $this->qb->where('id', '?')->get('??user', [$id]);
-        if($getuser->rowCount() > 0){
-            $user = $getuser->fetch();
-        }
-        
-        if($user['image']){
-            $this->media->delete($user['image']);
-        }
+        $id = (int)$_GET['id'];
+        $teacher = new Teacher();
 
-        $resultDelete = $this->qb->where('id', '?')->delete('??user', [$id]);
-        
-        if(!$resultDelete){
-            $this->errorText = $this->getTranslation('error delete ' . $this->control);
-            $this->errors['error db'];
-            return false;
+        if($id && $teacher->find($id)) {
+
+            if($teacher->usergroup <= $_SESSION['usergroup']){
+                exit('Access Error');
+            }
+
+            if($teacher->image){
+                $this->media->delete($teacher->image);
+            }
+
+            $teacher->remove();
+            
+            if($teacher->removedSuccess){
+                $this->successText = $this->t('success delete ' . $this->control, 'back');
+            }
+            else{
+                $this->errorText = $this->t('error delete ' . $this->control, 'back');
+                $this->errors['error db'];
+            }
+
+            $return = $teacher->removedSuccess;
+
+            return $teacher->removedSuccess;
         }
         else{
-            $this->successText = $this->getTranslation('success delete ' . $this->control);
-            return true;
+            $this->errors['error invalid id'];
         }
+
+        return $return;
     }
 
 }
-
-
-

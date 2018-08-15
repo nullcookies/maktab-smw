@@ -81,6 +81,7 @@ class ProductModel extends Model {
 
         return $this;
     }
+    
     public function list_ajax() {
         
         $data = [];

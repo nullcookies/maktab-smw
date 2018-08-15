@@ -33,43 +33,29 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table class="data-table table table-bordered table-hover">
+              <table class="data-table-ajax table table-bordered table-hover" data-ajax-url="<?=$controls['list_ajax']?>" data-order="[[ 1, &quot;asc&quot; ]]">
                 <thead>
                     <tr>
                       <th class="wh"><?=$this->t('id', 'back')?></th>
-                      <th><?=$this->t('fio', 'back')?></th>
+                      <th><?=$this->t('lastname', 'back')?></th>
+                      <th><?=$this->t('firstname', 'back')?></th>
                       <th><?=$this->t('username', 'back')?></th>
                       <th><?=$this->t('phone', 'back')?></th>
+                      <th><?=$this->t('email', 'back')?></th>
+                      <th><?=$this->t('status', 'back')?></th>
                       <th><?=$this->t('control buttons', 'back')?></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <?php if($users){ ?>
-                    <?php foreach($users as $value){ ?>
-                    <tr>
-                      <td class="td-shrink"><?=$value['id']?></td>
-                      <td><?=$value['lastname']?> <?=$value['firstname']?> <?=$value['middlename']?></td>
-                      <td><?=$value['username']?></td>
-                      <td><?=$value['phone']?></td>
-                      <td class="td-shrink">
-                          <a class="btn btn-info" title="<?=$this->t('btn edit', 'back')?>" href="<?=$controls['view'] . '?id=' . $value['id']?>">
-                              <i class="fa fa-edit"></i>
-                          </a>
-                          <a class="btn btn-danger" href="<?=$controls['delete'] . '?id=' . $value['id']?>" data-toggle="confirmation" data-btn-ok-label="<?=$this->t('confirm yes', 'back')?>" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label="<?=$this->t('confirm no', 'back')?>" data-btn-cancel-icon="fa fa-times"
-                            data-btn-cancel-class="btn-danger btn-xs" data-title="<?=$this->t('are you sure', 'back')?>" >
-                              <i title="<?=$this->t('btn delete', 'back')?>" class="fa fa-trash-o"></i>
-                          </a>
-                      </td>
-                    </tr>
-                    <?php } ?>
-                    <?php } ?>
-                </tbody>
+                
                 <tfoot>
                     <tr>
                       <th class="wh"><?=$this->t('id', 'back')?></th>
-                      <th><?=$this->t('fio', 'back')?></th>
+                      <th><?=$this->t('lastname', 'back')?></th>
+                      <th><?=$this->t('firstname', 'back')?></th>
                       <th><?=$this->t('username', 'back')?></th>
                       <th><?=$this->t('phone', 'back')?></th>
+                      <th><?=$this->t('email', 'back')?></th>
+                      <th><?=$this->t('status', 'back')?></th>
                       <th><?=$this->t('control buttons', 'back')?></th>
                     </tr>
                 </tfoot>

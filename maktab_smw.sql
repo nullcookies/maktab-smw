@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 12 2018 г., 23:41
+-- Время создания: Авг 16 2018 г., 00:20
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -829,7 +829,7 @@ CREATE TABLE IF NOT EXISTS `mktb_translation` (
   `content` text NOT NULL,
   `context` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1179 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1185 ;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -1996,7 +1996,13 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1175, 1, 'teacher list', 'teacher list', 'back'),
 (1176, 1, 'error usergroup', 'error usergroup', 'back'),
 (1177, 1, 'view teacher', 'view teacher', 'back'),
-(1178, 1, 'teacher', 'teacher', 'back');
+(1178, 1, 'teacher', 'teacher', 'back'),
+(1179, 1, 'edit teacher', 'edit teacher', 'back'),
+(1180, 1, 'error edit teacher', 'error edit teacher', 'back'),
+(1181, 1, 'error add teacher', 'error add teacher', 'back'),
+(1182, 1, 'max size', 'max size', 'back'),
+(1183, 1, 'success edit teacher', 'success edit teacher', 'back'),
+(1184, 1, 'error max image dimensions: x', 'error max image dimensions: x', 'back');
 
 -- --------------------------------------------------------
 
@@ -2088,16 +2094,17 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- Дамп данных таблицы `mktb_user`
 --
 
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `date_reg`, `date_activity`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
-(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 1534042796, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1534042796, '127.0.0.1', '8l41nf7u3djgi2v9to8qtjh772'),
+(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 1534356294, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1534356294, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
 (2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 1534048108, '', 0, 1, '', 'Улугбек', 'Фамилия', 'Отчество', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1534048108, '127.0.0.1', '8l41nf7u3djgi2v9to8qtjh772'),
-(11, 'teacher1', 'test', 5, 'teacher@test.com', '', 0, '', '', '', '', 0, 0, '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
+(11, 'teacher1', '', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 0, '', 0, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(12, 'TB', 'b401e2066c93fdcd6eb38966a9b86d14', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 0, '', 0, 0, '', 'Bolta', 'Teshayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
 
 -- --------------------------------------------------------
 

@@ -91,13 +91,19 @@ abstract class ActiveRecord extends Object {
         if (array_key_exists($name, $this->fields)) {
             return $this->fields[$name];
         }
-        elseif (isset($this->$name) && $name != 'fields') {
-            return $this->$name;
-        }
-        return null;
+        return (isset($this->$name)) ? $this->$name : null;
     }
 
     public function setFields($array = [])
+    {
+    	foreach ($array as $key => $value) {
+    		if (in_array($key, $this->columns) && !in_array($key, $this->secureAssignColumns)) {
+	        	$this->fields[$key] = $value;
+	        }
+    	}
+    }
+
+    public function getFields()
     {
     	foreach ($array as $key => $value) {
     		if (in_array($key, $this->columns) && !in_array($key, $this->secureAssignColumns)) {
@@ -126,6 +132,7 @@ abstract class ActiveRecord extends Object {
     public function save()
     {
     	$primaryKey = $this->primaryKey;
+    	$this->savedSuccess = false;
     	if(!empty($primaryKey)){
     		$primaryKeyValue = $this->$primaryKey;
     		$args = new ArgumentArray;
@@ -149,7 +156,7 @@ abstract class ActiveRecord extends Object {
     		}
 	        $sql = $query->toSql($this->driver, $args);
 	        $sth = $this->db->prepare($sql);
-	        $this->savedSuccess = false;
+	        
 	        if($sth !== false){
 	        	$this->savedSuccess = $sth->execute((array)$args);
 				if(!$this->savedSuccess){
@@ -160,8 +167,37 @@ abstract class ActiveRecord extends Object {
     	return $this;
     }
 
+    public function remove()
+    {
+    	$primaryKey = $this->primaryKey;
+    	$this->removedSuccess = false;
+    	if(!empty($primaryKey)){
+    		$primaryKeyValue = $this->$primaryKey;
+    		$args = new ArgumentArray;
+    		$query = new DeleteQuery;
+
+	        $query->delete($this->tableName);
+	        $query->where()
+	            ->equal($primaryKey, new Bind($primaryKey, $primaryKeyValue));	
+
+	        $sql = $query->toSql($this->driver, $args);
+	        $sth = $this->db->prepare($sql);
+
+	        file_put_contents('ppp.txt', $sql);
+	        
+	        if($sth !== false){
+	        	//$this->removedSuccess = $sth->execute((array)$args);
+				if(!$this->removedSuccess){
+					$this->errorInfo = $sth->errorInfo();
+				}
+	        }
+    	}
+    	return $this;
+    }
+
     public function find($id)
     {
+    	$found = false;
     	if(!empty($this->primaryKey)){
     		$args = new ArgumentArray;
     		$query = new SelectQuery;
@@ -172,13 +208,13 @@ abstract class ActiveRecord extends Object {
 			$sql = $query->toSql($this->driver, $args);
 			$sth = $this->db->prepare($sql);
 			if($sth !== false){
-	        	$result = $sth->execute((array)$args);
-				if($result){
+	        	$found = $sth->execute((array)$args);
+				if($found){
 					$this->fields = $sth->fetch(\PDO::FETCH_ASSOC);
 				}
 	        }
     	}
-    	return $this;
+    	return $found;
     }
 
     public function findAll($id)

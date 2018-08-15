@@ -14,7 +14,7 @@ return [
     'adminAccess' => 'admin',
     'developer' => 'Ulugbek',
     'developerEmail' => 'ulugbek.yu@gmail.com',
-    'synchronized' => true,
+    'synchronized' => false,
     'synchUploads' => 'http://domain.uz/uploads/',
     'synchApi' => 'http://domain.uz/api/',
     'synchApiKey' => '', //same between synchronized sites, (string)1234567890123456789012

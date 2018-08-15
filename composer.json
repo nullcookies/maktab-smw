@@ -3,7 +3,6 @@
         "phpmailer/phpmailer": "^6.0",
         "paycom/integration-template": "^1.0",
         "guzzlehttp/guzzle": "^6.3",
-        "php-activerecord/php-activerecord": "^1.2",
         "corneltek/sqlbuilder": "^4.0"
     }
 }

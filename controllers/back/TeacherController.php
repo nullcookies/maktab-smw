@@ -11,7 +11,8 @@ defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 class TeacherController extends Controller {
     
     public function index() {
-    	$this->modules = [
+    	
+        $this->modules = [
     		[
                 'side' => 'back',
                 'controller' => 'header',
@@ -38,6 +39,15 @@ class TeacherController extends Controller {
         $this->document = $model->document;
 
         $this->content = $this->render('teacher-list');
+    }
+
+    public function list_ajax() {
+        $model = new TeacherModel;
+
+        $model->list_ajax();
+        $this->data = $model->data;
+            
+        $this->json($this->data);
     }
     
     public function view() {    
@@ -66,10 +76,11 @@ class TeacherController extends Controller {
         $model = new TeacherModel;
 
         $viewFile = 'teacher-view';
-        $model->view();
+        
         if(isset($_POST['btn_save'])){
             $result = $model->save();
         }
+        $model->view();
     
         $this->data = $model->data;
         $this->document = $model->document;
@@ -106,15 +117,14 @@ class TeacherController extends Controller {
         ];
         
         $model = new TeacherModel;
-        if($model){
-            $id = (int)$_GET['param1'];
-            if($id){
-                $resultDelete = $model->delete();
-            }
-            $model->index();
-            $this->data = $model->data;
-            $this->document = $model->document;
+        $id = (int)$_GET['param1'];
+        if($id){
+            $resultDelete = $model->delete();
         }
+        $model->index();
+        $this->data = $model->data;
+        $this->document = $model->document;
+
         $this->content = $this->render('teacher-list');
     }
 
