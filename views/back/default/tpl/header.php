@@ -29,7 +29,8 @@
           <?php } ?>
           
 
-          <?php/*
+          <?php
+          /*
 			<!-- Messages: style can be found in dropdown.less-->
           <li class="dropdown messages-menu">
             <!-- Menu toggle button -->
@@ -65,7 +66,8 @@
             </ul>
           </li>
           <!-- /.messages-menu -->
-          */?>
+          */
+          ?>
           
 		  <li>
             <a href="<?=$homePage?>" target="_blank" class="dropdown-toggle">
@@ -73,7 +75,8 @@
               <?=$this->getTranslation('go site')?>
             </a>
           </li>
-          <?php/*
+          <?php
+          /*
           <!-- Notifications Menu -->
           <li class="dropdown notifications-menu">
             <!-- Menu toggle button -->
@@ -97,8 +100,10 @@
               <li class="footer"><a href="#">View all</a></li>
             </ul>
           </li>
-          */?>
-          <?php/*
+          */
+          ?>
+          <?php
+          /*
           <!-- Tasks Menu -->
           <li class="dropdown tasks-menu">
             <!-- Menu Toggle Button -->
@@ -135,7 +140,8 @@
               </li>
             </ul>
           </li>
-          */?>
+          */
+          ?>
 
           <!-- User Account Menu -->
         <li class="dropdown user user-menu">
@@ -167,12 +173,14 @@
               </li>
             </ul>
         </li>
-	     <?php/*
+	     <?php
+       /*
 	     <!-- Control Sidebar Toggle Button -->
 	      <li>
 	        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
 	      </li>
-	     */?>
+	     */
+        ?>
         </ul>
       </div>
     </nav>

@@ -461,7 +461,7 @@ class UserModel extends Model {
                             'phpsessid' => $_COOKIE['PHPSESSID'],
                             'last_ip' => $_SERVER['REMOTE_ADDR'],
                             'last_login' => time(),
-                            'date_activity' => time()
+                            'activity_at' => time()
                         ];
                         $this->qb->where('id', '?')->update('??user', $update, [$user['id']]);
                         //header('Location: ' . BASEURL . '/');
@@ -659,7 +659,7 @@ class UserModel extends Model {
             'phpsessid' => $_COOKIE['PHPSESSID'],
             'last_ip' => $_SERVER['REMOTE_ADDR'],
             'last_login' => time(),
-            'date_activity' => time()
+            'activity_at' => time()
         ];
         $result = $this->qb->where('id', '?')->update('??user', $update, [$userid]);
         if($result->rowCount() == 1){

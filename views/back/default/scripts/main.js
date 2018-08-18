@@ -47,6 +47,20 @@ $(document).ready(function () {
     }
   });
 
+  $('.school-group-start-11').on('change', function(){
+      var currentYear = +$(this).val();
+      if($('.school-group-end-11').length){
+        $('.school-group-end-11').find('option[value=' + (currentYear + 11) + ']').prop('selected', true);
+      }
+  });
+
+  $('.school-group-end-11').on('change', function(){
+      var currentYear = +$(this).val();
+      if($('.school-group-start-11').length){
+        $('.school-group-start-11').find('option[value=' + (currentYear - 11) + ']').prop('selected', true);
+      }
+  });
+
   $('#price, #discount, #priceshow').on('input change', function(){
 
     if($('#price').length && $('#discount').length && $('#priceshow').length){
@@ -383,7 +397,8 @@ $(document).ready(function () {
       .fail(function(data) {
         //console.log(data);
       })
-      .always(function() {
+      .always(function(data) {
+        //console.log(data);
         elem.removeClass('working');
         toggleOn.html(toggleOnText);
         toggleOff.html(toggleOffText);

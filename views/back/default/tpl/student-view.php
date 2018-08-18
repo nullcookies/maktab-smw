@@ -2,7 +2,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <?=$this->t('view teacher', 'back');?>
+        <?=$this->t('view student', 'back');?>
         <!-- <small>Optional description</small> -->
       </h1>
       <?php 
@@ -19,7 +19,7 @@
     
         <form action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
             
-            <input type="hidden" name="teacher[id]" value="<?=$teacher->id?>" />
+            <input type="hidden" name="student[id]" value="<?=$student->id?>" />
             
             <div class="form-group">
                 <a class="btn btn-default btn-app" href="<?=$controls['back']?>">
@@ -42,39 +42,26 @@
                                 <label for="username">
                                     <?=$this->t('username', 'back')?> <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[username]" id="username" value="<?= $teacher->username; ?>" />
+                                <input type="text" class="form-control" name="student[username]" id="username" value="<?= $student->username; ?>" />
                                 <?php if(!empty($errors['username'])) { ?><div class="help-block"><?=$this->t($errors['username'], 'back')?></div><?php } ?>
                             </div>
 
                             <div class="form-group <?php if(!empty($errors['password'])) { ?>has-error<?php } ?>">
                                 <label for="password">
                                     <?=$this->t('password', 'back')?>
-                                    <?php if(!$teacher->id): ?>
+                                    <?php if(!$student->id): ?>
                                         <span class="text-danger">*</span>
                                     <?php endif; ?>
                                 </label>
-                                <input type="password" class="form-control" name="teacher[password]" id="password" value="" />
+                                <input type="password" class="form-control" name="student[password]" id="password" value="" />
                                 <?php if(!empty($errors['password'])) { ?><div class="help-block"><?=$this->t($errors['password'], 'back')?></div><?php } ?>
-                            </div>
-
-                            <div class="form-group <?php if(!empty($errors['group_id'])) { ?>has-error<?php } ?>">
-                                <label for="group_id">
-                                    <?=$this->t('student group', 'back')?>
-                                </label>
-                                <select name="group_id" id="group_id" class="form-control">
-                                    <option value="">-</option>
-                                    <?php foreach($classes as $value){ ?>
-                                    <option value="<?=$value['id']?>" <?php /*if($group->end_year == $i){ ?>selected<?php }*/ ?>><?=$value['grade'] . ' - ' . $value['name']?> (<?=$value['start_year']?> - <?=$value['end_year']?>)</option>
-                                    <?php } ?>
-                                </select>
-                                <?php if(!empty($errors['group_id'])) { ?><div class="help-block"><?=$this->t($errors['group_id'], 'back')?></div><?php } ?>
                             </div>
 
                             <div class="form-group <?php if(!empty($errors['email'])) { ?>has-error<?php } ?>">
                                 <label for="email">
                                     <?=$this->t('email', 'back')?>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[email]" id="email" value="<?= $teacher->email; ?>" />
+                                <input type="text" class="form-control" name="student[email]" id="email" value="<?= $student->email; ?>" />
                                 <?php if(!empty($errors['email'])) { ?><div class="help-block"><?=$this->t($errors['email'], 'back')?></div><?php } ?>
                             </div>
 
@@ -82,7 +69,7 @@
                                 <label for="phone">
                                     <?=$this->t('phone', 'back')?>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[phone]" id="phone" value="<?= $teacher->phone; ?>" />
+                                <input type="text" class="form-control" name="student[phone]" id="phone" value="<?= $student->phone; ?>" />
                                 <?php if(!empty($errors['phone'])) { ?><div class="help-block"><?=$this->t($errors['phone'], 'back')?></div><?php } ?>
                             </div>
 
@@ -90,7 +77,7 @@
                                 <label for="address">
                                     <?=$this->t('address', 'back')?>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[address]" id="address" value="<?= $teacher->address; ?>" />
+                                <input type="text" class="form-control" name="student[address]" id="address" value="<?= $student->address; ?>" />
                                 <?php if(!empty($errors['address'])) { ?><div class="help-block"><?=$this->t($errors['address'], 'back')?></div><?php } ?>
                             </div>
 
@@ -109,28 +96,28 @@
                                 <label for="lastname">
                                     <?=$this->t('lastname', 'back')?>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[lastname]" id="lastname" value="<?= $teacher->lastname; ?>" />
+                                <input type="text" class="form-control" name="student[lastname]" id="lastname" value="<?= $student->lastname; ?>" />
                                 <?php if(!empty($errors['lastname'])) { ?><div class="help-block"><?=$this->t($errors['lastname'], 'back')?></div><?php } ?>
                             </div>
                             <div class="form-group <?php if(!empty($errors['firstname'])) { ?>has-error<?php } ?>">
                                 <label for="firstname">
                                     <?=$this->t('firstname', 'back')?>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[firstname]" id="firstname" value="<?= $teacher->firstname; ?>" />
+                                <input type="text" class="form-control" name="student[firstname]" id="firstname" value="<?= $student->firstname; ?>" />
                                 <?php if(!empty($errors['firstname'])) { ?><div class="help-block"><?=$this->t($errors['firstname'], 'back')?></div><?php } ?>
                             </div>
                             <div class="form-group <?php if(!empty($errors['middlename'])) { ?>has-error<?php } ?>">
                                 <label for="middlename">
                                     <?=$this->t('middlename', 'back')?>
                                 </label>
-                                <input type="text" class="form-control" name="teacher[middlename]" id="middlename" value="<?= $teacher->middlename; ?>" />
+                                <input type="text" class="form-control" name="student[middlename]" id="middlename" value="<?= $student->middlename; ?>" />
                                 <?php if(!empty($errors['middlename'])) { ?><div class="help-block"><?=$this->t($errors['middlename'], 'back')?></div><?php } ?>
                             </div>
                             
                             <div class="form-group">
                                 <div class="current-image">
-                                    <img src="<?=$teacher->icon?>?rand=<?=mt_rand(1, 999)?>" alt="<?=$teacher->firstname?>">
-                                    <input type="hidden" name="teacher[image]" value="<?=$teacher->image?>">
+                                    <img src="<?=$student->icon?>?rand=<?=mt_rand(1, 999)?>" alt="<?=$student->firstname?>">
+                                    <input type="hidden" name="student[image]" value="<?=$student->image?>">
                                 </div>
                             </div>
                             <div class="form-group <?php if(!empty($errors['image'])) { ?>has-error<?php } ?>">

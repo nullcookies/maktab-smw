@@ -10,21 +10,21 @@
  *
 */
 $time_start = microtime(true);
-
+//setcookie('developer', '1', time() + 365 * 86400);
 if(isset($_COOKIE['developer'])){
 	define('ENVIRONMENT', 'dev'); // dev, prod
 }
 else{
-	define('ENVIRONMENT', 'dev'); // dev, prod
+	define('ENVIRONMENT', 'prod'); // dev, prod
 }
 
 if(ENVIRONMENT == 'dev'){
 	ini_set('display_errors', 1);
-	//error_reporting(E_ALL);
+	error_reporting(E_ALL);
 }
 else{
 	ini_set('display_errors', 0);
-	//error_reporting(0);
+	error_reporting(0);
 }
 
 $serverName = 'http' . ((isset($_SERVER['HTTPS'])) ? 's' : '') . '://' . $_SERVER['SERVER_NAME'];

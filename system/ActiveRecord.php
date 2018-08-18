@@ -28,6 +28,7 @@ abstract class ActiveRecord extends Object {
 	{
 		parent::__construct();
 		$this->setTableName();
+		
 
 		$getColumns = $this->db->query('SHOW COLUMNS FROM ' . $this->tableName);
 		if($getColumns->rowCount() > 0){
@@ -64,7 +65,9 @@ abstract class ActiveRecord extends Object {
 						$fieldValue = '0000';
 					}
 				}
-				$this->fields[$value['Field']] = $fieldValue;
+				if(empty($this->$value['Field'])){
+					$this->$value['Field'] = $fieldValue;
+				}
 
 				//set primary key
 				if($value['Key'] == 'PRI'){
@@ -72,7 +75,6 @@ abstract class ActiveRecord extends Object {
 				}
 			}
 		}
-			
 		$this->driver = new MySQLDriver;
 	}
 
@@ -105,11 +107,13 @@ abstract class ActiveRecord extends Object {
 
     public function getFields()
     {
-    	foreach ($array as $key => $value) {
+    	$fields = [];
+    	foreach ($this->fields as $key => $value) {
     		if (in_array($key, $this->columns) && !in_array($key, $this->secureAssignColumns)) {
-	        	$this->fields[$key] = $value;
+	        	$fields[$key] = $value;
 	        }
     	}
+    	return $fields;
     }
 
 
@@ -169,6 +173,7 @@ abstract class ActiveRecord extends Object {
 
     public function remove()
     {
+
     	$primaryKey = $this->primaryKey;
     	$this->removedSuccess = false;
     	if(!empty($primaryKey)){
@@ -182,11 +187,9 @@ abstract class ActiveRecord extends Object {
 
 	        $sql = $query->toSql($this->driver, $args);
 	        $sth = $this->db->prepare($sql);
-
-	        file_put_contents('ppp.txt', $sql);
 	        
 	        if($sth !== false){
-	        	//$this->removedSuccess = $sth->execute((array)$args);
+	        	$this->removedSuccess = $sth->execute((array)$args);
 				if(!$this->removedSuccess){
 					$this->errorInfo = $sth->errorInfo();
 				}

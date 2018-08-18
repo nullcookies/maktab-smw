@@ -5,18 +5,13 @@ namespace models\back;
 use \system\Document;
 use \system\Model;
 use \models\objects\User;
-use \models\objects\Teacher;
+use \models\objects\Group;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class TeacherModel extends Model
+class GroupModel extends Model
 {
-    
-    /**
-     * Teacher Usergroup
-     */
-    public $usergroup = 5;
 
     public function index()
     {
@@ -57,15 +52,6 @@ class TeacherModel extends Model
         $dataTableAjaxParams['page-order-dir'] = ($_GET['page_order_dir']) ? $_GET['page_order_dir'] : '';
         $data['dataTableAjaxParams'] = $dataTableAjaxParams;
 
-        // $users = [];
-        // $this->qb->where('usergroup', $this->usergroup);
-        // $this->qb->order([['lastname', false], ['id', true]]);
-        // $getUsers = $this->qb->get('??user');
-        // if($getUsers->rowCount() > 0){
-        //     $users = $getUsers->fetchAll();
-        // }
-        // $data['users'] = $users;
-
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
         $data['successText'] = $this->successText;
@@ -88,8 +74,8 @@ class TeacherModel extends Model
         $_POST = $this->cleanForm($_POST);
 
         $data['draw'] = (int)$_POST['draw'];
-
-        $totalRows = $this->qb->select('id')->where('usergroup', $this->usergroup)->count('??user');
+        $checkYear = date('Y') - 1;
+        $totalRows = $this->qb->select('id')->where('end_year >=', $checkYear)->count('??group');
         $data['recordsTotal'] = $totalRows;
 
         $offset = (int)$_POST['start'];
@@ -115,31 +101,27 @@ class TeacherModel extends Model
                 break;
             
             case 1:
-                $order = 'lastname';
+                $order = 'grade_start_year';
                 break;
             
             case 2:
-                $order = 'firstname';
+                $order = 'name';
                 break;
             
             case 3:
-                $order = 'username';
+                $order = 'start_year';
                 break;
             
             case 4:
-                $order = 'email';
+                $order = 'end_year';
                 break;
             
             case 5:
-                $order = 'phone';
-                break;
-            
-            case 6:
                 $order = 'status';
                 break;
             
             default:
-                $order = 'lastname';
+                $order = 'start_year';
                 break;
         }
 
@@ -148,6 +130,11 @@ class TeacherModel extends Model
         //     $getOrderDir = $_POST['page_order_dir'];
         // }
         $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
+
+        if($order == 'grade_start_year'){
+            $order = 'start_year';
+            $orderDir = ($orderDir == 'DESC') ? 'ASC' : 'DESC';
+        }
 
 
         $recordsFiltered = $totalRows;
@@ -160,14 +147,10 @@ class TeacherModel extends Model
 
         if($searchText){
             $where_params = [];
-            $search_where = " (username LIKE ? OR email LIKE ? OR phone LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR middlename LIKE ?) ";
+            $search_where = " (grade LIKE ? OR name LIKE ?) ";
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . ' GROUP BY id';
+            $querySearch = 'SELECT id FROM ??group WHERE ' . $search_where . ' GROUP BY id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -175,9 +158,8 @@ class TeacherModel extends Model
         $data['recordsFiltered'] = $recordsFiltered;
 
 
-        $query = 'SELECT id, firstname, lastname, middlename, username, phone, email, status, activity_at FROM ??user ';
+        $query = 'SELECT * FROM ??group WHERE end_year >= ' . $checkYear . ' ';
 
-        $query .= ' WHERE usergroup = ' . $this->usergroup . ' ';
         if($searchText){
             $query .= ' AND ' . $search_where;
         }
@@ -194,20 +176,23 @@ class TeacherModel extends Model
         }
 
         $itemsData = [];
+        
+
         foreach($items as $value){
             $itemsDataRow = [];
 
             $itemsDataRow[0] = $value['id'];
-            $itemsDataRow[1] = $value['lastname'];
-            $itemsDataRow[2] = $value['firstname'];
-            $itemsDataRow[3] = $value['username'];
-            $itemsDataRow[4] = $value['phone'];
-            $itemsDataRow[5] = $value['email'];
+            $valueGrade = $this->getGrade($value['start_year'], $value['end_year']);
+
+            $itemsDataRow[1] = $valueGrade;
+            $itemsDataRow[2] = $value['name'];
+            $itemsDataRow[3] = $value['start_year'];
+            $itemsDataRow[4] = $value['end_year'];
             
-            $itemsDataRow[6] =   '<div class="status-change">' . 
-                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="teacher" data-table="user" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
+            $itemsDataRow[5] =   '<div class="status-change">' . 
+                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="group" data-table="group" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
                                     '</div>';
-            $itemsDataRow[7] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+            $itemsDataRow[6] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
                                     '</a> ' . 
                                     '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
@@ -227,17 +212,12 @@ class TeacherModel extends Model
     
     public function view()
     {
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['group']['id']) ? (int)$_POST['group']['id'] : 0);
         
-        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['teacher']['id']) ? (int)$_POST['teacher']['id'] : 0);
-        
-        $teacher = new Teacher();
+        $group = new Group();
 
         if($id){
-            $teacher->find($id);
-        }
-
-        if($teacher->usergroup <= $_SESSION['usergroup']){
-            exit('Access Error');
+            $group->find($id);
         }
 
         $data = [];
@@ -291,27 +271,15 @@ class TeacherModel extends Model
         $controls['save'] = $this->linker->getUrl($this->control . '/save', true);
         $data['controls'] = $controls;
 
-        if(!empty($_POST['teacher'])){
-            $teacher->setFields($_POST['teacher']);
+        if(!empty($_POST['group'])){
+            $group->setFields($_POST['group']);
         }
-        if(isset($this->teacher)){
-            $teacher = $this->teacher;
+        if(isset($this->group)){
+            $group = $this->group;
         }
-        $teacher->icon = $this->linker->getIcon($this->media->resize($teacher->image, 150, 150, NULL, true));
+        $group->icon = $this->linker->getIcon($this->media->resize($group->image, 150, 150, NULL, true));
 
-        $currentYear = date('Y');
-        $groupModel = new GroupModel();
-        $classes = [];
-        $getClasses = $this->qb->where('end_year >=', $currentYear)->order('start_year', true)->get('??group');
-        if($getClasses->rowCount()){
-            $classes = $getClasses->fetchAll();
-            foreach ($classes as $key => $value) {
-                $classes[$key]['grade'] = $groupModel->getGrade($value['start_year'], $value['end_year']);
-            }
-        }
-        $data['classes'] = $classes;
-
-        $data['teacher'] = $teacher;
+        $data['group'] = $group;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -326,32 +294,15 @@ class TeacherModel extends Model
     public function save()
     {
         
-        $teacher = new Teacher();
-
-        $isUniqueParams = [
-            'table' => '??user',
-            'column' => 'username'
-        ];
-        $isUniqueParamsEmail = [
-            'table' => '??user',
-            'column' => 'email'
-        ];
+        $group = new Group();
 
         $_POST = $this->cleanForm($_POST);
-        
-        $info = $_POST['teacher'];
-        $info['username'] = strtolower($info['username']);
+        $info = $_POST['group'];
         
         $new = true;
         $id = (int)$info['id'];
-        if($id && $teacher->find($id)){
-            $isUniqueParams['id'] = $id;
-            $isUniqueParamsEmail['id'] = $id;
+        if($id && $group->find($id)){
             $new = false;
-        }
-
-        if($teacher->usergroup <= $_SESSION['usergroup']){
-            exit('Access Error');
         }
 
         $checkData = [];
@@ -359,23 +310,14 @@ class TeacherModel extends Model
 
         $rules = [ 
             'info' => [
-                //'name' => ['isRequired'],
-                //'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
-                'username' => ['isRequired', 'isUsername', ['isUnique', $isUniqueParams]],
+                'name' => ['isRequired'],
+                'start_year' => ['isRequired'],
+                'end_year' => ['isRequired'],
             ],
             'files' => [
                 
             ]
         ];
-        if($new){
-            $rules['info']['password'] = ['isRequired'];
-        }
-
-
-        if($_FILES['image']['error'] == 0){
-            $rules['files']['image'] = ['isImage', ['maxSize', $this->config['params']['max_image_size']]];
-            $checkData['files'] = $_FILES;
-        }
 
         $valid = $this->validator->validate($rules, $checkData);
         
@@ -394,40 +336,26 @@ class TeacherModel extends Model
         }
         else{
 
-            $teacher->setFields($info);
-            
-            if(!empty($info['password'])){
-                $teacher->password = $this->hashPassword($info['password']);
-            }
+            $group->setFields($info);
 
-            $teacher->status = 1;
+            $group->status = 1;
 
             if($new) {
-                $teacher->created_at = time();
+                $group->created_at = time();
             }
-            $teacher->updated_at = time();
+            $group->updated_at = time();
 
-            $teacher->save();
+            $group->save();
 
-            if($teacher->savedSuccess){
-
-                $this->teacher = $teacher;
-
-                if($_FILES['image']['error'] == 0){
-                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
-                    if($imageUploaded){
-                        $teacher->image = $imageUploaded;
-                        $teacher->save();
-                    }
-                }
-
+            if($group->savedSuccess){
                 $this->successText = $this->t('success edit ' . $this->control, 'back');
+                $this->group = $group;
             }
             else{
                 $this->errorText = $this->t('error edit ' . $this->control, 'back');
                 $this->errors['error db'] = $this->t('error db', 'back');
             }
-            return $teacher->savedSuccess;
+            return $group->savedSuccess;
         }
     }
 
@@ -438,16 +366,12 @@ class TeacherModel extends Model
 
         $return = '';
 
-        $teacher = new Teacher();
-        if($id && $teacher->find($id)){
+        $group = new Group();
+        if($id && $group->find($id)){
+            $group->status = $status;
+            $group->save();
 
-            if($teacher->usergroup <= $_SESSION['usergroup']){
-                exit('Access Error');
-            }
-            $teacher->status = $status;
-            $teacher->save();
-
-            if($teacher->savedSuccess){
+            if($group->savedSuccess){
                 $return = ($status) ? 'on' : 'off';
             }
         }
@@ -459,21 +383,13 @@ class TeacherModel extends Model
         $return = false;
 
         $id = (int)$_GET['id'];
-        $teacher = new Teacher();
+        $group = new Group();
 
-        if($id && $teacher->find($id)) {
+        if($id && $group->find($id)) {
 
-            if($teacher->usergroup <= $_SESSION['usergroup']){
-                exit('Access Error');
-            }
-
-            if($teacher->image){
-                $this->media->delete($teacher->image);
-            }
-
-            $teacher->remove();
+            $group->remove();
             
-            if($teacher->removedSuccess){
+            if($group->removedSuccess){
                 $this->successText = $this->t('success delete ' . $this->control, 'back');
             }
             else{
@@ -481,15 +397,25 @@ class TeacherModel extends Model
                 $this->errors['error db'];
             }
 
-            $return = $teacher->removedSuccess;
-
-            return $teacher->removedSuccess;
+            $return = $group->removedSuccess;
         }
         else{
             $this->errors['error invalid id'];
         }
 
         return $return;
+    }
+
+    public function getGrade($start_year, $end_year)
+    {
+        $studyStartMonth = $this->getOption('study_start_month');
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+        //для определения номера класса
+        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
+
+        $grade = $currentYear - $start_year + $addition;
+        return ($grade <= 11) ? $grade : $this->t('study finished', 'back') . ' ' . $end_year;
     }
 
 }

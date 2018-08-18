@@ -370,7 +370,7 @@ class UserModel extends Model {
                 }
             }
             else{
-                $user->date_reg = time();
+                $user->created_at = time();
                 $user->password = $this->hashPassword($_POST['password']);
             }
 
@@ -485,7 +485,7 @@ class UserModel extends Model {
         				'phpsessid' => $_COOKIE['PHPSESSID'],
         				'last_ip' => $_SERVER['REMOTE_ADDR'],
         				'last_login' => time(),
-        				'date_activity' => time()
+        				'activity_at' => time()
         			];
         			$this->qb->where('id', '?')->update('??user', $update, [$user['id']]);
         			header('Location: ' . BASEURL_ADMIN . '/');

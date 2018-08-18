@@ -6,6 +6,7 @@ use \system\ActiveRecord;
 
 class User extends ActiveRecord
 {
+    protected $secureAssignColumns = ['password'];
     
     public function save()
     {

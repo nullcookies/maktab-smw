@@ -5,18 +5,18 @@ namespace models\back;
 use \system\Document;
 use \system\Model;
 use \models\objects\User;
-use \models\objects\Teacher;
+use \models\objects\Student;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class TeacherModel extends Model
+class StudentModel extends Model
 {
     
     /**
-     * Teacher Usergroup
+     * Student Usergroup
      */
-    public $usergroup = 5;
+    public $usergroup = 11;
 
     public function index()
     {
@@ -167,7 +167,7 @@ class TeacherModel extends Model
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . ' GROUP BY id';
+            $querySearch = 'SELECT u.id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . ' GROUP BY id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -205,7 +205,7 @@ class TeacherModel extends Model
             $itemsDataRow[5] = $value['email'];
             
             $itemsDataRow[6] =   '<div class="status-change">' . 
-                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="teacher" data-table="user" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
+                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="student" data-table="user" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
                                     '</div>';
             $itemsDataRow[7] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
@@ -228,15 +228,15 @@ class TeacherModel extends Model
     public function view()
     {
         
-        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['teacher']['id']) ? (int)$_POST['teacher']['id'] : 0);
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['student']['id']) ? (int)$_POST['student']['id'] : 0);
         
-        $teacher = new Teacher();
+        $student = new Student();
 
         if($id){
-            $teacher->find($id);
+            $student->find($id);
         }
 
-        if($teacher->usergroup <= $_SESSION['usergroup']){
+        if($student->usergroup <= $_SESSION['usergroup']){
             exit('Access Error');
         }
 
@@ -291,13 +291,13 @@ class TeacherModel extends Model
         $controls['save'] = $this->linker->getUrl($this->control . '/save', true);
         $data['controls'] = $controls;
 
-        if(!empty($_POST['teacher'])){
-            $teacher->setFields($_POST['teacher']);
+        if(!empty($_POST['student'])){
+            $student->setFields($_POST['student']);
         }
-        if(isset($this->teacher)){
-            $teacher = $this->teacher;
+        if(isset($this->student)){
+            $student = $this->student;
         }
-        $teacher->icon = $this->linker->getIcon($this->media->resize($teacher->image, 150, 150, NULL, true));
+        $student->icon = $this->linker->getIcon($this->media->resize($student->image, 150, 150, NULL, true));
 
         $currentYear = date('Y');
         $groupModel = new GroupModel();
@@ -311,7 +311,7 @@ class TeacherModel extends Model
         }
         $data['classes'] = $classes;
 
-        $data['teacher'] = $teacher;
+        $data['student'] = $student;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -320,13 +320,12 @@ class TeacherModel extends Model
         $this->data = $data;
 
         return $this;
-        
     }
     
     public function save()
     {
         
-        $teacher = new Teacher();
+        $student = new Student();
 
         $isUniqueParams = [
             'table' => '??user',
@@ -338,19 +337,18 @@ class TeacherModel extends Model
         ];
 
         $_POST = $this->cleanForm($_POST);
-        
-        $info = $_POST['teacher'];
+        $info = $_POST['student'];
         $info['username'] = strtolower($info['username']);
         
         $new = true;
         $id = (int)$info['id'];
-        if($id && $teacher->find($id)){
+        if($id && $student->find($id)){
             $isUniqueParams['id'] = $id;
             $isUniqueParamsEmail['id'] = $id;
             $new = false;
         }
 
-        if($teacher->usergroup <= $_SESSION['usergroup']){
+        if($student->usergroup <= $_SESSION['usergroup']){
             exit('Access Error');
         }
 
@@ -394,30 +392,30 @@ class TeacherModel extends Model
         }
         else{
 
-            $teacher->setFields($info);
+            $student->setFields($info);
             
             if(!empty($info['password'])){
-                $teacher->password = $this->hashPassword($info['password']);
+                $student->password = $this->hashPassword($info['password']);
             }
 
-            $teacher->status = 1;
+            $student->status = 1;
 
             if($new) {
-                $teacher->created_at = time();
+                $student->created_at = time();
             }
-            $teacher->updated_at = time();
+            $student->updated_at = time();
 
-            $teacher->save();
+            $student->save();
 
-            if($teacher->savedSuccess){
+            if($student->savedSuccess){
 
-                $this->teacher = $teacher;
-
+                $this->student = $student;
+                
                 if($_FILES['image']['error'] == 0){
                     $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
                     if($imageUploaded){
-                        $teacher->image = $imageUploaded;
-                        $teacher->save();
+                        $student->image = $imageUploaded;
+                        $student->save();
                     }
                 }
 
@@ -427,7 +425,7 @@ class TeacherModel extends Model
                 $this->errorText = $this->t('error edit ' . $this->control, 'back');
                 $this->errors['error db'] = $this->t('error db', 'back');
             }
-            return $teacher->savedSuccess;
+            return $student->savedSuccess;
         }
     }
 
@@ -438,16 +436,16 @@ class TeacherModel extends Model
 
         $return = '';
 
-        $teacher = new Teacher();
-        if($id && $teacher->find($id)){
+        $student = new Student();
+        if($id && $student->find($id)){
 
-            if($teacher->usergroup <= $_SESSION['usergroup']){
+            if($student->usergroup <= $_SESSION['usergroup']){
                 exit('Access Error');
             }
-            $teacher->status = $status;
-            $teacher->save();
+            $student->status = $status;
+            $student->save();
 
-            if($teacher->savedSuccess){
+            if($student->savedSuccess){
                 $return = ($status) ? 'on' : 'off';
             }
         }
@@ -459,21 +457,21 @@ class TeacherModel extends Model
         $return = false;
 
         $id = (int)$_GET['id'];
-        $teacher = new Teacher();
-
-        if($id && $teacher->find($id)) {
-
-            if($teacher->usergroup <= $_SESSION['usergroup']){
+        $student = new Student();
+        
+        if($id && $student->find($id)) {
+            
+            if($student->usergroup <= $_SESSION['usergroup']){
                 exit('Access Error');
             }
 
-            if($teacher->image){
-                $this->media->delete($teacher->image);
+            if($student->image){
+                $this->media->delete($student->image);
             }
 
-            $teacher->remove();
+            $student->remove();
             
-            if($teacher->removedSuccess){
+            if($student->removedSuccess){
                 $this->successText = $this->t('success delete ' . $this->control, 'back');
             }
             else{
@@ -481,9 +479,9 @@ class TeacherModel extends Model
                 $this->errors['error db'];
             }
 
-            $return = $teacher->removedSuccess;
+            $return = $student->removedSuccess;
 
-            return $teacher->removedSuccess;
+            return $student->removedSuccess;
         }
         else{
             $this->errors['error invalid id'];

@@ -55,7 +55,7 @@ class TranslationModel extends Model {
         $where = [];
         
         $where[] = ['lang', '?'];
-        if(USERGROUP != 1){
+        if($_SESSION['usergroup'] != 1){
             $where[] = ['context NOT IN', $this->adminContext];
         }
         $getWords = $this->qb->where($where)->order('name')->get('??translation', [$langId]);
