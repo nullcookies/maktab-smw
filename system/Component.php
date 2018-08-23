@@ -172,6 +172,9 @@ abstract class Component {
     }
 	*/
 
+    /**
+   	 * debug function
+   	 */
 	public function ppp($var, $exit = false, $mode = 1) {
 		echo '<pre>';
 		if($mode == 1){
@@ -186,7 +189,37 @@ abstract class Component {
 		}
 	}
 
-    protected function formatPrice($price){
+	/**
+	 * convert dashed word to camel case
+	 */
+	public function toCamelCase($string, $capitalizeFirstCharacter = false) 
+	{
+
+	    $str = str_replace('-', '', ucwords($string, '-'));
+
+	    if (!$capitalizeFirstCharacter) {
+	        $str = lcfirst($str);
+	    }
+
+	    return $str;
+	}
+
+	/**
+	 * convert from camel case to dashes
+	 */
+	public function fromCamelCase($string, $type = '-') {
+        preg_match_all('!([A-Z][A-Z0-9]*(?=$|[A-Z][a-z0-9])|[A-Za-z][a-z0-9]+)!', $string, $matches);
+        $ret = $matches[0];
+        foreach ($ret as &$match) {
+            $match = $match == strtoupper($match) ? strtolower($match) : lcfirst($match);
+        }
+        return implode($type, $ret);
+    }
+
+    /**
+	 * return formatted price with getting parameters from db
+	 */
+    protected function formatPrice($price, $currency = 0){
         $decimals = 2;
         if(null !== $this->getOption('price_decimals')){
             $decimals = (int)$this->getOption('price_decimals');
@@ -198,13 +231,26 @@ abstract class Component {
         }
 
         $thousandSep = '';
-        if(null !== $this->getOption('price_thousand_separator') && 'NULL' != $this->getOption('price_thousand_separator') && 'price_thousand_separator' != $this->getOption('price_thousand_separator')){
-            $thousandSep = (string)$this->getOption('price_thousand_separator');
+        $getThousandSep = $this->getOption('price_thousand_separator');
+        if(null !== $getThousandSep && 'NULL' != $getThousandSep && 'price_thousand_separator' != $getThousandSep){
+        	if($getThousandSep = '&nbsp;'){
+        		$getThousandSep = ' ';
+        	}
+            $thousandSep = (string)$getThousandSep;
         }
 
 
-        return number_format($price, $decimals, $decimalSep, $thousandSep) . '&nbsp;' . $this->translation($this->getOption('currency'));
+        return number_format($price, $decimals, $decimalSep, $thousandSep) . '&nbsp;' . $this->translation($this->getOption('currency_' . $currency));
     }
+
+    /**
+     * redirect function
+     */
+    protected function redirect($url, $statusCode = null)
+	{
+	   header('Location: ' . $url, true, $statusCode);
+	   exit();
+	}
 
 
 	

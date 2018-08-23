@@ -5,12 +5,12 @@ namespace models\back;
 use \system\Document;
 use \system\Model;
 use \models\objects\User;
-use \models\objects\Group;
+use \models\objects\Subject;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class GroupModel extends Model
+class SubjectModel extends Model
 {
 
     public function index()
@@ -75,7 +75,7 @@ class GroupModel extends Model
 
         $data['draw'] = (int)$_POST['draw'];
         $checkYear = date('Y') - 1;
-        $totalRows = $this->qb->select('id')->where('end_year >=', $checkYear)->count('??group');
+        $totalRows = $this->qb->select('id')->count('??subject');
         $data['recordsTotal'] = $totalRows;
 
         $offset = (int)$_POST['start'];
@@ -101,27 +101,11 @@ class GroupModel extends Model
                 break;
             
             case 1:
-                $order = 'grade_start_year';
-                break;
-            
-            case 2:
                 $order = 'name';
                 break;
-            
-            case 3:
-                $order = 'start_year';
-                break;
-            
-            case 4:
-                $order = 'end_year';
-                break;
-            
-            case 5:
-                $order = 'status';
-                break;
-            
+
             default:
-                $order = 'start_year';
+                $order = 'name';
                 break;
         }
 
@@ -130,12 +114,6 @@ class GroupModel extends Model
         //     $getOrderDir = $_POST['page_order_dir'];
         // }
         $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
-
-        if($order == 'grade_start_year'){
-            $order = 'start_year';
-            $orderDir = ($orderDir == 'DESC') ? 'ASC' : 'DESC';
-        }
-
 
         $recordsFiltered = $totalRows;
 
@@ -147,11 +125,9 @@ class GroupModel extends Model
 
         if($searchText){
             $where_params = [];
-            $search_where = " (name LIKE ? OR start_year LIKE ? OR end_year LIKE ?) ";
+            $search_where = " (name LIKE ?) ";
             $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT id FROM ??group WHERE ' . $search_where . ' GROUP BY id ';
+            $querySearch = 'SELECT id FROM ??subject WHERE ' . $search_where . ' GROUP BY id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -159,10 +135,10 @@ class GroupModel extends Model
         $data['recordsFiltered'] = $recordsFiltered;
 
 
-        $query = 'SELECT * FROM ??group WHERE end_year >= ' . $checkYear . ' ';
+        $query = 'SELECT * FROM ??subject ';
 
         if($searchText){
-            $query .= ' AND ' . $search_where;
+            $query .= ' WHERE ' . $search_where;
         }
         $query .= ' GROUP BY id ';
         $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
@@ -183,17 +159,12 @@ class GroupModel extends Model
             $itemsDataRow = [];
 
             $itemsDataRow[0] = $value['id'];
-            $valueGrade = $this->getGrade($value['start_year'], $value['end_year']);
-
-            $itemsDataRow[1] = $valueGrade;
-            $itemsDataRow[2] = $value['name'];
-            $itemsDataRow[3] = $value['start_year'];
-            $itemsDataRow[4] = $value['end_year'];
+            $itemsDataRow[1] = $value['name'];
             
-            $itemsDataRow[5] =   '<div class="status-change">' . 
-                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="group" data-table="group" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
+            $itemsDataRow[2] =   '<div class="status-change">' . 
+                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="subject" data-table="subject" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
                                     '</div>';
-            $itemsDataRow[6] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+            $itemsDataRow[3] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
                                     '</a> ' . 
                                     '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
@@ -213,12 +184,12 @@ class GroupModel extends Model
     
     public function view()
     {
-        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['group']['id']) ? (int)$_POST['group']['id'] : 0);
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['subject']['id']) ? (int)$_POST['subject']['id'] : 0);
         
-        $group = new Group();
+        $subject = new Subject();
 
         if($id){
-            $group->find($id);
+            $subject->find($id);
         }
 
         $data = [];
@@ -272,14 +243,14 @@ class GroupModel extends Model
         $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $data['controls'] = $controls;
 
-        if(isset($this->group)){
-            $group = $this->group;
+        if(isset($this->subject)){
+            $subject = $this->subject;
         }
-        elseif(!empty($_POST['group'])){
-            $group->setFields($_POST['group']);
+        elseif(!empty($_POST['subject'])){
+            $subject->setFields($_POST['subject']);
         }
 
-        $data['group'] = $group;
+        $data['subject'] = $subject;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -294,14 +265,14 @@ class GroupModel extends Model
     public function save()
     {
         
-        $group = new Group();
+        $subject = new Subject();
 
         $_POST = $this->cleanForm($_POST);
-        $info = $_POST['group'];
+        $info = $_POST['subject'];
         
         $new = true;
         $id = (int)$info['id'];
-        if($id && $group->find($id)){
+        if($id && $subject->find($id)){
             $new = false;
         }
 
@@ -311,8 +282,6 @@ class GroupModel extends Model
         $rules = [ 
             'info' => [
                 'name' => ['isRequired'],
-                'start_year' => ['isRequired'],
-                'end_year' => ['isRequired'],
             ],
             'files' => [
                 
@@ -336,26 +305,20 @@ class GroupModel extends Model
         }
         else{
 
-            $group->setFields($info);
+            $subject->setFields($info);
+            $subject->status = 1;
 
-            $group->status = 1;
+            $subject->save();
 
-            if($new) {
-                $group->created_at = time();
-            }
-            $group->updated_at = time();
-
-            $group->save();
-
-            if($group->savedSuccess){
-                $this->group = $group;
+            if($subject->savedSuccess){
+                $this->subject = $subject;
                 $this->successText = $this->t('success edit ' . $this->control, 'back');
             }
             else{
                 $this->errorText = $this->t('error edit ' . $this->control, 'back');
                 $this->errors['error db'] = $this->t('error db', 'back');
             }
-            return $group->savedSuccess;
+            return $subject->savedSuccess;
         }
     }
 
@@ -366,12 +329,12 @@ class GroupModel extends Model
 
         $return = '';
 
-        $group = new Group();
-        if($id && $group->find($id)){
-            $group->status = $status;
-            $group->save();
+        $subject = new Subject();
+        if($id && $subject->find($id)){
+            $subject->status = $status;
+            $subject->save();
 
-            if($group->savedSuccess){
+            if($subject->savedSuccess){
                 $return = ($status) ? 'on' : 'off';
             }
         }
@@ -383,16 +346,15 @@ class GroupModel extends Model
         $return = false;
 
         $id = (int)$_GET['id'];
-        $group = new Group();
+        $subject = new Subject();
 
-        if($id && $group->find($id)) {
+        if($id && $subject->find($id)) {
 
-            $this->qb->where('group_id', '?')->delete('??teacher_to_group', [$group->id]);
-            $this->qb->where('group_id', '?')->delete('??student_to_group', [$group->id]);
+        	$this->qb->where('subject_id', '?')->delete('??subject_to_teacher', [$subject->id]);
 
-            $group->remove();
+            $subject->remove();
             
-            if($group->removedSuccess){
+            if($subject->removedSuccess){
                 $this->successText = $this->t('success delete ' . $this->control, 'back');
             }
             else{
@@ -400,25 +362,13 @@ class GroupModel extends Model
                 $this->errors['error db'];
             }
 
-            $return = $group->removedSuccess;
+            $return = $subject->removedSuccess;
         }
         else{
             $this->errors['error invalid id'];
         }
 
         return $return;
-    }
-
-    public function getGrade($start_year, $end_year)
-    {
-        $studyStartMonth = $this->getOption('study_start_month');
-        $currentYear = date('Y');
-        $currentMonth = date('n');
-        //для определения номера класса
-        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
-
-        $grade = $currentYear - $start_year + $addition;
-        return ($grade <= 11) ? $grade : $this->t('study finished', 'back') . ' ' . $end_year;
     }
 
 }

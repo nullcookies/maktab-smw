@@ -495,7 +495,7 @@ class UserModel extends Model {
         	if(!empty($_POST['password'])) $errors['password'] = $this->getTranslation('error password');
         	
         }
-        $data['username'] = $_POST['username'];
+        $data['username'] = (!empty($_POST['username'])) ? $_POST['username'] : '';
         $data['errors'] = $errors;
 
         $data['action'] = BASEURL_ADMIN . '/user/login/';

@@ -51,20 +51,11 @@ class StudentModel extends Model
         $data['controls'] = $controls;
 
         $dataTableAjaxParams = [];
-        $dataTableAjaxParams['page-start'] = ($_GET['page_start']) ? $_GET['page_start'] : '';
-        $dataTableAjaxParams['page-length'] = ($_GET['page_length']) ? $_GET['page_length'] : '';
-        $dataTableAjaxParams['page-order-column'] = ($_GET['page_order_column']) ? $_GET['page_order_column'] : '';
-        $dataTableAjaxParams['page-order-dir'] = ($_GET['page_order_dir']) ? $_GET['page_order_dir'] : '';
+        $dataTableAjaxParams['page-start'] = (!empty($_GET['page_start'])) ? $_GET['page_start'] : '';
+        $dataTableAjaxParams['page-length'] = (!empty($_GET['page_length'])) ? $_GET['page_length'] : '';
+        $dataTableAjaxParams['page-order-column'] = (!empty($_GET['page_order_column'])) ? $_GET['page_order_column'] : '';
+        $dataTableAjaxParams['page-order-dir'] = (!empty($_GET['page_order_dir'])) ? $_GET['page_order_dir'] : '';
         $data['dataTableAjaxParams'] = $dataTableAjaxParams;
-
-        // $users = [];
-        // $this->qb->where('usergroup', $this->usergroup);
-        // $this->qb->order([['lastname', false], ['id', true]]);
-        // $getUsers = $this->qb->get('??user');
-        // if($getUsers->rowCount() > 0){
-        //     $users = $getUsers->fetchAll();
-        // }
-        // $data['users'] = $users;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -167,7 +158,7 @@ class StudentModel extends Model
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT u.id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . ' GROUP BY id ';
+            $querySearch = 'SELECT id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . ' GROUP BY id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -288,28 +279,29 @@ class StudentModel extends Model
         
         $controls = [];
         $controls['back'] = $this->linker->getUrl($this->control, true);
-        $controls['save'] = $this->linker->getUrl($this->control . '/save', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $data['controls'] = $controls;
 
-        if(!empty($_POST['student'])){
-            $student->setFields($_POST['student']);
-        }
         if(isset($this->student)){
             $student = $this->student;
         }
-        $student->icon = $this->linker->getIcon($this->media->resize($student->image, 150, 150, NULL, true));
+        elseif(!empty($_POST['student'])){
+            $student->setFields($_POST['student']);
+            $student->group_id = $_POST['group_id'];
+        }
+        //$student->icon = $this->linker->getIcon($this->media->resize($student->image, 150, 150, NULL, true));
 
         $currentYear = date('Y');
         $groupModel = new GroupModel();
-        $classes = [];
-        $getClasses = $this->qb->where('end_year >=', $currentYear)->order('start_year', true)->get('??group');
-        if($getClasses->rowCount()){
-            $classes = $getClasses->fetchAll();
-            foreach ($classes as $key => $value) {
-                $classes[$key]['grade'] = $groupModel->getGrade($value['start_year'], $value['end_year']);
+        $groups = [];
+        $getGroups = $this->qb->where('end_year >=', $currentYear)->order('start_year', true)->get('??group');
+        if($getGroups->rowCount()){
+            $groups = $getGroups->fetchAll();
+            foreach ($groups as $key => $value) {
+                $groups[$key]['grade'] = $groupModel->getGrade($value['start_year'], $value['end_year']);
             }
         }
-        $data['classes'] = $classes;
+        $data['groups'] = $groups;
 
         $data['student'] = $student;
 
@@ -342,6 +334,7 @@ class StudentModel extends Model
         
         $new = true;
         $id = (int)$info['id'];
+
         if($id && $student->find($id)){
             $isUniqueParams['id'] = $id;
             $isUniqueParamsEmail['id'] = $id;
@@ -409,16 +402,24 @@ class StudentModel extends Model
 
             if($student->savedSuccess){
 
-                $this->student = $student;
-                
-                if($_FILES['image']['error'] == 0){
-                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
+            	if($_FILES['image']['error'] == 0){
+                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $student->id, true);
                     if($imageUploaded){
+                    	if(!empty($student->image)){
+                    		$this->media->delete($student->image);
+                    	}
                         $student->image = $imageUploaded;
                         $student->save();
                     }
                 }
 
+                if(isset($_POST['group_id'])){
+                	$this->qb->where('student_id', '?')->delete('??student_to_group', [$student->id]);
+                	$this->qb->insert('??student_to_group', ['student_id' => $student->id, 'group_id' => $_POST['group_id']]);
+                	$student->group_id = $_POST['group_id'];
+                }
+
+                $this->student = $student;
                 $this->successText = $this->t('success edit ' . $this->control, 'back');
             }
             else{
@@ -468,6 +469,8 @@ class StudentModel extends Model
             if($student->image){
                 $this->media->delete($student->image);
             }
+
+            $this->qb->where('student_id', '?')->delete('??student_to_group', [$student->id]);
 
             $student->remove();
             

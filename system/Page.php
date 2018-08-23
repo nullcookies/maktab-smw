@@ -25,7 +25,10 @@ class Page extends Component {
             $checkAccess = $this->qb->where('alias', '?')->get('??module', [$pageParams['controller']])->fetch();
             if($checkAccess){
                 $moduleAccess = (int)$checkAccess['access'];
-                if($moduleAccess < 1 || $_SESSION['usergroup'] > $moduleAccess || $checkAccess['status'] == 0){
+                if($moduleAccess < 1 || $checkAccess['status'] == 0){
+                    $access = false;
+                }
+                elseif(!empty($_SESSION['usergroup']) && $_SESSION['usergroup'] > $moduleAccess){
                     $access = false;
                 }
             }
@@ -34,12 +37,13 @@ class Page extends Component {
         define('CONTROLLER', $pageParams['controller']);
         define('ACTION', $pageParams['action']);
 
-        $controllerName = '\\controllers\\' . $pageParams['side'] . '\\' . ucfirst($pageParams['controller']) . 'Controller';
+        $controllerName = '\\controllers\\' . $pageParams['side'] . '\\' . $this->toCamelCase($pageParams['controller'], true) . 'Controller';
         
         if(!class_exists($controllerName) || !method_exists($controllerName, $pageParams['action']) || !$access){
             $controllerName = '\\controllers\\' . $pageParams['side'] . '\\Page404Controller';
             $pageParams['action'] = 'index';
         }
+
         $controller = new $controllerName;
         $controller->viewsPath = BASEPATH . '/views/' . $pageParams['side'];
         $controller->params = $pageParams['params'];

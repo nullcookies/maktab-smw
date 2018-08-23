@@ -17,7 +17,7 @@
 
         <?=$this->renderNotifications($successText, $errorText)?>
     
-        <form action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
+        <form action="<?=$controls['view']?>" method="post" enctype="multipart/form-data">
             
             <input type="hidden" name="group[id]" value="<?=$group->id?>" />
             

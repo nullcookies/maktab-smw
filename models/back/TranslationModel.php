@@ -48,7 +48,7 @@ class TranslationModel extends Model {
         $languages = $this->qb->where('status', '1')->get('??lang');
         $data['languages'] = $languages;
 
-        $langId = ($_GET['param1']) ? (int)$_GET['param1'] : LANG_ID;
+        $langId = (!empty($_GET['param1'])) ? (int)$_GET['param1'] : LANG_ID;
         $data['langId'] = $langId;
 
         $words = [];

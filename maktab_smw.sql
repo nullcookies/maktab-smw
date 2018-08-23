@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 16 2018 г., 00:20
+-- Время создания: Авг 23 2018 г., 16:02
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -130,20 +130,6 @@ CREATE TABLE IF NOT EXISTS `mktb_category_search` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `mktb_class`
---
-
-CREATE TABLE IF NOT EXISTS `mktb_class` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `grade` tinyint(2) NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_year` smallint(4) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `mktb_contact`
 --
 
@@ -254,6 +240,35 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_value` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `mktb_group`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_group` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_year` smallint(4) NOT NULL,
+  `end_year` smallint(4) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
+
+--
+-- Дамп данных таблицы `mktb_group`
+--
+
+INSERT INTO `mktb_group` (`id`, `name`, `start_year`, `end_year`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'А', 2017, 2028, 1, 1534588350, 1534589180),
+(2, 'Б', 2017, 2028, 1, 1534588442, 1534589330),
+(3, 'А', 2016, 2027, 1, 1534591092, 1534591092),
+(4, 'А', 2006, 2017, 1, 1534591603, 1534591603),
+(5, 'А', 2018, 2029, 1, 1534591937, 1534591937),
+(6, 'Б', 2016, 2027, 1, 1534591976, 1534591993);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `mktb_lang`
 --
 
@@ -323,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `mktb_module` (
   `status` tinyint(1) NOT NULL,
   `show_menu` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
 
 --
 -- Дамп данных таблицы `mktb_module`
@@ -332,20 +347,20 @@ CREATE TABLE IF NOT EXISTS `mktb_module` (
 INSERT INTO `mktb_module` (`id`, `alias`, `name`, `access`, `sort_order`, `status`, `show_menu`) VALUES
 (1, 'category', 'Категории', 2, 10, 0, 0),
 (2, 'product', 'Товары', 2, 20, 0, 0),
-(3, 'page', 'Страницы', 2, 30, 1, 1),
-(4, 'user', 'Пользователи', 2, 91, 1, 1),
+(3, 'page', 'Страницы', 1, 30, 1, 1),
+(4, 'user', 'Пользователи', 2, 92, 1, 1),
 (5, 'configuration', 'Настройки', 2, 301, 1, 0),
 (6, 'blog', 'Блог', 3, 50, 0, 0),
 (9, 'chapter', 'Главы', 3, 25, 0, 0),
 (10, 'music', 'Песни', 3, 60, 0, 0),
 (11, 'clip', 'Клипы', 3, 70, 0, 0),
-(12, 'slider', 'Слайдер', 2, 100, 1, 1),
+(12, 'slider', 'Слайдер', 2, 100, 1, 0),
 (13, 'lexicon', 'Словарь', 3, 90, 0, 0),
 (14, 'illustrationbook', 'Иллюстрации', 3, 95, 0, 0),
 (15, 'symphony', 'Симфония', 3, 85, 0, 0),
 (16, 'news', 'Новости', 3, 51, 0, 0),
 (17, 'project', 'Проекты', 3, 10, 0, 0),
-(18, 'gallery', 'Галерея', 3, 80, 1, 1),
+(18, 'gallery', 'Галерея', 3, 80, 1, 0),
 (19, 'language', 'Языки', 1, 300, 1, 0),
 (20, 'brand', 'Производители', 2, 25, 0, 0),
 (21, 'order', 'Заказы', 3, 27, 0, 0),
@@ -358,11 +373,13 @@ INSERT INTO `mktb_module` (`id`, `alias`, `name`, `access`, `sort_order`, `statu
 (28, 'filter', 'Фильтр', 3, 90, 0, 0),
 (29, 'review', 'Отзывы', 3, 28, 0, 0),
 (30, 'video', 'Видеоролики', 3, 55, 0, 0),
-(31, 'banner', 'Баннеры', 3, 60, 1, 1),
-(32, 'contact', 'Контакты', 3, 60, 1, 1),
+(31, 'banner', 'Баннеры', 3, 60, 0, 0),
+(32, 'contact', 'Контакты', 3, 60, 1, 0),
 (33, 'teacher', 'Учители', 3, 90, 1, 1),
-(34, 'student', 'Студенты', 3, 90, 1, 1),
-(35, 'class', 'Классы', 3, 80, 1, 1);
+(34, 'student', 'Студенты', 3, 91, 1, 1),
+(35, 'group', 'Группы', 3, 80, 1, 1),
+(36, 'subject', 'Предметы', 3, 81, 1, 1),
+(37, 'study-period', 'Учебные периоды', 3, 83, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -389,7 +406,7 @@ CREATE TABLE IF NOT EXISTS `mktb_option` (
   `comment` varchar(255) NOT NULL,
   `visible` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
 
 --
 -- Дамп данных таблицы `mktb_option`
@@ -400,8 +417,8 @@ INSERT INTO `mktb_option` (`id`, `name`, `content`, `comment`, `visible`) VALUES
 (2, 'default_action', 'index', 'Функция по умолчанию', 0),
 (3, 'theme', 'maktab', 'Тема', 1),
 (4, 'theme_admin', 'default', '', 0),
-(5, 'phone1', '+7 (915) 006 1881', 'Телефон 1', 1),
-(6, 'phone2', '+7 (915) 006 1881', 'Телефон 2', 1),
+(5, 'phone1', '+998 00 006 1881', 'Телефон 1', 1),
+(6, 'phone2', '+998 01 006 1881', 'Телефон 2', 1),
 (7, 'fax', '123', 'Факс', 1),
 (8, 'contact_mail', 'info@domain.uz', 'Контактный e-mail', 1),
 (9, 'address', 'г. Ташкент, ул. Шота Руставели, 1', 'Адрес', 1),
@@ -432,7 +449,7 @@ INSERT INTO `mktb_option` (`id`, `name`, `content`, `comment`, `visible`) VALUES
 (34, 'currency', 'rub', 'Валюта магазина', 1),
 (35, 'icon_product_large_h', '620', 'Высота большой иконки товара', 1),
 (36, 'icon_product_large_w', '620', 'Ширина большой иконки товара', 1),
-(37, 'phone3', '+7 (915) 006 1881', 'Телефон 3', 1),
+(37, 'phone3', '+998 02 006 1881', 'Телефон 3', 1),
 (38, 'icon_brand_w', '200', 'Ширина логотипа бренда', 1),
 (39, 'icon_brand_h', '80', 'Высота логотипа бренда', 1),
 (40, 'SOCIAL_TWITTER', '#', 'Ссылка Twitter', 1),
@@ -448,7 +465,8 @@ INSERT INTO `mktb_option` (`id`, `name`, `content`, `comment`, `visible`) VALUES
 (50, 'price_thousand_separator', 'NULL', 'Разделитель тысячных знаков', 1),
 (51, 'google_maps_api_key', '1', 'Ключ для карт Google', 1),
 (52, 'map_lat', '1', 'Координаты карты (широта)', 1),
-(53, 'map_lng', '1', 'Координаты карты (долгота)', 1);
+(53, 'map_lng', '1', 'Координаты карты (долгота)', 1),
+(54, 'study_start_month', '9', 'Месяц начало учёбы', 1);
 
 -- --------------------------------------------------------
 
@@ -522,24 +540,8 @@ CREATE TABLE IF NOT EXISTS `mktb_page` (
 --
 
 INSERT INTO `mktb_page` (`id`, `controller`, `method`, `side`, `layout`, `status`, `alias`, `name`, `text_name`, `nav_name`, `descr`, `descr_full`, `meta_t`, `meta_d`, `meta_k`) VALUES
-(1, 'home', 'index', 'front', 'default', 1, '', '{"1":"2work"}', '{"1":"2work"}', '{"1":"Главная"}', '{"1":""}', '{"1":"&lt;p&gt;2work&lt;\\/p&gt;"}', '{"1":"2work - Поможем найти надежного исполнителя для любых задач"}', '{"1":""}', '{"1":""}'),
-(2, 'category', 'index', 'front', 'default', 1, 'category', '{"1":"Каталог"}', '{"1":"Каталог"}', '{"1":"Каталог"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(3, 'brand', 'index', 'front', 'default', 1, 'brand', '{"1":"Производители"}', '{"1":"Производители"}', '{"1":"Производители"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(4, 'product', 'index', 'front', 'default', 1, 'product', '{"1":"Продукция"}', '{"1":"Продукция"}', '{"1":"Продукция"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(5, 'cart', 'index', 'front', 'default', 1, 'cart', '{"1":"Корзина","2":"Cart"}', '', '{"1":"Корзина","2":"Cart"}', '', '', '', '', ''),
-(7, 'information', 'view', 'front', 'default', 1, 'about.html', '{"1":"О нас"}', '{"1":"О нас"}', '{"1":"О нас"}', '{"1":""}', '{"1":"&lt;div&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex alias aliquam commodi nisi sequi mollitia quae, voluptatibus veniam non voluptate ipsa eius magni, aliquid ratione sit odio, reprehenderit in quis!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Deleniti amet consequatur veritatis ducimus in aliquam magnam voluptatibus, ullam libero fugiat temporibus, at, aliquid explicabo placeat eligendi, assumenda magni? Iure id soluta aliquam, praesentium dicta aliquid autem cum impedit.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Ab iure enim totam dolor! Debitis itaque deleniti, esse ut adipisci officiis, nulla. Doloribus esse tenetur eos, provident quam quasi maxime tempore. Possimus nostrum neque voluptas, tempora laudantium dicta, laborum.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Iure fuga esse facere, adipisci debitis, iste nulla facilis perspiciatis voluptates delectus corrupti sint. Itaque, consequuntur modi. Placeat molestias cumque harum, aspernatur, beatae consequuntur quisquam qui accusantium obcaecati provident vel!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Eius ipsa, et esse ipsum animi id, placeat fuga fugit reprehenderit, minima facere asperiores aperiam sequi labore voluptatibus nam excepturi incidunt nulla eum. Officiis, maxime vel at, numquam quod quae.&lt;\\/div&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(8, 'information', 'view', 'front', 'default', 1, 'terms-of-payment.html', '{"1":"Условия оплаты"}', '{"1":"Условия оплаты"}', '{"1":"Условия оплаты"}', '{"1":""}', '{"1":"&lt;div&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex alias aliquam commodi nisi sequi mollitia quae, voluptatibus veniam non voluptate ipsa eius magni, aliquid ratione sit odio, reprehenderit in quis!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Deleniti amet consequatur veritatis ducimus in aliquam magnam voluptatibus, ullam libero fugiat temporibus, at, aliquid explicabo placeat eligendi, assumenda magni? Iure id soluta aliquam, praesentium dicta aliquid autem cum impedit.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Ab iure enim totam dolor! Debitis itaque deleniti, esse ut adipisci officiis, nulla. Doloribus esse tenetur eos, provident quam quasi maxime tempore. Possimus nostrum neque voluptas, tempora laudantium dicta, laborum.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Iure fuga esse facere, adipisci debitis, iste nulla facilis perspiciatis voluptates delectus corrupti sint. Itaque, consequuntur modi. Placeat molestias cumque harum, aspernatur, beatae consequuntur quisquam qui accusantium obcaecati provident vel!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Eius ipsa, et esse ipsum animi id, placeat fuga fugit reprehenderit, minima facere asperiores aperiam sequi labore voluptatibus nam excepturi incidunt nulla eum. Officiis, maxime vel at, numquam quod quae.&lt;\\/div&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(9, 'information', 'view', 'front', 'default', 1, 'shipping-policy.html', '{"1":"Условия доставки"}', '{"1":"Условия доставки"}', '{"1":"Условия доставки"}', '{"1":""}', '{"1":"&lt;div&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex alias aliquam commodi nisi sequi mollitia quae, voluptatibus veniam non voluptate ipsa eius magni, aliquid ratione sit odio, reprehenderit in quis!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Deleniti amet consequatur veritatis ducimus in aliquam magnam voluptatibus, ullam libero fugiat temporibus, at, aliquid explicabo placeat eligendi, assumenda magni? Iure id soluta aliquam, praesentium dicta aliquid autem cum impedit.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Ab iure enim totam dolor! Debitis itaque deleniti, esse ut adipisci officiis, nulla. Doloribus esse tenetur eos, provident quam quasi maxime tempore. Possimus nostrum neque voluptas, tempora laudantium dicta, laborum.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Iure fuga esse facere, adipisci debitis, iste nulla facilis perspiciatis voluptates delectus corrupti sint. Itaque, consequuntur modi. Placeat molestias cumque harum, aspernatur, beatae consequuntur quisquam qui accusantium obcaecati provident vel!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Eius ipsa, et esse ipsum animi id, placeat fuga fugit reprehenderit, minima facere asperiores aperiam sequi labore voluptatibus nam excepturi incidunt nulla eum. Officiis, maxime vel at, numquam quod quae.&lt;\\/div&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(10, 'information', 'view', 'front', 'default', 1, 'return-policy.html', '{"1":"Условия возврата"}', '{"1":"Условия возврата"}', '{"1":"Условия возврата"}', '{"1":""}', '{"1":"&lt;div&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex alias aliquam commodi nisi sequi mollitia quae, voluptatibus veniam non voluptate ipsa eius magni, aliquid ratione sit odio, reprehenderit in quis!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Deleniti amet consequatur veritatis ducimus in aliquam magnam voluptatibus, ullam libero fugiat temporibus, at, aliquid explicabo placeat eligendi, assumenda magni? Iure id soluta aliquam, praesentium dicta aliquid autem cum impedit.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Ab iure enim totam dolor! Debitis itaque deleniti, esse ut adipisci officiis, nulla. Doloribus esse tenetur eos, provident quam quasi maxime tempore. Possimus nostrum neque voluptas, tempora laudantium dicta, laborum.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Iure fuga esse facere, adipisci debitis, iste nulla facilis perspiciatis voluptates delectus corrupti sint. Itaque, consequuntur modi. Placeat molestias cumque harum, aspernatur, beatae consequuntur quisquam qui accusantium obcaecati provident vel!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Eius ipsa, et esse ipsum animi id, placeat fuga fugit reprehenderit, minima facere asperiores aperiam sequi labore voluptatibus nam excepturi incidunt nulla eum. Officiis, maxime vel at, numquam quod quae.&lt;\\/div&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(11, 'information', 'view', 'front', 'default', 1, 'privacy-policy.html', '{"1":"Конфиденциальность"}', '{"1":"Политика конфиденциальности"}', '{"1":"Конфиденциальность"}', '{"1":""}', '{"1":"&lt;div&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex alias aliquam commodi nisi sequi mollitia quae, voluptatibus veniam non voluptate ipsa eius magni, aliquid ratione sit odio, reprehenderit in quis!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Deleniti amet consequatur veritatis ducimus in aliquam magnam voluptatibus, ullam libero fugiat temporibus, at, aliquid explicabo placeat eligendi, assumenda magni? Iure id soluta aliquam, praesentium dicta aliquid autem cum impedit.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Ab iure enim totam dolor! Debitis itaque deleniti, esse ut adipisci officiis, nulla. Doloribus esse tenetur eos, provident quam quasi maxime tempore. Possimus nostrum neque voluptas, tempora laudantium dicta, laborum.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Iure fuga esse facere, adipisci debitis, iste nulla facilis perspiciatis voluptates delectus corrupti sint. Itaque, consequuntur modi. Placeat molestias cumque harum, aspernatur, beatae consequuntur quisquam qui accusantium obcaecati provident vel!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Eius ipsa, et esse ipsum animi id, placeat fuga fugit reprehenderit, minima facere asperiores aperiam sequi labore voluptatibus nam excepturi incidunt nulla eum. Officiis, maxime vel at, numquam quod quae.&lt;\\/div&gt;\\r\\n\\r\\n&lt;p&gt;&amp;nbsp;&lt;\\/p&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(12, 'information', 'view', 'front', 'default', 1, 'certificates.html', '{"1":"Сертификаты"}', '{"1":"Сертификаты"}', '{"1":"Сертификаты"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(13, 'information', 'view', 'front', 'default', 0, 'affiliate-program.html', '{"1":"Партнерская программа"}', '{"1":"Партнерская программа"}', '{"1":"Партнерская программа"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(15, 'information', 'view', 'front', 'default', 1, 'promotions.html', '{"1":"Наши акции"}', '{"1":"Наши акции"}', '{"1":"Наши акции"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(16, 'information', 'view', 'front', 'default', 1, 'services.html', '{"1":"Услуги"}', '{"1":"Услуги"}', '{"1":"Услуги"}', '{"1":""}', '{"1":"&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minus odit rerum necessitatibus saepe asperiores, commodi porro doloribus ipsum aspernatur architecto sequi reprehenderit officia magni. Praesentium aliquid odit minus, cumque molestias.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Numquam eligendi eum ratione reiciendis nesciunt quia fugit totam dignissimos quaerat dicta, voluptatibus temporibus sit dolorum quibusdam expedita, natus recusandae vel perferendis cumque incidunt hic. Recusandae minus autem odio sint!&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Excepturi, molestiae quas minus, assumenda similique nisi dolorem autem natus, sint reiciendis omnis distinctio asperiores eligendi fugiat consequuntur amet facere hic nesciunt rem deserunt? Quia quasi, at quos totam eaque.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Corrupti iusto est beatae magni, ducimus illum optio quas perferendis quo alias atque dignissimos quod facere ipsam ad excepturi deserunt adipisci fuga mollitia aliquid earum, assumenda reiciendis deleniti veniam at?&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Saepe impedit placeat eos delectus, corrupti, assumenda, vel id animi reiciendis quod repellat dolorum quas amet cum rerum ut nostrum iste a. Officiis doloremque non vitae eaque sint omnis odit!&lt;\\/p&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(20, 'news', 'index', 'front', 'default', 1, 'news', '{"1":"Новости"}', '{"1":"Новости"}', '{"1":"Новости"}', '{"1":""}', '{"1":"&lt;div&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ex alias aliquam commodi nisi sequi mollitia quae, voluptatibus veniam non voluptate ipsa eius magni, aliquid ratione sit odio, reprehenderit in quis!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Deleniti amet consequatur veritatis ducimus in aliquam magnam voluptatibus, ullam libero fugiat temporibus, at, aliquid explicabo placeat eligendi, assumenda magni? Iure id soluta aliquam, praesentium dicta aliquid autem cum impedit.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Ab iure enim totam dolor! Debitis itaque deleniti, esse ut adipisci officiis, nulla. Doloribus esse tenetur eos, provident quam quasi maxime tempore. Possimus nostrum neque voluptas, tempora laudantium dicta, laborum.&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Iure fuga esse facere, adipisci debitis, iste nulla facilis perspiciatis voluptates delectus corrupti sint. Itaque, consequuntur modi. Placeat molestias cumque harum, aspernatur, beatae consequuntur quisquam qui accusantium obcaecati provident vel!&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;&amp;nbsp;&lt;\\/div&gt;\\r\\n\\r\\n&lt;div&gt;Eius ipsa, et esse ipsum animi id, placeat fuga fugit reprehenderit, minima facere asperiores aperiam sequi labore voluptatibus nam excepturi incidunt nulla eum. Officiis, maxime vel at, numquam quod quae.&lt;\\/div&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
+(1, 'home', 'index', 'front', 'default', 1, '', '{"1":"Maktab"}', '{"1":"Maktab"}', '{"1":"Главная"}', '{"1":""}', '{"1":"&lt;p&gt;Maktab&lt;\\/p&gt;"}', '{"1":"2work - Поможем найти надежного исполнителя для любых задач"}', '{"1":""}', '{"1":""}'),
 (21, 'contact', 'index', 'front', 'default', 1, 'contact', '{"1":"Контакты"}', '{"1":"Связаться с нами"}', '{"1":"Контакты"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(22, 'video', 'index', 'front', 'default', 1, 'video', '{"1":"Видеоролики","2":"Видеоролики"}', '{"1":"Видеоролики","2":"Видеоролики"}', '{"1":"Видеоролики","2":"Видеоролики"}', '{"1":"","2":""}', '{"1":"","2":""}', '{"1":"","2":""}', '{"1":"","2":""}', '{"1":"","2":""}'),
-(23, 'information', 'view', 'front', 'default', 1, 'guarantee', '{"1":"Гарантия","2":"Guarantee"}', '{"1":"Гарантия","2":"Guarantee"}', '{"1":"Гарантия","2":"Guarantee"}', '{"1":"","2":""}', '{"1":"","2":""}', '{"1":"","2":""}', '{"1":"","2":""}', '{"1":"","2":""}'),
 (24, 'information', 'view', 'front', 'default', 1, 'rules.html', '{"1":"Пользовательское соглашение"}', '{"1":"Пользовательское соглашение"}', '{"1":"Пользовательское соглашение"}', '{"1":""}', '{"1":"&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati fuga itaque debitis dolorum veritatis deserunt sit illum rerum fugit voluptatem, at odio, reprehenderit, dolores deleniti dignissimos qui dolor repudiandae ullam.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Praesentium modi voluptatibus velit excepturi qui reprehenderit rerum, totam, nesciunt, obcaecati neque quos quisquam! Ab molestiae qui veniam voluptatem deleniti in inventore, maxime itaque cumque recusandae odit nisi ut. Repellat!&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Qui molestias culpa ipsam rem, saepe. Inventore aliquam ab ducimus accusamus reiciendis saepe quidem nisi aliquid earum maiores voluptatum repellat dolore sequi magnam, labore dolorum placeat enim suscipit laborum veniam.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Fuga incidunt neque distinctio aliquid ut, ipsam officiis deleniti magni eveniet est dolor quam ab id, atque doloremque eos repudiandae architecto possimus minima nulla ea labore consequatur maxime cum. Dolores.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Sapiente harum rem reprehenderit ex accusamus, vero ducimus. Accusantium ullam quia, et id nam tempora nulla recusandae eligendi minima perspiciatis nostrum, numquam molestias, repellat fuga distinctio autem, consequatur dolorem. Iste.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Odio molestiae harum aperiam officiis hic, at assumenda, incidunt iusto est totam commodi quidem perspiciatis dolorum ab ducimus recusandae eius doloribus! Molestias quasi ea suscipit, perspiciatis numquam quos itaque obcaecati.&lt;\\/p&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}');
 
 -- --------------------------------------------------------
@@ -746,15 +748,37 @@ CREATE TABLE IF NOT EXISTS `mktb_slider` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `mktb_student_to_group`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_student_to_group` (
+  `student_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`student_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `mktb_student_to_group`
+--
+
+INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
+(13, 1),
+(14, 3);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `mktb_study_period`
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_study_period` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `period` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `year` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `start_year` smallint(4) NOT NULL,
+  `end_year` smallint(4) NOT NULL,
   `start_time` int(11) NOT NULL,
   `end_time` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
 
@@ -767,8 +791,38 @@ CREATE TABLE IF NOT EXISTS `mktb_study_period` (
 CREATE TABLE IF NOT EXISTS `mktb_subject` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `mktb_subject`
+--
+
+INSERT INTO `mktb_subject` (`id`, `name`, `status`) VALUES
+(1, 'Алгебра', 1),
+(2, 'Геометрия', 1),
+(3, 'Физика', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_subject_to_teacher`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_subject_to_teacher` (
+  `subject_id` int(11) NOT NULL,
+  `teacher_id` int(11) NOT NULL,
+  PRIMARY KEY (`subject_id`,`teacher_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `mktb_subject_to_teacher`
+--
+
+INSERT INTO `mktb_subject_to_teacher` (`subject_id`, `teacher_id`) VALUES
+(1, 11),
+(2, 11);
 
 -- --------------------------------------------------------
 
@@ -819,6 +873,25 @@ CREATE TABLE IF NOT EXISTS `mktb_tag_to_product` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `mktb_teacher_to_group`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_teacher_to_group` (
+  `teacher_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  PRIMARY KEY (`teacher_id`,`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `mktb_teacher_to_group`
+--
+
+INSERT INTO `mktb_teacher_to_group` (`teacher_id`, `group_id`) VALUES
+(11, 6);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `mktb_translation`
 --
 
@@ -829,7 +902,7 @@ CREATE TABLE IF NOT EXISTS `mktb_translation` (
   `content` text NOT NULL,
   `context` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1185 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1242 ;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -1361,7 +1434,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (537, 1, 'usercontract page', 'Контракты', 'back'),
 (538, 1, 'usercontract list', 'Список контрактов', 'back'),
 (539, 1, 'menu usercontract', 'Контракты', 'back'),
-(540, 1, 'usergroup 5', 'Пользователь', 'back'),
+(540, 1, 'usergroup 5', 'Учители', 'back'),
 (541, 1, 'usergroup 6', 'Пользователь', 'back'),
 (542, 1, 'error add usercontract', 'Ошибка при добавлении контракта', 'back'),
 (543, 2, 'error add usercontract', 'Error while adding contract', 'back'),
@@ -1984,25 +2057,82 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1163, 1, 'file category common', 'file category common', 'back'),
 (1164, 1, 'forget password?', 'forget password?', 'front'),
 (1165, 1, 'restore password', 'restore password', 'front'),
-(1166, 1, 'usergroup 10', 'usergroup 10', 'back'),
-(1167, 1, 'usergroup 11', 'usergroup 11', 'back'),
-(1168, 1, 'context', 'context', 'back'),
-(1169, 1, 'choose usergroup', 'choose usergroup', 'back'),
-(1170, 1, 'teacher page', 'teacher page', 'back'),
-(1171, 1, 'menu class', 'menu class', 'back'),
-(1172, 1, 'menu teacher', 'menu teacher', 'back'),
-(1173, 1, 'menu student', 'menu student', 'back'),
-(1174, 1, 'add teacher', 'add teacher', 'back'),
-(1175, 1, 'teacher list', 'teacher list', 'back'),
-(1176, 1, 'error usergroup', 'error usergroup', 'back'),
-(1177, 1, 'view teacher', 'view teacher', 'back'),
-(1178, 1, 'teacher', 'teacher', 'back'),
-(1179, 1, 'edit teacher', 'edit teacher', 'back'),
-(1180, 1, 'error edit teacher', 'error edit teacher', 'back'),
-(1181, 1, 'error add teacher', 'error add teacher', 'back'),
+(1166, 1, 'usergroup 10', 'Пользователи', 'back'),
+(1167, 1, 'usergroup 11', 'Ученики', 'back'),
+(1168, 1, 'context', 'Контекст', 'back'),
+(1169, 1, 'choose usergroup', 'Выбрать группы пользователя', 'back'),
+(1170, 1, 'teacher page', 'Учители', 'back'),
+(1171, 1, 'menu class', 'Классы', 'back'),
+(1172, 1, 'menu teacher', 'Учители', 'back'),
+(1173, 1, 'menu student', 'Ученики', 'back'),
+(1174, 1, 'add teacher', 'Добавить учителя', 'back'),
+(1175, 1, 'teacher list', 'Учители', 'back'),
+(1176, 1, 'error usergroup', 'Ошибка группы пользователя', 'back'),
+(1177, 1, 'view teacher', 'Учитель', 'back'),
+(1178, 1, 'teacher', 'Учитель', 'back'),
+(1179, 1, 'edit teacher', 'Редактировать учителя', 'back'),
+(1180, 1, 'error edit teacher', 'Ошибка сохранения', 'back'),
+(1181, 1, 'error add teacher', 'Ошибка сохранения', 'back'),
 (1182, 1, 'max size', 'max size', 'back'),
-(1183, 1, 'success edit teacher', 'success edit teacher', 'back'),
-(1184, 1, 'error max image dimensions: x', 'error max image dimensions: x', 'back');
+(1183, 1, 'success edit teacher', 'Успешное сохранение', 'back'),
+(1184, 1, 'error max image dimensions: x', 'error max image dimensions: x', 'back'),
+(1185, 1, 'menu group', 'Классы', 'back'),
+(1186, 1, 'student page', 'Ученики', 'back'),
+(1187, 1, 'add student', 'Добавить ученика', 'back'),
+(1188, 1, 'student list', 'Ученики', 'back'),
+(1189, 1, 'cache synchro size', 'cache synchro size', 'back'),
+(1190, 1, 'view student', 'Ученик', 'back'),
+(1191, 1, 'student', 'Учение', 'back'),
+(1192, 1, 'error db', 'error db', 'back'),
+(1193, 1, 'group page', 'Классы', 'back'),
+(1194, 1, 'error add student', 'Ошибка сохранения', 'back'),
+(1195, 1, 'success edit student', 'Успешное сохранение', 'back'),
+(1196, 1, 'add group', 'Добавить класс', 'back'),
+(1197, 1, 'group list', 'Список классов', 'back'),
+(1198, 1, 'group grade', 'Класс', 'back'),
+(1199, 1, 'group name', 'Название', 'back'),
+(1200, 1, 'start_year', 'start_year', 'back'),
+(1201, 1, 'end_year', 'end_year', 'back'),
+(1202, 1, 'group start year', 'Год начала учёбы', 'back'),
+(1203, 1, 'group end year', 'Год окончания', 'back'),
+(1204, 1, 'view group', 'Класс', 'back'),
+(1205, 1, 'group', 'Класс', 'back'),
+(1206, 1, 'success edit group', 'Успешное сохранение', 'back'),
+(1207, 1, 'error add group', 'Ошибка сохранения', 'back'),
+(1208, 1, 'error edit group', 'Ошибка сохранения', 'back'),
+(1209, 1, 'study finished', 'Выпуск', 'back'),
+(1210, 1, 'error edit student', 'Ошибка сохранения', 'back'),
+(1211, 1, 'student group', 'Класс', 'back'),
+(1212, 1, 'error delete student', 'error delete student', 'back'),
+(1213, 1, 'success delete student', 'success delete student', 'back'),
+(1214, 1, 'usergroup ', 'usergroup ', 'back'),
+(1215, 1, 'menu subject', 'Предметы', 'back'),
+(1216, 1, 'subject page', 'Предметы', 'back'),
+(1217, 1, 'add subject', 'Добавить предмет', 'back'),
+(1218, 1, 'subject list', 'Предметы', 'back'),
+(1219, 1, 'subject name', 'Название', 'back'),
+(1220, 1, 'view subject', 'Предмет', 'back'),
+(1221, 1, 'subject', 'Предмет', 'back'),
+(1222, 1, 'success edit subject', 'Успешное сохранение', 'back'),
+(1223, 1, 'error add subject', 'Ошибка сохранения', 'back'),
+(1224, 1, 'error edit subject', 'Ошибка сохранения', 'back'),
+(1225, 1, 'teacher subjects', 'teacher subjects', 'back'),
+(1226, 1, 'success delete teacher', 'success delete teacher', 'back'),
+(1227, 1, 'success delete subject', 'success delete subject', 'back'),
+(1228, 1, 'menu study-period', 'menu study-period', 'back'),
+(1229, 1, 'studyperiod page', 'studyperiod page', 'back'),
+(1230, 1, 'study period page', 'study period page', 'back'),
+(1231, 1, 'add study period', 'add study period', 'back'),
+(1232, 1, 'study period list', 'study period list', 'back'),
+(1233, 1, 'study period start year', 'study period start year', 'back'),
+(1234, 1, 'study period end year', 'study period end year', 'back'),
+(1235, 1, 'study period name', 'study period name', 'back'),
+(1236, 1, 'study period start time', 'study period start time', 'back'),
+(1237, 1, 'study period end time', 'study period end time', 'back'),
+(1238, 1, 'study_period_ page', 'study_period_ page', 'back'),
+(1239, 1, 'study-period- page', 'study-period- page', 'back'),
+(1240, 1, 'study-period-model page', 'study-period-model page', 'back'),
+(1241, 1, 'study-period page', 'study-period page', 'back');
 
 -- --------------------------------------------------------
 
@@ -2024,24 +2154,9 @@ CREATE TABLE IF NOT EXISTS `mktb_url` (
 --
 
 INSERT INTO `mktb_url` (`id`, `alias`, `route`) VALUES
-(19, 'category', 'category/index/2'),
 (33, 'products', 'product/index'),
 (96, '', 'home/index/1'),
-(127, 'about.html', 'information/view/7'),
-(179, 'terms-of-payment.html', 'information/view/8'),
-(180, 'shipping-policy.html', 'information/view/9'),
-(181, 'return-policy.html', 'information/view/10'),
-(182, 'privacy-policy.html', 'information/view/11'),
-(183, 'certificates.html', 'information/view/12'),
-(184, 'affiliate-program.html', 'information/view/13'),
-(186, 'promotions.html', 'information/view/15'),
-(187, 'brand', 'brand/index/3'),
-(238, 'services.html', 'information/view/16'),
-(248, 'product', 'product/index/4'),
-(254, 'news', 'news/index/20'),
 (522, 'contact', 'contact/index/21'),
-(525, 'video', 'video/index/22'),
-(528, 'guarantee', 'information/view/23'),
 (553, 'rules.html', 'information/view/24');
 
 -- --------------------------------------------------------
@@ -2062,8 +2177,9 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   `phone` varchar(255) NOT NULL,
   `address` text NOT NULL,
   `info` text NOT NULL,
-  `date_reg` int(11) NOT NULL,
-  `date_activity` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  `activity_at` int(11) NOT NULL,
   `avatar` varchar(255) NOT NULL,
   `date_birth` int(11) NOT NULL,
   `gender` tinyint(1) NOT NULL,
@@ -2092,19 +2208,23 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   `last_ip` varchar(255) NOT NULL,
   `phpsessid` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Дамп данных таблицы `mktb_user`
 --
 
-INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `date_reg`, `date_activity`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
-(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 1534356294, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1534356294, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
-(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 1534048108, '', 0, 1, '', 'Улугбек', 'Фамилия', 'Отчество', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1534048108, '127.0.0.1', '8l41nf7u3djgi2v9to8qtjh772'),
-(11, 'teacher1', '', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 0, '', 0, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(12, 'TB', 'b401e2066c93fdcd6eb38966a9b86d14', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 0, '', 0, 0, '', 'Bolta', 'Teshayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
+INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
+(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1534600841, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1534600841, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
+(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1534996926, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1534996926, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(11, 'teacher1', '', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535023467, 0, '', 0, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(12, 'tb', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 0, 0, '', 0, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(13, 'oa1', '', 11, '', '', 1, '', '', '', '', 1534574994, 1535019281, 0, '', 0, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(14, 'sa1', '', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535025373, 0, '', 0, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(15, 'kd1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'kd1@test.com', '', 1, '', '', '', '', 1534576158, 0, 0, '', 0, 0, '', 'Dilshod', 'Karimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(22, 'test2', '0992a103ec11bc5618c10f2cc7d5c775', 10, '', '', 1, '', '', '', '', 1534598344, 1534598344, 0, '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(24, 'test3', '', 5, '', '', 1, '', '', '', '', 1535011435, 1535011809, 0, '', 0, 0, '', 'test3', 'test3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
 
 -- --------------------------------------------------------
 

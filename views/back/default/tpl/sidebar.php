@@ -34,11 +34,17 @@
 	<?php if($menu){ ?>
     <?php
       $faIcons = [
+        'page' => 'file-text-o',
         'category' => 'th-large',
         'product' => 'truck',
         'order' => 'shopping-bag',
         'user' => 'users',
         'brand' => 'apple',
+        'teacher' => 'user-secret',
+        'student' => 'child',
+        'subject' => 'book',
+        'settings' => 'cog',
+        'group' => 'group',
       ];
     ?>
       <!-- Sidebar Menu -->
@@ -48,7 +54,7 @@
         </li>
         <?php foreach($menu as $value){ ?>
         <li class="<?php if($value['active']){ ?>active<?php } ?>">
-          <a title="<?=$this->getTranslation('menu ' . $value['alias'])?>" href="<?=$value['url']?>"><i class="fa fa-<?=(($faIcons[$value['alias']]) ? $faIcons[$value['alias']] : 'link')?>"></i> <span><?=$this->getTranslation('menu ' . $value['alias'])?></span></a>
+          <a title="<?=$this->getTranslation('menu ' . $value['alias'])?>" href="<?=$value['url']?>"><i class="fa fa-<?=((!empty($faIcons[$value['alias']])) ? $faIcons[$value['alias']] : 'link')?>"></i> <span><?=$this->getTranslation('menu ' . $value['alias'])?></span></a>
         </li>
         <?php } ?>
         <?php 
@@ -58,7 +64,7 @@
           }
         ?>
         <li class="treeview<?php if($settingsMenuActive){ ?> active<?php } ?>">
-          <a href="#"><i class="fa fa-link"></i> <span><?=$this->getTranslation('settings')?></span>
+          <a href="#"><i class="fa fa-cog"></i> <span><?=$this->getTranslation('settings')?></span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>

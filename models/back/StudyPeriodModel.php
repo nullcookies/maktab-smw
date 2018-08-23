@@ -5,12 +5,12 @@ namespace models\back;
 use \system\Document;
 use \system\Model;
 use \models\objects\User;
-use \models\objects\Group;
+use \models\objects\StudyPeriod;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class GroupModel extends Model
+class StudyPeriodModel extends Model
 {
 
     public function index()
@@ -74,8 +74,7 @@ class GroupModel extends Model
         $_POST = $this->cleanForm($_POST);
 
         $data['draw'] = (int)$_POST['draw'];
-        $checkYear = date('Y') - 1;
-        $totalRows = $this->qb->select('id')->where('end_year >=', $checkYear)->count('??group');
+        $totalRows = $this->qb->select('id')->count('??study_period');
         $data['recordsTotal'] = $totalRows;
 
         $offset = (int)$_POST['start'];
@@ -101,25 +100,25 @@ class GroupModel extends Model
                 break;
             
             case 1:
-                $order = 'grade_start_year';
-                break;
-            
-            case 2:
-                $order = 'name';
-                break;
-            
-            case 3:
                 $order = 'start_year';
                 break;
             
-            case 4:
+            case 2:
                 $order = 'end_year';
                 break;
             
-            case 5:
-                $order = 'status';
+            case 3:
+                $order = 'period';
                 break;
             
+            case 4:
+                $order = 'start_time';
+                break;
+            
+            case 5:
+                $order = 'end_time';
+                break;
+
             default:
                 $order = 'start_year';
                 break;
@@ -131,12 +130,6 @@ class GroupModel extends Model
         // }
         $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
 
-        if($order == 'grade_start_year'){
-            $order = 'start_year';
-            $orderDir = ($orderDir == 'DESC') ? 'ASC' : 'DESC';
-        }
-
-
         $recordsFiltered = $totalRows;
 
         $search_where = '';
@@ -147,11 +140,13 @@ class GroupModel extends Model
 
         if($searchText){
             $where_params = [];
-            $search_where = " (name LIKE ? OR start_year LIKE ? OR end_year LIKE ?) ";
+            $search_where = " (start_year LIKE ? OR end_year LIKE ? OR period LIKE ? OR start_time LIKE ? OR end_time LIKE ?) ";
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT id FROM ??group WHERE ' . $search_where . ' GROUP BY id ';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $querySearch = 'SELECT id FROM ??study_period WHERE ' . $search_where . ' GROUP BY id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -159,10 +154,10 @@ class GroupModel extends Model
         $data['recordsFiltered'] = $recordsFiltered;
 
 
-        $query = 'SELECT * FROM ??group WHERE end_year >= ' . $checkYear . ' ';
+        $query = 'SELECT * FROM ??study_period ';
 
         if($searchText){
-            $query .= ' AND ' . $search_where;
+            $query .= ' WHERE ' . $search_where;
         }
         $query .= ' GROUP BY id ';
         $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
@@ -183,17 +178,16 @@ class GroupModel extends Model
             $itemsDataRow = [];
 
             $itemsDataRow[0] = $value['id'];
-            $valueGrade = $this->getGrade($value['start_year'], $value['end_year']);
-
-            $itemsDataRow[1] = $valueGrade;
-            $itemsDataRow[2] = $value['name'];
-            $itemsDataRow[3] = $value['start_year'];
-            $itemsDataRow[4] = $value['end_year'];
+            $itemsDataRow[1] = $value['start_year'];
+            $itemsDataRow[2] = $value['end_year'];
+            $itemsDataRow[3] = $value['period'];
+            $itemsDataRow[4] = $value['start_time'];
+            $itemsDataRow[5] = $value['end_time'];
             
-            $itemsDataRow[5] =   '<div class="status-change">' . 
-                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="group" data-table="group" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
+            $itemsDataRow[6] =   '<div class="status-change">' . 
+                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="study-period" data-table="study_period" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
                                     '</div>';
-            $itemsDataRow[6] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+            $itemsDataRow[7] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
                                     '</a> ' . 
                                     '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
@@ -213,12 +207,12 @@ class GroupModel extends Model
     
     public function view()
     {
-        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['group']['id']) ? (int)$_POST['group']['id'] : 0);
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['studyPeriod']['id']) ? (int)$_POST['studyPeriod']['id'] : 0);
         
-        $group = new Group();
+        $studyPeriod = new StudyPeriod();
 
         if($id){
-            $group->find($id);
+            $studyPeriod->find($id);
         }
 
         $data = [];
@@ -272,14 +266,14 @@ class GroupModel extends Model
         $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $data['controls'] = $controls;
 
-        if(isset($this->group)){
-            $group = $this->group;
+        if(isset($this->studyPeriod)){
+            $studyPeriod = $this->studyPeriod;
         }
-        elseif(!empty($_POST['group'])){
-            $group->setFields($_POST['group']);
+        elseif(!empty($_POST['studyPeriod'])){
+            $studyPeriod->setFields($_POST['studyPeriod']);
         }
 
-        $data['group'] = $group;
+        $data['studyPeriod'] = $studyPeriod;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
@@ -294,14 +288,14 @@ class GroupModel extends Model
     public function save()
     {
         
-        $group = new Group();
+        $studyPeriod = new StudyPeriod();
 
         $_POST = $this->cleanForm($_POST);
-        $info = $_POST['group'];
+        $info = $_POST['studyPeriod'];
         
         $new = true;
         $id = (int)$info['id'];
-        if($id && $group->find($id)){
+        if($id && $studyPeriod->find($id)){
             $new = false;
         }
 
@@ -311,8 +305,6 @@ class GroupModel extends Model
         $rules = [ 
             'info' => [
                 'name' => ['isRequired'],
-                'start_year' => ['isRequired'],
-                'end_year' => ['isRequired'],
             ],
             'files' => [
                 
@@ -336,26 +328,20 @@ class GroupModel extends Model
         }
         else{
 
-            $group->setFields($info);
+            $studyPeriod->setFields($info);
+            $studyPeriod->status = 1;
 
-            $group->status = 1;
+            $studyPeriod->save();
 
-            if($new) {
-                $group->created_at = time();
-            }
-            $group->updated_at = time();
-
-            $group->save();
-
-            if($group->savedSuccess){
-                $this->group = $group;
+            if($studyPeriod->savedSuccess){
+                $this->studyPeriod = $studyPeriod;
                 $this->successText = $this->t('success edit ' . $this->control, 'back');
             }
             else{
                 $this->errorText = $this->t('error edit ' . $this->control, 'back');
                 $this->errors['error db'] = $this->t('error db', 'back');
             }
-            return $group->savedSuccess;
+            return $studyPeriod->savedSuccess;
         }
     }
 
@@ -366,12 +352,12 @@ class GroupModel extends Model
 
         $return = '';
 
-        $group = new Group();
-        if($id && $group->find($id)){
-            $group->status = $status;
-            $group->save();
+        $studyPeriod = new StudyPeriod();
+        if($id && $studyPeriod->find($id)){
+            $studyPeriod->status = $status;
+            $studyPeriod->save();
 
-            if($group->savedSuccess){
+            if($studyPeriod->savedSuccess){
                 $return = ($status) ? 'on' : 'off';
             }
         }
@@ -383,16 +369,13 @@ class GroupModel extends Model
         $return = false;
 
         $id = (int)$_GET['id'];
-        $group = new Group();
+        $studyPeriod = new StudyPeriod();
 
-        if($id && $group->find($id)) {
+        if($id && $studyPeriod->find($id)) {
 
-            $this->qb->where('group_id', '?')->delete('??teacher_to_group', [$group->id]);
-            $this->qb->where('group_id', '?')->delete('??student_to_group', [$group->id]);
-
-            $group->remove();
+            $studyPeriod->remove();
             
-            if($group->removedSuccess){
+            if($studyPeriod->removedSuccess){
                 $this->successText = $this->t('success delete ' . $this->control, 'back');
             }
             else{
@@ -400,25 +383,13 @@ class GroupModel extends Model
                 $this->errors['error db'];
             }
 
-            $return = $group->removedSuccess;
+            $return = $studyPeriod->removedSuccess;
         }
         else{
             $this->errors['error invalid id'];
         }
 
         return $return;
-    }
-
-    public function getGrade($start_year, $end_year)
-    {
-        $studyStartMonth = $this->getOption('study_start_month');
-        $currentYear = date('Y');
-        $currentMonth = date('n');
-        //для определения номера класса
-        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
-
-        $grade = $currentYear - $start_year + $addition;
-        return ($grade <= 11) ? $grade : $this->t('study finished', 'back') . ' ' . $end_year;
     }
 
 }

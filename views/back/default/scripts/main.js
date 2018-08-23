@@ -384,7 +384,7 @@ $(document).ready(function () {
           toggleOn.html('<i class="fa fa-spin fa-circle-o-notch"></i>');
           toggleOff.html('<i class="fa fa-spin fa-circle-o-notch"></i>');
         },
-        url: '/admin/view/' + controller + '/' + action + '/' + id + '/' + newStatus
+        url: '/admin/view/' + controller + '/' + action + '/' + id + '/' + newStatus + '/'
       })
       .done(function(data) {
         if(data == 'on'){

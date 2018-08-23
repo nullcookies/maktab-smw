@@ -18,6 +18,9 @@ abstract class ActiveRecord extends Object {
 	
 	public $tableName;
 	public $primaryKey;
+	public $media;
+	public $linker;
+
 	protected $driver;
 	protected $fields = [];
 	protected $columns = [];
@@ -29,6 +32,9 @@ abstract class ActiveRecord extends Object {
 		parent::__construct();
 		$this->setTableName();
 		
+		$this->media = new \system\Media($this->config);
+		$lang_prefix = (LANG_ID != LANG_MAIN) ? LANG_PREFIX : '';
+        $this->linker = new Linker($lang_prefix);
 
 		$getColumns = $this->db->query('SHOW COLUMNS FROM ' . $this->tableName);
 		if($getColumns->rowCount() > 0){
@@ -163,7 +169,13 @@ abstract class ActiveRecord extends Object {
 	        
 	        if($sth !== false){
 	        	$this->savedSuccess = $sth->execute((array)$args);
-				if(!$this->savedSuccess){
+				if($this->savedSuccess){
+					if(empty($primaryKeyValue)){
+						$newUserId = $this->db->lastInsertId();
+						$this->find($newUserId);
+					}
+				}
+				else{
 					$this->errorInfo = $sth->errorInfo();
 				}
 	        }
@@ -198,7 +210,7 @@ abstract class ActiveRecord extends Object {
     	return $this;
     }
 
-    public function find($id)
+    public function find($id, $secure = true)
     {
     	$found = false;
     	if(!empty($this->primaryKey)){
@@ -211,9 +223,15 @@ abstract class ActiveRecord extends Object {
 			$sql = $query->toSql($this->driver, $args);
 			$sth = $this->db->prepare($sql);
 			if($sth !== false){
-	        	$found = $sth->execute((array)$args);
-				if($found){
-					$this->fields = $sth->fetch(\PDO::FETCH_ASSOC);
+	        	$result = $sth->execute((array)$args);
+				if($result && $sth->rowCount() > 0){
+					$found = true;
+					if($secure){
+						$this->setFields($sth->fetch(\PDO::FETCH_ASSOC));
+					}
+					else{
+						$this->fields = $sth->fetch(\PDO::FETCH_ASSOC);
+					}
 				}
 	        }
     	}

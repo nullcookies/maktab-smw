@@ -35,28 +35,29 @@ class HeaderModel extends Model {
         }
 
         $user = [];
-        $getUser = $this->qb->where('id', '?')->get('??user', [$_SESSION['user_id']]);
-        if($getUser->rowCount() > 0){
-            $user = $getUser->fetch();
-        }
-
         $currentUser = [];
 
-        $currentUser['name'] = $user['firstname'] . ' ' . $user['lastname'];
-        $currentUser['usergroup'] = $user['usergroup'];
-        $currentUser['email'] = $user['email'];
-        
-        if(!$user['image']){
-            if($user['gender'] == 1){
-                $user['image'] = 'user/avatar-m.png';
-            }
-            else{
-                $user['image'] = 'user/avatar-f.png';
-            }
-        }
-        $currentUser['icon'] = $this->linker->getIcon($user['image']);
-        $currentUser['profile'] = $this->linker->getUrl('user/edit/' . $user['id'], true);
-        $currentUser['reg'] = date('Y/m/d', $user['created_at']);
+	    if(!empty($_SESSION['user_id'])){
+	    	$getUser = $this->qb->where('id', '?')->get('??user', [$_SESSION['user_id']]);
+	        if($getUser->rowCount() > 0){
+	            $user = $getUser->fetch();
+	        }
+	        $currentUser['name'] = $user['firstname'] . ' ' . $user['lastname'];
+	        $currentUser['usergroup'] = $user['usergroup'];
+	        $currentUser['email'] = $user['email'];
+	        
+	        if(!$user['image']){
+	            if($user['gender'] == 1){
+	                $user['image'] = 'user/avatar-m.png';
+	            }
+	            else{
+	                $user['image'] = 'user/avatar-f.png';
+	            }
+	        }
+	        $currentUser['icon'] = $this->linker->getIcon($user['image']);
+	        $currentUser['profile'] = $this->linker->getUrl('user/edit/' . $user['id'], true);
+	        $currentUser['reg'] = date('Y/m/d', $user['created_at']);
+	    }
 
         $data['user'] = $currentUser;
         $data['logout'] = $this->linker->getUrl('user/logout/', true);

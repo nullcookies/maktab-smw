@@ -23,28 +23,47 @@ class Teacher extends User{
 		$this->usergroup = 5;
 	}
 
-	// public function find($id)
- //    {
- //    	parent::find($id);
+	public function find($id, $secure = true)
+    {
+    	$found = parent::find($id, $secure);
 
- //    	$args = new ArgumentArray;
+    	$args = new ArgumentArray;
 
-	// 	// $query = new InsertQuery;
-	// 	// $query->insert([ 'name' => new Bind('name', 'John'), 'confirmed' => new Bind('confirmed', true) ])->into('users');
-	// 	// $query->returning('id');
-	// 	// $sql = $query->toSql($driver, $args);
+		$query = new SelectQuery;
+		$query->select('*')
+		    ->from(DB_PREFIX . 'teacher_to_group')
+		    ->where()
+		    ->equal('teacher_id', new Bind('teacher_id', $this->id));
+		$sql = $query->toSql($this->driver, $args);
+		$sth = $this->db->prepare($sql);
+		if($sth !== false){
+        	$result = $sth->execute((array)$args);
+			if($result){
+				$teacherToGroup = $sth->fetch(\PDO::FETCH_ASSOC);
+				$this->group_id = $teacherToGroup['group_id'];
+			}
+        }
 
-	// 	// var_dump($sql);
-	// 	// var_dump((array)$args);
+        $this->subject_id = [];
+        $query = new SelectQuery;
+        $query->select('*')
+		    ->from(DB_PREFIX . 'subject_to_teacher')
+		    ->where()
+		    ->equal('teacher_id', new Bind('teacher_id', $this->id));
+		$sql = $query->toSql($this->driver, $args);
+		$sth = $this->db->prepare($sql);
+		if($sth !== false){
+        	$result = $sth->execute((array)$args);
+			if($result){
+				$subjectToTeacher = $sth->fetchAll(\PDO::FETCH_ASSOC);
+				foreach ($subjectToTeacher as $value) {
+					$this->subject_id[] = $value['subject_id'];
+				}
+			}
+        }
 
-	// 	$query = new SelectQuery;
-	// 	$query->select('*')
-	// 	    ->from(DB_PREFIX . 'teacher_to_group')
-	// 	    ->where()
-	// 	    ->equal('teacher_id', new Bind('teacher_id', $this->id));
-	// 	$sql = $query->toSql($this->driver, $args);
+        $this->icon = $this->linker->getIcon($this->media->resize($this->image, 150, 150));
 
-	// 	var_dump($sql);
-	// 	var_dump((array)$args);
- //    }
+        return $found;
+    }
 }

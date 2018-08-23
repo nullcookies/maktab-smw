@@ -17,7 +17,7 @@
 
         <?=$this->renderNotifications($successText, $errorText)?>
     
-        <form action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
+        <form action="<?=$controls['view']?>" method="post" enctype="multipart/form-data">
             
             <input type="hidden" name="student[id]" value="<?=$student->id?>" />
             
@@ -55,6 +55,19 @@
                                 </label>
                                 <input type="password" class="form-control" name="student[password]" id="password" value="" />
                                 <?php if(!empty($errors['password'])) { ?><div class="help-block"><?=$this->t($errors['password'], 'back')?></div><?php } ?>
+                            </div>
+
+                            <div class="form-group <?php if(!empty($errors['group_id'])) { ?>has-error<?php } ?>">
+                                <label for="group_id">
+                                    <?=$this->t('student group', 'back')?>
+                                </label>
+                                <select name="group_id" id="group_id" class="form-control selectpicker">
+                                    <option value="">-</option>
+                                    <?php foreach($groups as $value){ ?>
+                                    <option value="<?=$value['id']?>" <?php if(!empty($student->group_id) && $student->group_id == $value['id']){ ?>selected<?php } ?>><?=$value['grade'] . ' - ' . $value['name']?> (<?=$value['start_year']?> - <?=$value['end_year']?>)</option>
+                                    <?php } ?>
+                                </select>
+                                <?php if(!empty($errors['group_id'])) { ?><div class="help-block"><?=$this->t($errors['group_id'], 'back')?></div><?php } ?>
                             </div>
 
                             <div class="form-group <?php if(!empty($errors['email'])) { ?>has-error<?php } ?>">
@@ -125,9 +138,7 @@
                                 <input class="image-fileinput" type="file" name="image" multiple/>
                                 <?php if(!empty($errors['image'])) { ?><div class="help-block"><?=$this->t($errors['image'], 'back')?></div><?php } ?>
                             </div>
-
                             
-
                         </div>
                     </div>
                 </div>

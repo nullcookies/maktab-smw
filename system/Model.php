@@ -41,8 +41,8 @@ class Model extends Component {
 
     protected function getControl() {
         $getControl = explode('\\', get_class($this));
-        $control = strtolower(array_pop($getControl));
-        $control = preg_replace('#(.*?)model$#', '\1', $control);
+        $control = preg_replace('#(.*?)model$#i', '\1', array_pop($getControl));
+        $control = $this->fromCamelCase($control);
         return $control;
     }
 

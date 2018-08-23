@@ -117,8 +117,7 @@ class StudentController extends Controller {
         ];
         
         $model = new StudentModel;
-        $id = (int)$_GET['id'];
-        if($id){
+        if(!empty($_GET['id'])){
             $resultDelete = $model->delete();
         }
         $model->index();

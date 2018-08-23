@@ -14,9 +14,9 @@ class SidebarModel extends Model {
         $data = [];
 
         $topmenu = [];
-        $access = $_SESSION['usergroup'];
+        $access = (!empty($_SESSION['usergroup'])) ? $_SESSION['usergroup'] : 0;
         if(empty($access)) {
-            header('Location: ' . BASEURL_ADMIN . '/');
+            //header('Location: ' . BASEURL_ADMIN . '/');
             exit;
         }
 

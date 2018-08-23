@@ -139,13 +139,13 @@ class Router extends Component {
         }
 
         //если url начинается с 'view' показываем только блок модуля
-        if($urlPieces[0] == 'view'){
+        if(!empty($urlPieces[0]) && $urlPieces[0] == 'view'){
             $this->renderMode = 'module';
             array_shift($urlPieces);
         }
 
         //контроллер
-        if($urlPieces[0]){
+        if(!empty($urlPieces[0]) && $urlPieces[0]){
             $this->controller = array_shift($urlPieces);
         }
         else{

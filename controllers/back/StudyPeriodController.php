@@ -3,12 +3,12 @@
 namespace controllers\back;
 
 use \system\Controller;
-use \models\back\GroupModel;
+use \models\back\StudyPeriodModel;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class GroupController extends Controller {
+class StudyPeriodController extends Controller {
     
     public function index() {
         
@@ -32,17 +32,17 @@ class GroupController extends Controller {
                 'position' => 'sidebar'
             ]
         ];
-        $model = new GroupModel;
+        $model = new StudyPeriodModel;
 
         $model->index();
         $this->data = $model->data;
         $this->document = $model->document;
 
-        $this->content = $this->render('group-list');
+        $this->content = $this->render('study-period-list');
     }
 
     public function list_ajax() {
-        $model = new GroupModel;
+        $model = new StudyPeriodModel;
 
         $model->list_ajax();
         $this->data = $model->data;
@@ -73,9 +73,9 @@ class GroupController extends Controller {
             ]
         ];
 
-        $model = new GroupModel;
+        $model = new StudyPeriodModel;
 
-        $viewFile = 'group-view';
+        $viewFile = 'study-period-view';
         
         if(isset($_POST['btn_save'])){
             $result = $model->save();
@@ -90,7 +90,7 @@ class GroupController extends Controller {
     }
 
     public function toggle() {
-        $model = new GroupModel;
+        $model = new StudyPeriodModel;
         $this->content = $model->toggle();
     }
 
@@ -116,7 +116,7 @@ class GroupController extends Controller {
             ]
         ];
         
-        $model = new GroupModel;
+        $model = new StudyPeriodModel;
         $id = (int)$_GET['id'];
         if($id){
             $resultDelete = $model->delete();
@@ -125,7 +125,7 @@ class GroupController extends Controller {
         $this->data = $model->data;
         $this->document = $model->document;
 
-        $this->content = $this->render('group-list');
+        $this->content = $this->render('study-period-list');
     }
 
 

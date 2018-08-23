@@ -17,7 +17,7 @@
 
         <?=$this->renderNotifications($successText, $errorText)?>
     
-        <form action="<?=$controls['action']?>" method="post" enctype="multipart/form-data">
+        <form action="<?=$controls['view']?>" method="post" enctype="multipart/form-data">
             
             <input type="hidden" name="teacher[id]" value="<?=$teacher->id?>" />
             
@@ -61,13 +61,26 @@
                                 <label for="group_id">
                                     <?=$this->t('student group', 'back')?>
                                 </label>
-                                <select name="group_id" id="group_id" class="form-control">
+                                <select name="group_id" id="group_id" class="form-control selectpicker">
                                     <option value="">-</option>
-                                    <?php foreach($classes as $value){ ?>
-                                    <option value="<?=$value['id']?>" <?php /*if($group->end_year == $i){ ?>selected<?php }*/ ?>><?=$value['grade'] . ' - ' . $value['name']?> (<?=$value['start_year']?> - <?=$value['end_year']?>)</option>
+                                    <?php foreach($groups as $value){ ?>
+                                    <option value="<?=$value['id']?>" <?php if(!empty($teacher->group_id) && $teacher->group_id == $value['id']){ ?>selected<?php } ?>><?=$value['grade'] . ' - ' . $value['name']?> (<?=$value['start_year']?> - <?=$value['end_year']?>)</option>
                                     <?php } ?>
                                 </select>
                                 <?php if(!empty($errors['group_id'])) { ?><div class="help-block"><?=$this->t($errors['group_id'], 'back')?></div><?php } ?>
+                            </div>
+
+                            <div class="form-group <?php if(!empty($errors['subject_id'])) { ?>has-error<?php } ?>">
+                                <label for="subject_id">
+                                    <?=$this->t('teacher subjects', 'back')?>
+                                </label>
+                                <select name="subject_id[]" id="subject_id" class="form-control selectpicker" multiple>
+                                    <option value="">-</option>
+                                    <?php foreach($subjects as $value){ ?>
+                                    <option value="<?=$value['id']?>" <?php if(!empty($teacher->subject_id) && in_array($value['id'], $teacher->subject_id)){ ?>selected<?php } ?>><?=$value['name']?></option>
+                                    <?php } ?>
+                                </select>
+                                <?php if(!empty($errors['subject_id'])) { ?><div class="help-block"><?=$this->t($errors['subject_id'], 'back')?></div><?php } ?>
                             </div>
 
                             <div class="form-group <?php if(!empty($errors['email'])) { ?>has-error<?php } ?>">
@@ -138,9 +151,7 @@
                                 <input class="image-fileinput" type="file" name="image" multiple/>
                                 <?php if(!empty($errors['image'])) { ?><div class="help-block"><?=$this->t($errors['image'], 'back')?></div><?php } ?>
                             </div>
-
                             
-
                         </div>
                     </div>
                 </div>

@@ -127,15 +127,16 @@ class HomeModel extends Model {
 		$categoryProducts = [];
 
 		//leader product
-		$leader = array_shift($allOrders);
-		$leaderProduct = [];
-		$getLeaderProduct = $this->qb->select('id, category_id, name, alias')->where('id', '?')->get('??product', [$leader['product_id']]);
-		if($getLeaderProduct->rowCount() > 0){
-			$leaderProduct = $getLeaderProduct->fetch();
-			$leaderProduct = $this->langDecode($leaderProduct, ['name'], false);
-		}
-		$leader['name'] = $leaderProduct['name'][LANG_ID];
-		$leader['url'] = $this->linker->getUrl('product/edit/' . $leaderProduct['id'], true);
+		$leader = [];
+		// $leader = array_shift($allOrders);
+		// $leaderProduct = [];
+		// $getLeaderProduct = $this->qb->select('id, category_id, name, alias')->where('id', '?')->get('??product', [$leader['product_id']]);
+		// if($getLeaderProduct->rowCount() > 0){
+		// 	$leaderProduct = $getLeaderProduct->fetch();
+		// 	$leaderProduct = $this->langDecode($leaderProduct, ['name'], false);
+		// }
+		// $leader['name'] = $leaderProduct['name'][LANG_ID];
+		// $leader['url'] = $this->linker->getUrl('product/edit/' . $leaderProduct['id'], true);
 
 		$months = [];
 		for($i = 5; $i >= 0; $i--){

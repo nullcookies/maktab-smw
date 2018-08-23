@@ -117,8 +117,7 @@ class TeacherController extends Controller {
         ];
         
         $model = new TeacherModel;
-        $id = (int)$_GET['param1'];
-        if($id){
+        if(!empty($_GET['id'])){
             $resultDelete = $model->delete();
         }
         $model->index();
