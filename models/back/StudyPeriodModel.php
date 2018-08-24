@@ -181,8 +181,8 @@ class StudyPeriodModel extends Model
             $itemsDataRow[1] = $value['start_year'];
             $itemsDataRow[2] = $value['end_year'];
             $itemsDataRow[3] = $value['period'];
-            $itemsDataRow[4] = $value['start_time'];
-            $itemsDataRow[5] = $value['end_time'];
+            $itemsDataRow[4] = date('j-', $value['start_time']) . $this->t(date('F', $value['start_time']), 'back') . date(', Y', $value['start_time']);
+            $itemsDataRow[5] = date('j-', $value['end_time']) . $this->t(date('F', $value['end_time']), 'back') . date(', Y', $value['end_time']);
             
             $itemsDataRow[6] =   '<div class="status-change">' . 
                                     '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="study-period" data-table="study_period" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
@@ -273,6 +273,14 @@ class StudyPeriodModel extends Model
             $studyPeriod->setFields($_POST['studyPeriod']);
         }
 
+        if($studyPeriod->start_time == 0){
+        	$studyPeriod->start_time = time();
+        }
+        if($studyPeriod->end_time == 0){
+        	$studyPeriod->end_time = time() + 86400 * 30;
+        }
+
+
         $data['studyPeriod'] = $studyPeriod;
 
         $data['errors'] = $this->errors;
@@ -291,20 +299,41 @@ class StudyPeriodModel extends Model
         $studyPeriod = new StudyPeriod();
 
         $_POST = $this->cleanForm($_POST);
+
+        //convert Y/m/d to timestamp
+        if(isset($_POST['studyPeriod']['start_time'])){
+        	$dateTime = \DateTime::createFromFormat('Y/m/d H:i:s', $_POST['studyPeriod']['start_time'] . ' 00:00:01');
+        	if($dateTime != false){
+        		$_POST['studyPeriod']['start_time'] = $dateTime->getTimestamp();
+        	}
+        }
+        if(isset($_POST['studyPeriod']['end_time'])){
+        	$dateTime = \DateTime::createFromFormat('Y/m/d H:i:s', $_POST['studyPeriod']['end_time'] . ' 00:00:01');
+        	if($dateTime != false){
+        		$_POST['studyPeriod']['end_time'] = $dateTime->getTimestamp();
+        	}
+        }
+
         $info = $_POST['studyPeriod'];
-        
+
         $new = true;
         $id = (int)$info['id'];
         if($id && $studyPeriod->find($id)){
             $new = false;
         }
 
+        
+
         $checkData = [];
         $checkData['info'] = $info;
 
         $rules = [ 
             'info' => [
-                'name' => ['isRequired'],
+                'start_year' => ['isRequired'],
+                'end_year' => ['isRequired'],
+                'period' => ['isRequired'],
+                'start_time' => ['isRequired'],
+                'end_time' => ['isRequired'],
             ],
             'files' => [
                 
@@ -327,8 +356,8 @@ class StudyPeriodModel extends Model
 
         }
         else{
-
             $studyPeriod->setFields($info);
+
             $studyPeriod->status = 1;
 
             $studyPeriod->save();

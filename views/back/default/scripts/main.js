@@ -61,6 +61,20 @@ $(document).ready(function () {
       }
   });
 
+  $('.study-period-start-year-1').on('change', function(){
+      var currentYear = +$(this).val();
+      if($('.study-period-end-year-1').length){
+        $('.study-period-end-year-1').find('option[value=' + (currentYear + 1) + ']').prop('selected', true);
+      }
+  });
+
+  $('.study-period-end-year-1').on('change', function(){
+      var currentYear = +$(this).val();
+      if($('.study-period-start-year-1').length){
+        $('.study-period-start-year-1').find('option[value=' + (currentYear - 1) + ']').prop('selected', true);
+      }
+  });
+
   $('#price, #discount, #priceshow').on('input change', function(){
 
     if($('#price').length && $('#discount').length && $('#priceshow').length){

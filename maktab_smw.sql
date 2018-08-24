@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 23 2018 г., 16:02
+-- Время создания: Авг 24 2018 г., 16:32
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -780,7 +780,17 @@ CREATE TABLE IF NOT EXISTS `mktb_study_period` (
   `end_time` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `mktb_study_period`
+--
+
+INSERT INTO `mktb_study_period` (`id`, `period`, `start_year`, `end_year`, `start_time`, `end_time`, `status`) VALUES
+(1, '1', 2018, 2019, 1535742001, 1540926001, 1),
+(2, '2', 2018, 2019, 1541012401, 1546196401, 1),
+(3, '3', 2018, 2019, 1546282801, 1553972401, 1),
+(4, '4', 2018, 2019, 1554058801, 1567191601, 1);
 
 -- --------------------------------------------------------
 
@@ -793,7 +803,7 @@ CREATE TABLE IF NOT EXISTS `mktb_subject` (
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `mktb_subject`
@@ -902,7 +912,7 @@ CREATE TABLE IF NOT EXISTS `mktb_translation` (
   `content` text NOT NULL,
   `context` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1242 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1256 ;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -2132,7 +2142,21 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1238, 1, 'study_period_ page', 'study_period_ page', 'back'),
 (1239, 1, 'study-period- page', 'study-period- page', 'back'),
 (1240, 1, 'study-period-model page', 'study-period-model page', 'back'),
-(1241, 1, 'study-period page', 'study-period page', 'back');
+(1241, 1, 'study-period page', 'study-period page', 'back'),
+(1242, 1, 'view study-period', 'view study-period', 'back'),
+(1243, 1, 'study-period', 'study-period', 'back'),
+(1244, 1, 'view study period', 'view study period', 'back'),
+(1245, 1, 'success edit study-period', 'success edit study-period', 'back'),
+(1246, 1, 'error edit study-period', 'error edit study-period', 'back'),
+(1247, 1, 'error add study-period', 'error add study-period', 'back'),
+(1248, 1, 'September', 'September', 'back'),
+(1249, 1, 'October', 'October', 'back'),
+(1250, 1, 'November', 'November', 'back'),
+(1251, 1, 'December', 'December', 'back'),
+(1252, 1, 'January', 'January', 'back'),
+(1253, 1, 'March', 'March', 'back'),
+(1254, 1, 'April', 'April', 'back'),
+(1255, 1, 'August', 'August', 'back');
 
 -- --------------------------------------------------------
 
@@ -2209,7 +2233,7 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   `phpsessid` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
 -- Дамп данных таблицы `mktb_user`
