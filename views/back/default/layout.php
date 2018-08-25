@@ -40,7 +40,7 @@
     <script type="text/javascript" src="<?= THEMEURL_ADMIN . '/scripts/main.js'; ?>"></script>
 </head>
 
-<body class="hold-transition sidebar-mini <?php echo (empty($document->bodyClass) ? 'skin-blue' : $document->bodyClass); ?>">
+<body class="hold-transition sidebar-mini <?php echo (empty($document->bodyClass) ? 'skin-blue' : implode(' ', $document->bodyClass)); ?>">
 
 <div class="wrapper">
 	

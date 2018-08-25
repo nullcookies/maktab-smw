@@ -138,6 +138,11 @@ class Router extends Component {
             }
         }
 
+        //if login always required
+        if(empty($_SESSION['usergroup']) || empty($_SESSION['user_id'])){
+            $urlPieces = ['user', 'login'];
+        }
+
         //если url начинается с 'view' показываем только блок модуля
         if(!empty($urlPieces[0]) && $urlPieces[0] == 'view'){
             $this->renderMode = 'module';
@@ -145,7 +150,7 @@ class Router extends Component {
         }
 
         //контроллер
-        if(!empty($urlPieces[0]) && $urlPieces[0]){
+        if(!empty($urlPieces[0])){
             $this->controller = array_shift($urlPieces);
         }
         else{
@@ -153,7 +158,7 @@ class Router extends Component {
         }
 
         //метод
-        if(isset($urlPieces[0]) && $urlPieces[0] !== false){
+        if(!empty($urlPieces[0])){
             $this->action = array_shift($urlPieces);
         }
         else{

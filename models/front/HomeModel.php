@@ -40,18 +40,8 @@ class HomeModel extends Model {
 
         $data['home'] = $home;
 
-        $twowork = new WorkApiModel();
-
-        //$categories = $twowork->get_categories();
-
-        
-
-        $data['categories'] = json_decode($categories, true);
-
 
         $data['themeURL'] = THEMEURL;
-
-
         $this->data = $data;
 
         return $this;

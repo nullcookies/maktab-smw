@@ -38,17 +38,18 @@ class Page extends Component {
         define('ACTION', $pageParams['action']);
 
         $controllerName = '\\controllers\\' . $pageParams['side'] . '\\' . $this->toCamelCase($pageParams['controller'], true) . 'Controller';
+        $methodName = $this->toCamelCase($pageParams['action']);
         
-        if(!class_exists($controllerName) || !method_exists($controllerName, $pageParams['action']) || !$access){
+        if(!class_exists($controllerName) || !method_exists($controllerName, $methodName) || !$access){
             $controllerName = '\\controllers\\' . $pageParams['side'] . '\\Page404Controller';
-            $pageParams['action'] = 'index';
+            $methodName = 'index';
         }
 
         $controller = new $controllerName;
         $controller->viewsPath = BASEPATH . '/views/' . $pageParams['side'];
         $controller->params = $pageParams['params'];
 
-        $controller->$pageParams['action']();
+        $controller->$methodName();
         
         $controllerPath = explode('\\', $controllerName);
         

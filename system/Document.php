@@ -25,7 +25,7 @@ class Document {
         $this->scripts = [];
         $this->charset = 'utf-8';
         $this->favicon = '';
-        $this->bodyClass = '';
+        $this->bodyClass = [];
     }
     
     public function addStyle($style){

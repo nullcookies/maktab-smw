@@ -45,33 +45,33 @@ abstract class ActiveRecord extends Object {
 				
 				//set values
 				$fieldValue = $value['Default'] ? $value['Default'] : NULL;
-				if(NULL === $fieldValue){
-					if (strpos($value['Type'], 'tinyint') === 0 || strpos($value['Type'], 'smallint') === 0 || strpos($value['Type'], 'mediumint') === 0 || strpos($value['Type'], 'int') === 0 || strpos($value['Type'], 'bigint') === 0 || strpos($value['Type'], 'decimal') === 0 || strpos($value['Type'], 'float') === 0 || strpos($value['Type'], 'double') === 0 || strpos($value['Type'], 'real') === 0) {
-						$fieldValue = 0;
-					}
-					elseif (strpos($value['Type'], 'boolean') === 0){
-						$fieldValue = 0;
-					}
-					elseif (strpos($value['Type'], 'char') === 0 || strpos($value['Type'], 'varchar') === 0 || strpos($value['Type'], 'tinytext') === 0 || strpos($value['Type'], 'text') === 0 || strpos($value['Type'], 'mediumtext') === 0 || strpos($value['Type'], 'longtext') === 0){
-						$fieldValue = '';
-					}
-					elseif (strpos($value['Type'], 'datetime') === 0){
-						$fieldValue = '0000-00-00 00:00:00';
-					}
-					elseif (strpos($value['Type'], 'date') === 0){
-						$fieldValue = $fieldValue = '0000-00-00';
-					}
-					elseif (strpos($value['Type'], 'timestamp') === 0){
-						$fieldValue = 0;
-					}
-					elseif (strpos($value['Type'], 'time') === 0){
-						$fieldValue = '00:00:00';
-					}
-					elseif (strpos($value['Type'], 'year') === 0){
-						$fieldValue = '0000';
-					}
-				}
-				if(empty($this->$value['Field'])){
+				// if(NULL === $fieldValue){
+				// 	if (strpos($value['Type'], 'tinyint') === 0 || strpos($value['Type'], 'smallint') === 0 || strpos($value['Type'], 'mediumint') === 0 || strpos($value['Type'], 'int') === 0 || strpos($value['Type'], 'bigint') === 0 || strpos($value['Type'], 'decimal') === 0 || strpos($value['Type'], 'float') === 0 || strpos($value['Type'], 'double') === 0 || strpos($value['Type'], 'real') === 0) {
+				// 		$fieldValue = 0;
+				// 	}
+				// 	elseif (strpos($value['Type'], 'boolean') === 0){
+				// 		$fieldValue = 0;
+				// 	}
+				// 	elseif (strpos($value['Type'], 'char') === 0 || strpos($value['Type'], 'varchar') === 0 || strpos($value['Type'], 'tinytext') === 0 || strpos($value['Type'], 'text') === 0 || strpos($value['Type'], 'mediumtext') === 0 || strpos($value['Type'], 'longtext') === 0){
+				// 		$fieldValue = '';
+				// 	}
+				// 	elseif (strpos($value['Type'], 'datetime') === 0){
+				// 		$fieldValue = '0000-00-00 00:00:00';
+				// 	}
+				// 	elseif (strpos($value['Type'], 'date') === 0){
+				// 		$fieldValue = $fieldValue = '0000-00-00';
+				// 	}
+				// 	elseif (strpos($value['Type'], 'timestamp') === 0){
+				// 		$fieldValue = 0;
+				// 	}
+				// 	elseif (strpos($value['Type'], 'time') === 0){
+				// 		$fieldValue = '00:00:00';
+				// 	}
+				// 	elseif (strpos($value['Type'], 'year') === 0){
+				// 		$fieldValue = '0000';
+				// 	}
+				// }
+				if(NULL !== $fieldValue && empty($this->$value['Field']) && !in_array($value['Field'], $this->secureAssignColumns)){
 					$this->$value['Field'] = $fieldValue;
 				}
 

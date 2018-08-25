@@ -457,7 +457,7 @@ class UserModel extends Model {
 
         $this->document = new Document();
         $this->document->title = $this->getTranslation('login page');
-        $this->document->bodyClass = 'login-page';
+        $this->document->bodyClass[] = 'login-page';
 
         foreach($_POST as $key => $value){
         	$_POST[$key] = trim($value);

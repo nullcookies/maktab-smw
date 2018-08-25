@@ -3,6 +3,7 @@
 namespace models\front;
 
 use \system\Model;
+use \models\objects\User;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -49,6 +50,7 @@ class HeaderModel extends Model {
         $data['searchUrl'] = $this->linker->getUrl('product/search');
         $data['ordersUrl'] = $this->linker->getUrl('user/orders');
         $data['accountUrl'] = $this->linker->getUrl('user/account');
+        $data['profileUrl'] = $this->linker->getUrl('user/profile');
         $data['registerUrl'] = $this->linker->getUrl('user/register');
         $data['loginUrl'] = $this->linker->getUrl('user/login');
         $data['logoutUrl'] = $this->linker->getUrl('user/logout');
@@ -57,27 +59,13 @@ class HeaderModel extends Model {
         
         $user = [];
         if(isset($_SESSION['user_id'])){
-            $user_id = (int)$_SESSION['user_id'];
-            $getUser = $this->qb->where('id', '?')->get('??user', [$user_id])->fetch();
-            if($getUser){
-                $user['name'] = $getUser['name'];
-            }
+            $user = new User();
+            $user->find($_SESSION['user_id']);
         }
+        $userImg = ($user->image) ? $user->image : 'no-image.jpg';
+        $user->icon = $this->linker->getIcon($userImg);
         $data['user'] = $user;
 
-        
-        $headerLinkPages = [1, 2, 20, 22];
-        $headerLinks = $this->getSitePages($headerLinkPages);
-        if(CONTROLLER == 'information' && isset($_GET['param1']) && isset($headerLinks[$_GET['param1']])) {
-            $headerLinks[$_GET['param1']]['active'] = true;
-        }
-        $data['headerLinks'] = $headerLinks;
-
-        $privacyPages = $this->getSitePages([11, 24]);
-        $data['privacyPage'] = $privacyPages[11];
-        $data['rulesPage'] = $privacyPages[24];
-
-        
         $this->data = $data;
 
         return $this;

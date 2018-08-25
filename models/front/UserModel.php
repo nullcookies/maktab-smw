@@ -4,6 +4,7 @@ namespace models\front;
 
 use \system\Document;
 use \system\Model;
+use \system\objects\User;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -83,180 +84,6 @@ class UserModel extends Model {
         $data['user'] = $user;
 
         $data['breadcrumbs'] = $breadcrumbs;
-
-        
-        $this->data = $data;
-
-        return $this;
-    }
-
-    public function orders(){
-        $data = [];
-        $this->document = new Document();
-
-        $userMenu = [
-            [
-                'url' => $this->linker->getUrl('user/account'),
-                'name' => $this->translation('account'),
-                'active' => false
-            ],
-            [
-                'url' => $this->linker->getUrl('user/orders'),
-                'name' => $this->translation('orders'),
-                'active' => true
-            ],
-            [
-                'url' => $this->linker->getUrl('user/logout'),
-                'name' => $this->translation('logout'),
-                'active' => false
-            ]
-        ];
-        $data['userMenu'] = $userMenu;
-
-        $data['statusIconsPath'] = $this->linker->getIcon('order-status');
-        
-        $breadcrumbs = [];
-        $name = '';
-
-        $breadcrumbPages = ['home'];
-        $statement = $this->qb->where([['side', 'front'], ['controller', '?']])->getStatement('??page');
-        $sth = $this->qb->prepare($statement);
-        if($sth){
-            foreach ($breadcrumbPages as $value) {
-                $sth->execute([$value]);
-                if($sth->rowCount() > 0){
-                    $breadcrumb = $sth->fetchAll();
-                    $breadcrumb = $this->langDecode($breadcrumb, ['name', 'text_name', 'nav_name', 'descr', 'descr_full', 'meta_t', 'meta_d', 'meta_k']);
-                    $breadcrumb = $breadcrumb[0];
-                    $breadcrumbs[] = [
-                        'name' => $breadcrumb['nav_name'][LANG_ID],
-                        'url' => $this->linker->getUrl($breadcrumb['alias'])
-                    ];
-                }
-            }
-            
-        }
-
-        $this->document->title = $this->translation('orders');
-        $breadcrumbs[] = [
-            'name' => $this->translation('my account'),
-            'url' => $this->linker->getUrl('user/account')
-        ];
-        $breadcrumbs[] = [
-            'name' => $this->translation('orders'),
-            'url' => 'active'
-        ];
-
-        $orders = [];
-        $getOrders = $this->qb->where('user_id', '?')->order('date', true)->limit(50)->get('??order', [$_SESSION['user_id']]);
-        if($getOrders->rowCount() > 0){
-            $orders = $getOrders->fetchAll();
-            foreach($orders as $key => $value){
-                $orders[$key]['url'] = $this->linker->getUrl('user/orders/' . $value['id'] . '-' . $value['date']);
-                $orders[$key]['items'] = $this->getOrder($value);
-            }
-        }
-        $data['orders'] = $orders;
-
-        $data['breadcrumbs'] = $breadcrumbs;
-
-        
-        $this->data = $data;
-
-        return $this;
-    }
-
-    public function orderView(){
-        $data = [];
-        $this->document = new Document();
-
-        $userMenu = [
-            [
-                'url' => $this->linker->getUrl('user/account'),
-                'name' => $this->translation('account'),
-                'active' => false
-            ],
-            [
-                'url' => $this->linker->getUrl('user/orders'),
-                'name' => $this->translation('orders'),
-                'active' => false
-            ],
-            [
-                'url' => $this->linker->getUrl('user/logout'),
-                'name' => $this->translation('logout'),
-                'active' => false
-            ]
-        ];
-        $data['userMenu'] = $userMenu;
-
-        $data['statusIconsPath'] = $this->linker->getIcon('order-status');
-        
-        $breadcrumbs = [];
-        $name = '';
-
-        $breadcrumbPages = ['home'];
-        $statement = $this->qb->where([['side', 'front'], ['controller', '?']])->getStatement('??page');
-        $sth = $this->qb->prepare($statement);
-        if($sth){
-            foreach ($breadcrumbPages as $value) {
-                $sth->execute([$value]);
-                if($sth->rowCount() > 0){
-                    $breadcrumb = $sth->fetchAll();
-                    $breadcrumb = $this->langDecode($breadcrumb, ['name', 'text_name', 'nav_name', 'descr', 'descr_full', 'meta_t', 'meta_d', 'meta_k']);
-                    $breadcrumb = $breadcrumb[0];
-                    $breadcrumbs[] = [
-                        'name' => $breadcrumb['nav_name'][LANG_ID],
-                        'url' => $this->linker->getUrl($breadcrumb['alias'])
-                    ];
-                }
-            }
-            
-        }
-
-        $this->document->title = $this->translation('order view');
-        $breadcrumbs[] = [
-            'name' => $this->translation('my account'),
-            'url' => $this->linker->getUrl('user/account')
-        ];
-        $breadcrumbs[] = [
-            'name' => $this->translation('orders'),
-            'url' => $this->linker->getUrl('user/orders')
-        ];
-        $breadcrumbs[] = [
-            'name' => $this->translation('order view'),
-            'url' => 'active'
-        ];
-
-        $orderParam = (isset($_GET['param1'])) ? explode('-', $_GET['param1']) : array(0, 0);
-
-        $id = (int)$orderParam[0];
-        $order_date = (int)$orderParam[1];
-
-        $data['orderId'] = $id;
-
-        //$order = $this->qb->where([['user_id', '?'], ['id', '?']])->get('??order', [$_SESSION['user_id'], $id])->fetch();
-        $order = $this->qb->where([['date', '?'], ['id', '?']])->get('??order', [$order_date, $id])->fetch();
-        if($order){
-            $order['items'] = $this->getOrder($order);
-        }
-        $data['order'] = $order;
-
-        $orderHistory = $this->qb->where('order_id', '?')->order('date', true)->get('??order_change', [$id])->fetchAll();
-        $data['orderHistory'] = $orderHistory;
-
-        $user = $this->qb->select('address_phy, address_jur')->where('id', '?')->get('??user', [$_SESSION['user_id']])->fetch();
-        $data['userAddr'] = $user['address_jur'];
-
-        $data['breadcrumbs'] = $breadcrumbs;
-
-        $data['returnURL'] = $_SERVER['REQUEST_URI'];
-        if(isset($this->config['paycom_environment']) && $this->config['paycom_environment'] == 'test'){
-            $data['paycomCheckoutUrl'] = 'https://checkout.test.paycom.uz/';
-        }
-        else{
-            $data['paycomCheckoutUrl'] = 'https://checkout.paycom.uz/';
-        }
-        
 
         
         $this->data = $data;
@@ -532,6 +359,7 @@ class UserModel extends Model {
         $data = [];
         $this->document = new Document();
         $data['success'] = false;
+
         foreach($_POST as $key => $value){
             $_POST[$key] = trim($value);
         }
@@ -540,44 +368,54 @@ class UserModel extends Model {
         if(isset($_POST['username']) && isset($_POST['password'])){
             $username = strtolower($_POST['username']);
             $password = $_POST['password'];
-            if(empty($_POST['username'])) {
+            if(empty($username)) {
                 $errors['username'] = $this->translation('error username empty');
             }
-
-            if(!$this->validator->isEmail($_POST['username'])) {
-                $errors['username'] = $this->translation('error email invalid');
+            // elseif(!$this->validator->isEmail($_POST['username'])) {
+            //     $errors['username'] = $this->translation('error email invalid');
+            // }
+            elseif(!empty($username)){
+                $checkUserExist = $this->qb->where('username', '?')->get('??user', [$username]);
+                if($checkUserExist->rowCount() == 0){
+                    $errors['username'] = $this->translation('error no such username');
+                }
+                else{
+                    //если аккаунт существует проверяем активирован ли
+                    $checkUserExist = $this->qb->where([['username', '?'], ['status', '?']])->get('??user', [$username, 1]);
+                    if($checkUserExist->rowCount() == 0){
+                        $errors['username'] = $this->translation('error account hasnt been activated yet');
+                    }
+                }
             }
+
+            
             if(empty($_POST['password'])) {
                 $errors['password'] = $this->translation('error password empty');
             }
 
-            $checkUserExist = $this->qb->where('username', '?')->get('??user', [$username]);
-            if($checkUserExist->rowCount() == 0){
-                $errors['username'] = $this->translation('error no such username');
-            }
-            else{
-                //если аккаунт существует проверяем активирован ли
-                $checkUserExist = $this->qb->where([['username', '?'], ['status', '?']])->get('??user', [$username, 1]);
-                if($checkUserExist->rowCount() == 0){
-                    $errors['username'] = $this->translation('error account hasnt been activated yet');
-                }
-            }
+                
             
 
             if(!$errors){
                 $password = $this->hashPassword($password);
                 $checkUser = $this->qb->where([['username', '?'], ['password', '?']])->get('??user', [$username, $password]);
+
+
                 
                 if($checkUser->rowCount() > 0){
                     $user = $checkUser->fetch();
                     $data['success'] = $this->loginUser($user['id'], $user['usergroup']);
+                    if($data['success']){
+                        $homeUrl = $this->linker->getHomeUrl();
+                        $this->redirect($homeUrl);
+                    }
                 }
                 else{
                     $errors['password'] = $this->translation('error password');
                 }
             }
         }
-        $data['username'] = $_POST['username'];
+        $data['username'] = (isset($_POST['username'])) ? $_POST['username'] : '';
         $data['errors'] = $errors;
 
         $data['homeUrl'] = $this->linker->getUrl('');
@@ -674,52 +512,8 @@ class UserModel extends Model {
         unset($_SESSION['user_id']);
         unset($_SESSION['usergroup']);
         session_destroy();
-        header('Location: ' . BASEURL);
-        exit;
-    }
-
-    public function getOrder($orderRow) {
-
-        $smallIconW = $this->getOption('icon_small_w');
-        $smallIconH = $this->getOption('icon_small_h');
-        $mediumIconW = $this->getOption('icon_medium_w');
-        $mediumIconH = $this->getOption('icon_medium_h');
-        $coupon = json_decode($orderRow['coupon'], true);
-        $order = [];
-        $items = json_decode($orderRow['items'], true);
-        $total = 0;
-        $quantity = 0;
-        if(count($items) > 0){
-            $productModel = new ProductModel();
-            foreach($items as $key => $value){
-                $product = $this->qb->where('id', '?')->get('??product', [$value['product_id']])->fetch();
-                $product = $this->langDecode($product, ['name'], false);
-                
-                //цена из заказа
-                $product['price_show'] = $value['price'];
-
-                $product['configuration_show'] = $value['configuration'];
-
-                $product['url'] = $this->linker->getUrl($product['alias']);
-                $mainIcon = $this->getMainIcon($product['images']);
-                $product['icon'] = $this->linker->getIcon($this->media->resize($mainIcon, $smallIconW, $smallIconH, true));
-                $product['quantity'] = $value['quantity'];
-                $product['line_total'] = $value['quantity'] * $product['price_show'];
-
-                $total += $product['line_total'];
-                $quantity += $product['quantity'];
-                $items[$key]['product'] = $product;
-            }
-        }
-        $order['items'] = $items;
-        $order['subtotal'] = $total;
-        if(isset($coupon['coupon_discount'])){
-            $total -= (float)$coupon['coupon_discount'];
-        }
-        $order['total'] = $total;
-        $order['quantity'] = $quantity;
-        $order['coupon'] = $coupon;
-        return $order;
+        $homeUrl = $this->linker->getHomeUrl();
+        $this->redirect($homeUrl);
     }
 
     public function activate(){

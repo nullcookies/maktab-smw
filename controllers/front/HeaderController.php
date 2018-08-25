@@ -11,18 +11,14 @@ class HeaderController extends Controller {
     
     public function index() {
         $model = new HeaderModel;
-        if($model){
-            $model->index();
-            $this->data = $model->data;
-        }
+        $model->index();
+        $this->data = $model->data;
         $this->content = $this->render('header');
     }
 
     public function stock(){
         $model = new HeaderModel;
-        if($model){
-            $model->stock();
-        }
+        $model->stock();
         exit;
     }
     

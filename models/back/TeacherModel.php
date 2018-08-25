@@ -399,6 +399,8 @@ class TeacherModel extends Model
                 $teacher->password = $this->hashPassword($info['password']);
             }
 
+
+
             $teacher->status = 1;
 
             if($new) {

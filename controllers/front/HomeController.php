@@ -4,6 +4,9 @@ namespace controllers\front;
 
 use \system\Controller;
 use \models\front\HomeModel;
+use \models\objects\User;
+use \models\objects\Teacher;
+use \models\objects\Student;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -23,52 +26,43 @@ class HomeController extends Controller {
                 'action' => 'index',
                 'position' => 'footer'
             ],
-            // [
-            //     'side' => 'front',
-            //     'controller' => 'topSlider',
-            //     'action' => 'index',
-            //     'position' => 'top'
-            // ],
-            // [
-            //     'side' => 'front',
-            //     'controller' => 'newsBlock',
-            //     'action' => 'index',
-            //     'position' => 'bottom'
-            // ],
-            // [
-            //     'side' => 'front',
-            //     'controller' => 'newProducts',
-            //     'action' => 'index',
-            //     'position' => 'bottom'
-            // ],
-            // [
-            //     'side' => 'front',
-            //     'controller' => 'banner',
-            //     'action' => 'bottom',
-            //     'position' => 'bottom'
-            // ],
-            // [
-            //     'side' => 'front',
-            //     'controller' => 'mainCategories',
-            //     'action' => 'side',
-            //     'position' => 'top'
-            // ],
-            // [
-            //     'side' => 'front',
-            //     'controller' => 'brandsScroll',
-            //     'action' => 'index',
-            //     'position' => 'bottom'
-            // ],
+            [
+                'side' => 'front',
+                'controller' => 'sidebar',
+                'action' => 'index',
+                'position' => 'sidebar'
+            ],
     	];
     	
         $model = new HomeModel;
-        if($model){
-            $model->index();
-            $this->data = $model->data;
-            $this->document = $model->document;
+        $model->index();
+        $this->data = $model->data;
+        $this->document = $model->document;
+
+        $user = new User();
+        $teacher = new Teacher();
+        $student = new Student();
+
+        $viewFile = 'home';
+
+
+        switch($_SESSION['usergroup']){
+            case $teacher->usergroup: 
+                $viewFile = 'home-teacher';
+                break;
+            case $student->usergroup: 
+                $viewFile = 'home-student';
+                break;
+            case 1:
+            case 2:
+            case 3:
+                $viewFile = 'home-admin';
+                break;
+            default: 
+                $viewFile = 'home';
         }
 
-        $this->content = $this->render('home');
+        $this->content = $this->render($viewFile);
     }
 
 }

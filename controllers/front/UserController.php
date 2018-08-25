@@ -35,27 +35,28 @@ class UserController extends Controller {
         //$this->content = $this->render('user-login');
     }
     public function login() {
-        /*$this->modules = [
-            [
-                'side' => 'front',
-                'controller' => 'header',
-                'action' => 'index',
-                'position' => 'header'
-            ],
-            [
-                'side' => 'front',
-                'controller' => 'footer',
-                'action' => 'index',
-                'position' => 'footer'
-            ]
-        ];*/
+        // $this->modules = [
+        //     [
+        //         'side' => 'front',
+        //         'controller' => 'header',
+        //         'action' => 'index',
+        //         'position' => 'header'
+        //     ],
+        //     [
+        //         'side' => 'front',
+        //         'controller' => 'footer',
+        //         'action' => 'index',
+        //         'position' => 'footer'
+        //     ]
+        // ];
         $model = new UserModel;
         $model->login();
-        $this->json($model->data);
         
-        //$this->data = $model->data;
-        //$this->document = $model->document;
-        //$this->content = $this->render('user-login');
+        // $this->json($model->data);
+        
+        $this->data = $model->data;
+        $this->document = $model->document;
+        $this->content = $this->render('user-login');
     }
 
     public function forgetPassword() {
@@ -66,9 +67,7 @@ class UserController extends Controller {
 
     public function logout() {
         $model = new UserModel;
-        if($model){
-            $model->logout();
-        }
+        $model->logout();
     }
 
     public function account() {

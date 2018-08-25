@@ -17,6 +17,7 @@ class Page404Model extends Model {
         $data['searchAction'] = $this->linker->getUrl('search');
 
         $this->document = new Document();
+        $this->document->bodyClass[] = 'blank';
         $this->data = $data;
 
         return $this;
