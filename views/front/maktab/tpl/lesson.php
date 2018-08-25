@@ -2,11 +2,38 @@
     <div class="title-block">
         <h3 class="title"> 
             Уроки
-            <a href="<?=$controls['view']?>" class="btn btn-primary btn-sm rounded-s">
-                <?=$this->t('add new', 'front')?>
-            </a>
         </h3>
         <p class="title-description"> Просмотр уроков </p>
+    </div>
+    <div class="subtitle-block lesson-add-form-container">
+        <form action="<?=$controls['view']?>" method="post">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="group_id"><?=$this->t('group', 'front')?></label>
+                    <select id="group_id" name="group_id" class="custom-select">
+                        <option value=""><?=$this->t('choose...', 'front')?></option>
+                        <?php foreach ($groups as $value) { ?>
+                        <option value="<?=$value['id']?>"><?=$value['grade']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="subject_id"><?=$this->t('subject', 'front')?></label>
+                    <select id="subject_id" name="subject_id" class="custom-select">
+                        <option value=""><?=$this->t('choose...', 'front')?></option>
+                        <?php foreach ($subjects as $value) { ?>
+                        <option value="<?=$value['id']?>"><?=$value['name']?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label сlass="d-block">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary">
+                        <?=$this->t('add new', 'front')?>
+                    </button>
+                </div>
+            </div> 
+        </form>
     </div>
 
     <section class="section">
