@@ -168,6 +168,26 @@ class Validator {
         return $return;
     }
 
+    public function belongsTo($string, $params) {
+        $return = false;
+        $sqlParams = [];
+        $where = [];
+        $table = $params['table'];
+        foreach ($params['columns'] as $key => $value) {
+        	$where[] = [$key, '?'];
+        	$sqlParams[] = $value;
+        }
+
+        $check = $this->qb->where($where)->get($table, $sqlParams);
+        if($check && $check->rowCount() > 0){
+        	$return = true;
+        }
+        if(!$return){
+        	$this->lastError = 'error not belongs to';
+        }
+        return $return;
+    }
+
     public function accessControl($string, $params)
     {
     	$return = false;

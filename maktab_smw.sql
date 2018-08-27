@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 27 2018 г., 10:07
+-- Время создания: Авг 27 2018 г., 16:11
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -287,13 +287,24 @@ INSERT INTO `mktb_lang` (`id`, `name`, `lang_prefix`, `icon`, `status`, `main`, 
 
 CREATE TABLE IF NOT EXISTS `mktb_lesson` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `study_period_id` int(11) NOT NULL,
   `subject_id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
   `start_time` int(11) NOT NULL,
   `end_time` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=8 ;
+
+--
+-- Дамп данных таблицы `mktb_lesson`
+--
+
+INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 11, 1535245201, 0, 1535367039, 1535374286),
+(2, 2, 3, 11, 1535367541, 0, 1535367599, 1535367599),
+(4, 1, 3, 11, 1535373421, 0, 1535373444, 1535373444);
 
 -- --------------------------------------------------------
 
@@ -727,9 +738,24 @@ CREATE TABLE IF NOT EXISTS `mktb_student_attendance` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `present` tinyint(1) NOT NULL,
+  `attended` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=25 ;
+
+--
+-- Дамп данных таблицы `mktb_student_attendance`
+--
+
+INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attended`) VALUES
+(4, 2, 13, 1),
+(5, 2, 14, 1),
+(6, 2, 25, 1),
+(10, 4, 13, 1),
+(11, 4, 14, 1),
+(12, 4, 25, 1),
+(22, 1, 13, 1),
+(23, 1, 14, 1),
+(24, 1, 25, 0);
 
 -- --------------------------------------------------------
 
@@ -743,7 +769,22 @@ CREATE TABLE IF NOT EXISTS `mktb_student_mark` (
   `student_id` int(11) NOT NULL,
   `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=25 ;
+
+--
+-- Дамп данных таблицы `mktb_student_mark`
+--
+
+INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
+(4, 2, 13, '4'),
+(5, 2, 14, '4'),
+(6, 2, 25, '5'),
+(10, 4, 13, '5'),
+(11, 4, 14, '5'),
+(12, 4, 25, '5'),
+(22, 1, 13, '3'),
+(23, 1, 14, '5'),
+(24, 1, 25, '0');
 
 -- --------------------------------------------------------
 
@@ -916,7 +957,7 @@ CREATE TABLE IF NOT EXISTS `mktb_translation` (
   `content` text NOT NULL,
   `context` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1273 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1290 ;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -2014,8 +2055,8 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1104, 1, 'discount', 'Скидка', 'front'),
 (1106, 1, 'from brand', 'от', 'front'),
 (1107, 1, 'happy customer reviews', 'Отзывы счастливых клиентов', 'front'),
-(1108, 1, 'update', 'update', 'front'),
-(1109, 1, 'delete', 'delete', 'front'),
+(1108, 1, 'update', 'Обновить', 'front'),
+(1109, 1, 'delete', 'Удалить', 'front'),
 (1110, 1, 'send email to customer', 'send email to customer', 'back'),
 (1111, 1, 'order has been changed', 'order has been changed', 'back'),
 (1112, 1, 'customer notified', 'customer notified', 'back'),
@@ -2063,7 +2104,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1155, 1, 'contact form name', 'contact form name', 'back'),
 (1156, 1, 'upsell products', 'upsell products', 'front'),
 (1157, 1, 'cross products', 'cross products', 'front'),
-(1158, 1, 'buy', 'buy', 'front'),
+(1158, 1, 'buy', 'Купить', 'front'),
 (1159, 1, 'banner position bottom', 'Перед футером', 'back'),
 (1160, 1, 'banner position news section', 'banner position news section', 'back'),
 (1161, 1, 'upload videos', 'upload videos', 'back'),
@@ -2105,7 +2146,6 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1197, 1, 'group list', 'Список классов', 'back'),
 (1198, 1, 'group grade', 'Класс', 'back'),
 (1199, 1, 'group name', 'Название', 'back'),
-(1200, 1, 'start_year', 'start_year', 'back'),
 (1201, 1, 'end_year', 'end_year', 'back'),
 (1202, 1, 'group start year', 'Год начала учёбы', 'back'),
 (1203, 1, 'group end year', 'Год окончания', 'back'),
@@ -2119,7 +2159,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1211, 1, 'student group', 'Класс', 'back'),
 (1212, 1, 'error delete student', 'Успешное удаление', 'back'),
 (1213, 1, 'success delete student', 'Успешное удаление', 'back'),
-(1214, 1, 'usergroup ', 'usergroup ', 'back'),
+(1214, 1, 'usergroup ', 'Группа', 'back'),
 (1215, 1, 'menu subject', 'Предметы', 'back'),
 (1216, 1, 'subject page', 'Предметы', 'back'),
 (1217, 1, 'add subject', 'Добавить предмет', 'back'),
@@ -2130,7 +2170,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1222, 1, 'success edit subject', 'Успешное сохранение', 'back'),
 (1223, 1, 'error add subject', 'Ошибка сохранения', 'back'),
 (1224, 1, 'error edit subject', 'Ошибка сохранения', 'back'),
-(1225, 1, 'teacher subjects', 'teacher subjects', 'back'),
+(1225, 1, 'teacher subjects', 'Предметы привязанные к учителю', 'back'),
 (1226, 1, 'success delete teacher', 'Успешное удаление', 'back'),
 (1227, 1, 'success delete subject', 'Успешное удаление', 'back'),
 (1228, 1, 'menu study-period', 'Учебные периоды (четверти)', 'back'),
@@ -2150,14 +2190,14 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1245, 1, 'success edit study-period', 'Успешное сохранение', 'back'),
 (1246, 1, 'error edit study-period', 'Ошибка сохранения', 'back'),
 (1247, 1, 'error add study-period', 'Ошибка сохранения', 'back'),
-(1248, 1, 'September', 'September', 'back'),
-(1249, 1, 'October', 'October', 'back'),
-(1250, 1, 'November', 'November', 'back'),
+(1248, 1, 'September', 'Сентябрь', 'back'),
+(1249, 1, 'October', 'Октябрь', 'back'),
+(1250, 1, 'November', 'Ноябрь', 'back'),
 (1251, 1, 'December', 'December', 'back'),
-(1252, 1, 'January', 'January', 'back'),
-(1253, 1, 'March', 'March', 'back'),
-(1254, 1, 'April', 'April', 'back'),
-(1255, 1, 'August', 'August', 'back'),
+(1252, 1, 'January', 'Январь', 'back'),
+(1253, 1, 'March', 'Март', 'back'),
+(1254, 1, 'April', 'Апрель', 'back'),
+(1255, 1, 'August', 'Август', 'back'),
 (1256, 1, 'success delete study-period', 'Успешное удаление', 'back'),
 (1257, 1, 'sorry, page not found', 'Извините, странице не найдена', 'front'),
 (1258, 1, 'profile', 'Профиль', 'front'),
@@ -2166,15 +2206,30 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1261, 1, 'Введите пароль', 'Введите пароль', 'front'),
 (1262, 1, 'Введите имя пользователя', 'Введите имя пользователя', 'front'),
 (1263, 1, 'dashboard', 'Панель управления', 'front'),
-(1264, 1, 'lessons', 'lessons', 'front'),
-(1265, 1, 'add new', 'add new', 'front'),
-(1266, 1, 'lesson', 'lesson', 'front'),
-(1267, 1, 'group', 'group', 'front'),
-(1268, 1, 'choose...', 'choose...', 'front'),
-(1269, 1, 'subject', 'subject', 'front'),
-(1270, 1, 'lesson start time', 'lesson start time', 'front'),
-(1271, 1, 'error not this teacher group', 'error not this teacher group', 'front'),
-(1272, 1, 'students list', 'students list', 'front');
+(1264, 1, 'lessons', 'Уроки', 'front'),
+(1266, 1, 'lesson', 'Урок', 'front'),
+(1267, 1, 'group', 'Класс', 'front'),
+(1268, 1, 'choose...', 'Выбрать...', 'front'),
+(1269, 1, 'subject', 'Предмет', 'front'),
+(1270, 1, 'lesson start time', 'Время начала урока', 'front'),
+(1271, 1, 'error not this teacher group', 'Класс не привязан к учителю', 'front'),
+(1272, 1, 'students list', 'Список учеников', 'front'),
+(1273, 1, 'student attendance', 'Посещение', 'front'),
+(1274, 1, 'student mark', 'student mark', 'front'),
+(1276, 1, 'choose group', 'Выбрать класс', 'front'),
+(1277, 1, 'choose', 'Выбрать', 'front'),
+(1278, 1, 'all', 'Все', 'front'),
+(1279, 1, 'error not this teacher subject', 'Предмет не привязан к учителю', 'front'),
+(1280, 1, 'error save lesson', 'Ошибка сохранинея', 'front'),
+(1281, 1, 'success save lesson', 'Успешное сохранение', 'front'),
+(1282, 1, 'are you sure?', 'Вы уверены?', 'front'),
+(1283, 1, 'back', 'Назад', 'front'),
+(1284, 1, 'error not belongs to', 'Не привязан', 'front'),
+(1285, 1, 'success delete lesson', 'Успешное удаление', 'front'),
+(1286, 1, 'edit', 'Редактировать', 'front'),
+(1287, 1, 'student group', 'Класс', 'front'),
+(1288, 1, 'add new lesson', 'Добавить новый урок', 'front'),
+(1289, 1, 'view lessons', 'view lessons', 'front');
 
 -- --------------------------------------------------------
 
@@ -2259,11 +2314,11 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
 
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
 (1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1535276431, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1535276431, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
-(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1535196588, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1535196588, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
-(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535276681, 1535276695, '', 0, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535276695, '127.0.0.1', 'g30n3khj3vtvfufpg44eqvf3j3'),
+(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1535371792, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1535371792, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535276681, 1535372116, '', 0, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535372116, '127.0.0.1', 'g5ni3qiq6anv44d7epvs1avnm1'),
 (12, 'tb', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 0, 0, '', 0, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535282778, 0, '', 0, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535282764, 0, '', 0, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535282764, 1535375356, '', 0, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
 (15, 'kd1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'kd1@test.com', '', 1, '', '', '', '', 1534576158, 0, 0, '', 0, 0, '', 'Dilshod', 'Karimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (22, 'test2', '0992a103ec11bc5618c10f2cc7d5c775', 10, '', '', 1, '', '', '', '', 1534598344, 1534598344, 0, '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (24, 'test3', '0992a103ec11bc5618c10f2cc7d5c775', 5, '', '', 1, '', '', '', '', 1535011435, 1535193943, 1535194265, '', 0, 0, '', 'test3', 'test3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '5050', 0, '', '', 1535194265, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),

@@ -512,8 +512,6 @@ class TeacherModel extends Model
             }
 
             $return = $teacher->removedSuccess;
-
-            return $teacher->removedSuccess;
         }
         else{
             $this->errors['error invalid id'];

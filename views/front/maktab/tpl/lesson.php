@@ -1,16 +1,19 @@
 <article class="content">
     <div class="title-block">
         <h3 class="title"> 
-            Уроки
+            <?=$this->t('lessons', 'front')?>
         </h3>
-        <p class="title-description"> Просмотр уроков </p>
+        <p class="title-description"> <?=$this->t('view lessons', 'front')?> </p>
     </div>
+
+    <?=$this->renderNotifications($successText, $errorText)?>
+
     <div class="subtitle-block lesson-add-form-container">
-        <form action="<?=$controls['view']?>" method="get" >
+        <form action="<?=$controls['view']?>" method="post" >
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="group_id"><?=$this->t('group', 'front')?></label>
-                    <select id="group_id" name="group_id" class="custom-select">
+                    <select id="group_id" name="lesson[group_id]" class="custom-select">
                         <option value=""><?=$this->t('choose...', 'front')?></option>
                         <?php foreach ($groups as $value) { ?>
                         <option value="<?=$value['id']?>"><?=$value['grade']?></option>
@@ -19,7 +22,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label for="subject_id"><?=$this->t('subject', 'front')?></label>
-                    <select id="subject_id" name="subject_id" class="custom-select">
+                    <select id="subject_id" name="lesson[subject_id]" class="custom-select">
                         <option value=""><?=$this->t('choose...', 'front')?></option>
                         <?php foreach ($subjects as $value) { ?>
                         <option value="<?=$value['id']?>"><?=$value['name']?></option>
@@ -31,7 +34,7 @@
                         <label>&nbsp;</label>
                     </div>
                     <button type="submit" class="btn btn-primary">
-                        <?=$this->t('add new', 'front')?>
+                        <?=$this->t('add new lesson', 'front')?>
                     </button>
                 </div>
             </div> 
@@ -47,25 +50,23 @@
                     </h3>
                 </div>
                 <section class="section">
-                    <table id="example" class="display" style="width:100%">
+                	<table class="data-table-ajax table table-bordered table-hover" data-ajax-url="<?=$controls['list_ajax']?>" data-order="[[ 3, &quot;desc&quot; ]]">
                         <thead>
                             <tr>
-                                <th>First name</th>
-                                <th>Last name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th>ID</th>
+                                <th><?=$this->t('student group', 'front')?></th>
+                                <th><?=$this->t('subject', 'front')?></th>
+                                <th><?=$this->t('lesson start time', 'front')?></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <th>First name</th>
-                                <th>Last name</th>
-                                <th>Position</th>
-                                <th>Office</th>
-                                <th>Start date</th>
-                                <th>Salary</th>
+                                <th>ID</th>
+                                <th><?=$this->t('student group', 'front')?></th>
+                                <th><?=$this->t('subject', 'front')?></th>
+                                <th><?=$this->t('student group', 'front')?></th>
+                                <th></th>
                             </tr>
                         </tfoot>
                     </table>

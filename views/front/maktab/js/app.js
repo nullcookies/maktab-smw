@@ -1477,12 +1477,21 @@ $(function () {
             }
         });
         dataTableAjax.on( 'page.dt order.dt search.dt',  function (e){ 
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(initAfterAjaxLoad, 300);
+            //clearTimeout(searchTimeout);
+            //searchTimeout = setTimeout(function(){}, 300);
         });
     }
 });
 
+
+$(function(){
+	$('body').on('click', '.entry-delete-btn', function(e){
+		var result = confirm($(this).data('confirm-text'));
+		if(!result){
+			e.preventDefault();
+		}
+	});
+})
 
 //date time picker
 $(function(){
@@ -1520,6 +1529,10 @@ $(function(){
     // });
 });
 
+
+$('#check_all_students_attendance').on('change', function(){
+	$('input[name^="lesson[students]"]').prop('checked', $(this).prop('checked'));
+});
 
 
 /***********************************************
