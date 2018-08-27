@@ -6,7 +6,7 @@
         <p class="title-description"> Просмотр уроков </p>
     </div>
     <div class="subtitle-block lesson-add-form-container">
-        <form action="<?=$controls['view']?>" method="post">
+        <form action="<?=$controls['view']?>" method="get" >
             <div class="form-row">
                 <div class="form-group col-md-4">
                     <label for="group_id"><?=$this->t('group', 'front')?></label>
@@ -27,7 +27,9 @@
                     </select>
                 </div>
                 <div class="form-group col-md-4">
-                    <label сlass="d-block">&nbsp;</label>
+                    <div>
+                        <label>&nbsp;</label>
+                    </div>
                     <button type="submit" class="btn btn-primary">
                         <?=$this->t('add new', 'front')?>
                     </button>

@@ -61,10 +61,10 @@
                                 <label for="group_id">
                                     <?=$this->t('student group', 'back')?>
                                 </label>
-                                <select name="group_id" id="group_id" class="form-control selectpicker">
+                                <select name="group_id[]" id="group_id" class="form-control selectpicker" multiple>
                                     <option value="">-</option>
                                     <?php foreach($groups as $value){ ?>
-                                    <option value="<?=$value['id']?>" <?php if(!empty($teacher->group_id) && $teacher->group_id == $value['id']){ ?>selected<?php } ?>><?=$value['grade'] . ' - ' . $value['name']?> (<?=$value['start_year']?> - <?=$value['end_year']?>)</option>
+                                    <option value="<?=$value['id']?>" <?php if(!empty($teacher->group_id) && in_array($value['id'], $teacher->group_id)){ ?>selected<?php } ?>><?=$value['grade'] . ' - ' . $value['name']?> (<?=$value['start_year']?> - <?=$value['end_year']?>)</option>
                                     <?php } ?>
                                 </select>
                                 <?php if(!empty($errors['group_id'])) { ?><div class="help-block"><?=$this->t($errors['group_id'], 'back')?></div><?php } ?>

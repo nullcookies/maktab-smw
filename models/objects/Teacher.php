@@ -29,6 +29,7 @@ class Teacher extends User{
 
     	$args = new ArgumentArray;
 
+    	$this->group_id = [];
 		$query = new SelectQuery;
 		$query->select('*')
 		    ->from(DB_PREFIX . 'teacher_to_group')
@@ -39,8 +40,10 @@ class Teacher extends User{
 		if($sth !== false){
         	$result = $sth->execute((array)$args);
 			if($result){
-				$teacherToGroup = $sth->fetch(\PDO::FETCH_ASSOC);
-				$this->group_id = $teacherToGroup['group_id'];
+				$teacherToGroup = $sth->fetchAll(\PDO::FETCH_ASSOC);
+				foreach ($teacherToGroup as $value) {
+					$this->group_id[] = $value['group_id'];
+				}
 			}
         }
 

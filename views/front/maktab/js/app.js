@@ -1484,6 +1484,43 @@ $(function () {
 });
 
 
+//date time picker
+$(function(){
+    $.extend(true, $.fn.datetimepicker.defaults, {
+        icons: {
+            time: 'fa fa-clock',
+            date: 'fa fa-calendar',
+            up: 'fa fa-arrow-up',
+            down: 'fa fa-arrow-down',
+            previous: 'fa fa-angle-left',
+            next: 'fa fa-angle-right',
+            today: 'fa fa-calendar-check',
+            clear: 'fa fa-trash',
+            close: 'fa fa-times-circle'
+        }
+    });
+    $('.datetimepicker').datetimepicker({
+        locale: 'ru',
+        sideBySide: true,
+        format: 'DD-MM-YYYY HH:mm',
+        widgetPositioning: {
+            horizontal: 'left',
+            vertical: 'bottom'
+        }
+    });
+
+    // $('.datetimepicker-start_time').datetimepicker({
+    //     locale: 'ru',
+    //     inline: true,
+    //     sideBySide: true,
+    //     format: 'DD-MM-YYYY HH:mm'
+    // });
+    // $('.datetimepicker-start_time').on('dp.change', function(event) {
+    //     $('#start_time').val(event.timeStamp);
+    // });
+});
+
+
 
 /***********************************************
 *        NProgress Settings

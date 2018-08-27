@@ -423,13 +423,19 @@ class TeacherModel extends Model
                     }
                 }
 
-                if(isset($_POST['group_id'])){
+                if( !empty($_POST['group_id']) && is_array($_POST['group_id']) ){
                 	$this->qb->where('teacher_id', '?')->delete('??teacher_to_group', [$teacher->id]);
-                	$this->qb->insert('??teacher_to_group', ['teacher_id' => $teacher->id, 'group_id' => $_POST['group_id']]);
-                	$teacher->group_id = $_POST['group_id'];
+                	$teacher->group_id = [];
+                    foreach ($_POST['group_id'] as $value) {
+                        $group_id = (int)$value;
+                        if($value > 0){
+                            $teacher->group_id[] = $value;
+                            $this->qb->insert('??teacher_to_group', ['teacher_id' => $teacher->id, 'group_id' => $value]);
+                        }
+                    }
                 }
 
-                if(!empty($_POST['subject_id']) && is_array($_POST['subject_id'])){
+                if( !empty($_POST['subject_id']) && is_array($_POST['subject_id']) ){
                 	$this->qb->where('teacher_id', '?')->delete('??subject_to_teacher', [$teacher->id]);
                 	$teacher->subject_id = [];
                 	foreach ($_POST['subject_id'] as $value) {

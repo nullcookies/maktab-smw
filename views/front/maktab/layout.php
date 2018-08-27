@@ -40,7 +40,9 @@
             document.write('<link rel="stylesheet" id="theme-style" href="' + cssUrl + '/app.css">');
         }
     </script>
-    <link rel="stylesheet" type="text/css" href="<?= THEMEURL ?>/plugins/datatables.css" />
+
+    <link rel="stylesheet" type="text/css" href="<?= THEMEURL ?>/plugins/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?= THEMEURL ?>/plugins/datatables/datatables.css" />
     <link rel="stylesheet" type="text/css" href="<?= THEMEURL ?>/css/main.css" />
 
 </head>
@@ -94,7 +96,12 @@
     <script type="text/javascript" src="<?= $script; ?>"></script>
     <?php } ?>
     <?php } ?>
-    <script type="text/javascript" src="<?= THEMEURL ?>/plugins/datatables.min.js"></script>
+
+    <script type="text/javascript" src="<?= THEMEURL ?>/plugins/datatables/datatables.min.js"></script>
+    <script type="text/javascript" src="<?= THEMEURL ?>/plugins/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="<?= THEMEURL ?>/plugins/moment/locale/ru.js"></script>
+    <script type="text/javascript" src="<?= THEMEURL ?>/plugins/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+
     <script type="text/javascript" src="<?= THEMEURL ?>/js/app.js"></script>
 
 
