@@ -94,23 +94,23 @@ class LessonModel extends Model {
         // }
         switch ($getOrder) {
             case 0:
-                $order = 'id';
+                $order = 'l.id';
                 break;
             
             case 1:
-                $order = 'group_id';
+                $order = 'l.group_id';
                 break;
             
             case 2:
-                $order = 'subject_id';
+                $order = 'l.subject_id';
                 break;
             
             case 3:
-                $order = 'start_time';
+                $order = 'l.start_time';
                 break;
             
             default:
-                $order = 'start_time';
+                $order = 'l.start_time';
                 break;
         }
 
@@ -132,13 +132,46 @@ class LessonModel extends Model {
 
         if($searchText){
         	//todo: search by group name preg
-        	//search by subject name
+        	$search_where = " ( ";
             $where_params = [];
-            $search_where = " (group_id LIKE ? OR subject_id LIKE ? OR start_time LIKE ?) ";
+            $search_where .= " s.name LIKE ? ";
             $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT id FROM ??lesson WHERE ' . $search_where . ' AND teacher_id = ' . $_SESSION['user_id'] . ' GROUP BY id ';
+            
+            $matches = [];
+            $checkRegex = preg_match('/^(\d{1,2})\s?-?\s?(.)$/u', trim($searchText), $matches);
+
+            if(isset($matches[1]) && isset($matches[2])){
+            	$searchStartYear = $this->getStartYear($matches[1]);
+            	$search_where .= " OR (g.start_year = ? AND g.name = ?)";
+	        	$where_params[] = $searchStartYear;
+	        	$where_params[] = $matches[2];
+            }
+            else{
+            	if( mb_strlen($searchText) == 1 ){
+	            	$search_where .= " OR g.name LIKE ? ";
+	        		$where_params[] = '%' . $searchText . '%';
+	            }
+	            if( is_numeric($searchText) && $searchText >=1 && $searchText <=11 ){
+	            	$searchStartYear = $this->getStartYear($searchText);
+	            	$search_where .= " OR g.start_year LIKE ? ";
+	            	$where_params[] = '%' . $searchStartYear . '%';
+	            }
+	            if(preg_match('/\d{2}-\d{2}-\d{4}/', trim($searchText))){
+	            	file_put_contents('ppp2.txt', $searchText);
+	            	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', trim($searchText . ' 00:00:00'));
+	            	$dayStart = $dateTime->getTimestamp();
+	            	$dayEnd = $dayStart + 86400;
+	            	$search_where .= " OR (l.start_time >= ? AND l.start_time <= ? )";
+	            	$where_params[] = $dayStart;
+	            	$where_params[] = $dayEnd;
+	            }
+            }
+	            
+            
+
+            $search_where .= " ) ";
+
+            $querySearch = 'SELECT l.id FROM ??lesson l LEFT JOIN ??group g on l.group_id = g.id LEFT JOIN ??subject s on l.subject_id = s.id WHERE ' . $search_where . ' AND l.teacher_id = ' . $_SESSION['user_id'] . ' GROUP BY l.id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -152,7 +185,7 @@ class LessonModel extends Model {
         if($searchText){
             $query .= ' AND ' . $search_where;
         }
-        $query .= ' GROUP BY id ';
+        $query .= ' GROUP BY l.id ';
         $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
         $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
 
@@ -419,6 +452,18 @@ class LessonModel extends Model {
 
         $grade = $currentYear - $start_year + $addition;
         return ($grade <= 11) ? $grade : $this->t('study finished', 'front') . ' ' . $end_year;
+    }
+
+    public function getStartYear($grade)
+    {
+        $studyStartMonth = $this->getOption('study_start_month');
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+        //для определения номера класса
+        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
+
+        $start_year = $currentYear - $grade + $addition;
+        return $start_year;
     }
 }
 
