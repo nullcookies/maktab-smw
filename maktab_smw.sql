@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 28 2018 г., 16:03
+-- Время создания: Авг 29 2018 г., 07:58
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -943,6 +943,387 @@ INSERT INTO `mktb_teacher_to_group` (`teacher_id`, `group_id`) VALUES
 (11, 3),
 (11, 6),
 (24, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_api_token`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_api_token` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(32) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `counter` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_botan_shortener`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_botan_shortener` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `url` text NOT NULL COMMENT 'Original URL',
+  `short_url` char(255) NOT NULL DEFAULT '' COMMENT 'Shortened URL',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_callback_query`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_callback_query` (
+  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Unique identifier for this query',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
+  `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
+  `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the message sent via the bot in inline mode, that originated the query',
+  `data` char(255) NOT NULL DEFAULT '' COMMENT 'Data associated with the callback button',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `chat_id` (`chat_id`),
+  KEY `message_id` (`message_id`),
+  KEY `chat_id_2` (`chat_id`,`message_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_chat`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_chat` (
+  `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier',
+  `type` enum('private','group','supergroup','channel') NOT NULL COMMENT 'Chat type, either private, group, supergroup or channel',
+  `title` char(255) DEFAULT '' COMMENT 'Chat (group) title, is null if chat type is private',
+  `username` char(255) DEFAULT NULL COMMENT 'Username, for private chats, supergroups and channels if available',
+  `all_members_are_administrators` tinyint(1) DEFAULT '0' COMMENT 'True if a all members of this group are admins',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
+  `old_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier, this is filled when a group is converted to a supergroup',
+  PRIMARY KEY (`id`),
+  KEY `old_id` (`old_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_chosen_inline_result`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_chosen_inline_result` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `result_id` char(255) NOT NULL DEFAULT '' COMMENT 'Identifier for this result',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `location` char(255) DEFAULT NULL COMMENT 'Location object, user''s location',
+  `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the sent inline message',
+  `query` text NOT NULL COMMENT 'The query that was used to obtain the result',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_conversation`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_conversation` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique user or chat identifier',
+  `status` enum('active','cancelled','stopped') NOT NULL DEFAULT 'active' COMMENT 'Conversation state',
+  `command` varchar(160) DEFAULT '' COMMENT 'Default command to execute',
+  `notes` text COMMENT 'Data stored from command',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `chat_id` (`chat_id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3676 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_edited_message`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_edited_message` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
+  `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `edit_date` timestamp NULL DEFAULT NULL COMMENT 'Date the message was edited in timestamp format',
+  `text` text COMMENT 'For text messages, the actual UTF-8 text of the message max message length 4096 char utf8',
+  `entities` text COMMENT 'For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text',
+  `caption` text COMMENT 'For message with caption, the actual UTF-8 text of the caption',
+  PRIMARY KEY (`id`),
+  KEY `chat_id` (`chat_id`),
+  KEY `message_id` (`message_id`),
+  KEY `user_id` (`user_id`),
+  KEY `chat_id_2` (`chat_id`,`message_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2107 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_file`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_file` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `file_id` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_information`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_information` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) NOT NULL,
+  `language_id` int(11) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `sort_number` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_inline_query`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_inline_query` (
+  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Unique identifier for this query',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `location` char(255) DEFAULT NULL COMMENT 'Location of the user',
+  `query` text NOT NULL COMMENT 'Text of the query',
+  `offset` char(255) DEFAULT NULL COMMENT 'Offset of the result',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_message`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
+  `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique chat identifier',
+  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Unique message identifier',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
+  `date` timestamp NULL DEFAULT NULL COMMENT 'Date the message was sent in timestamp format',
+  `forward_from` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier, sender of the original message',
+  `forward_from_chat` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier, chat the original message belongs to',
+  `forward_from_message_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier of the original message in the channel',
+  `forward_date` timestamp NULL DEFAULT NULL COMMENT 'date the original message was sent in timestamp format',
+  `reply_to_chat` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
+  `reply_to_message` bigint(20) unsigned DEFAULT NULL COMMENT 'Message that this message is reply to',
+  `text` text COMMENT 'For text messages, the actual UTF-8 text of the message max message length 4096 char utf8',
+  `entities` text COMMENT 'For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text',
+  `audio` text COMMENT 'Audio object. Message is an audio file, information about the file',
+  `document` text COMMENT 'Document object. Message is a general file, information about the file',
+  `photo` text COMMENT 'Array of PhotoSize objects. Message is a photo, available sizes of the photo',
+  `sticker` text COMMENT 'Sticker object. Message is a sticker, information about the sticker',
+  `video` text COMMENT 'Video object. Message is a video, information about the video',
+  `voice` text COMMENT 'Voice Object. Message is a Voice, information about the Voice',
+  `video_note` text COMMENT 'VoiceNote Object. Message is a Video Note, information about the Video Note',
+  `contact` text COMMENT 'Contact object. Message is a shared contact, information about the contact',
+  `location` text COMMENT 'Location object. Message is a shared location, information about the location',
+  `venue` text COMMENT 'Venue object. Message is a Venue, information about the Venue',
+  `caption` text COMMENT 'For message with caption, the actual UTF-8 text of the caption',
+  `new_chat_members` text COMMENT 'List of unique user identifiers, new member(s) were added to the group, information about them (one of these members may be the bot itself)',
+  `left_chat_member` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier, a member was removed from the group, information about them (this member may be the bot itself)',
+  `new_chat_title` char(255) DEFAULT NULL COMMENT 'A chat title was changed to this value',
+  `new_chat_photo` text COMMENT 'Array of PhotoSize objects. A chat photo was change to this value',
+  `delete_chat_photo` tinyint(1) DEFAULT '0' COMMENT 'Informs that the chat photo was deleted',
+  `group_chat_created` tinyint(1) DEFAULT '0' COMMENT 'Informs that the group has been created',
+  `supergroup_chat_created` tinyint(1) DEFAULT '0' COMMENT 'Informs that the supergroup has been created',
+  `channel_chat_created` tinyint(1) DEFAULT '0' COMMENT 'Informs that the channel chat has been created',
+  `migrate_to_chat_id` bigint(20) DEFAULT NULL COMMENT 'Migrate to chat identifier. The group has been migrated to a supergroup with the specified identifier',
+  `migrate_from_chat_id` bigint(20) DEFAULT NULL COMMENT 'Migrate from chat identifier. The supergroup has been migrated from a group with the specified identifier',
+  `pinned_message` text COMMENT 'Message object. Specified message was pinned',
+  PRIMARY KEY (`chat_id`,`id`),
+  KEY `user_id` (`user_id`),
+  KEY `forward_from` (`forward_from`),
+  KEY `forward_from_chat` (`forward_from_chat`),
+  KEY `reply_to_chat` (`reply_to_chat`),
+  KEY `reply_to_message` (`reply_to_message`),
+  KEY `left_chat_member` (`left_chat_member`),
+  KEY `migrate_from_chat_id` (`migrate_from_chat_id`),
+  KEY `migrate_to_chat_id` (`migrate_to_chat_id`),
+  KEY `reply_to_chat_2` (`reply_to_chat`,`reply_to_message`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_request_limiter`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_request_limiter` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `chat_id` char(255) DEFAULT NULL COMMENT 'Unique chat identifier',
+  `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the sent inline message',
+  `method` char(255) DEFAULT NULL COMMENT 'Request method',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2666 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_store_cart`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'User ID',
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_store_cart_item`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart_item` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart item identifier',
+  `cart_id` bigint(20) NOT NULL COMMENT 'Cart identifier',
+  `product_id` bigint(20) NOT NULL COMMENT 'Product identifier',
+  `quantity` int(10) NOT NULL COMMENT 'Product quantity in cart',
+  PRIMARY KEY (`id`),
+  KEY `cart_id` (`cart_id`),
+  KEY `product_id` (`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_store_order`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'User identifier',
+  `date_created` int(11) NOT NULL COMMENT 'Date order placed timestamp',
+  `total` decimal(15,2) NOT NULL COMMENT 'Order total price',
+  `phone` char(255) DEFAULT '' COMMENT 'Phone number',
+  `address` text NOT NULL COMMENT 'Order address',
+  `status` tinyint(2) NOT NULL COMMENT 'Order status',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_store_order_item`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order_item` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Order item identifier',
+  `order_id` bigint(20) NOT NULL COMMENT 'Order identifier',
+  `product_id` bigint(20) NOT NULL COMMENT 'Product identifier',
+  `title` char(255) DEFAULT '' COMMENT 'Product title',
+  `price` decimal(10,2) NOT NULL COMMENT 'Product price',
+  `quantity` int(10) NOT NULL COMMENT 'Product quantity in order',
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_store_product`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_product` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique product identifier',
+  `price` decimal(10,2) NOT NULL COMMENT 'Product price',
+  `title` char(255) DEFAULT '' COMMENT 'Product title',
+  `description` varchar(5000) NOT NULL COMMENT 'Product description',
+  `image_file_id` varchar(255) NOT NULL,
+  `url` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_telegram_update`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_telegram_update` (
+  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Update''s unique identifier',
+  `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
+  `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
+  `inline_query_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique inline query identifier',
+  `chosen_inline_result_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local chosen inline result identifier',
+  `callback_query_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique callback query identifier',
+  `edited_message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local edited message identifier',
+  PRIMARY KEY (`id`),
+  KEY `message_id` (`chat_id`,`message_id`),
+  KEY `inline_query_id` (`inline_query_id`),
+  KEY `chosen_inline_result_id` (`chosen_inline_result_id`),
+  KEY `callback_query_id` (`callback_query_id`),
+  KEY `edited_message_id` (`edited_message_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_user`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_user` (
+  `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user identifier',
+  `is_bot` tinyint(1) DEFAULT '0' COMMENT 'True if this user is a bot',
+  `first_name` char(255) NOT NULL DEFAULT '' COMMENT 'User''s first name',
+  `last_name` char(255) DEFAULT NULL COMMENT 'User''s last name',
+  `username` char(191) DEFAULT NULL COMMENT 'User''s username',
+  `language_code` char(10) DEFAULT NULL COMMENT 'User''s system language',
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
+  `phone` varchar(255) NOT NULL DEFAULT '',
+  `language_id` int(11) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `username` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_tgbot_user_chat`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_tgbot_user_chat` (
+  `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user identifier',
+  `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier',
+  PRIMARY KEY (`user_id`,`chat_id`),
+  KEY `chat_id` (`chat_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -2400,6 +2781,98 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `order_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_botan_shortener`
+--
+ALTER TABLE `mktb_tgbot_botan_shortener`
+  ADD CONSTRAINT `mktb_tgbot_botan_shortener_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_callback_query`
+--
+ALTER TABLE `mktb_tgbot_callback_query`
+  ADD CONSTRAINT `mktb_tgbot_callback_query_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_callback_query_ibfk_2` FOREIGN KEY (`chat_id`, `message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_chosen_inline_result`
+--
+ALTER TABLE `mktb_tgbot_chosen_inline_result`
+  ADD CONSTRAINT `mktb_tgbot_chosen_inline_result_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_conversation`
+--
+ALTER TABLE `mktb_tgbot_conversation`
+  ADD CONSTRAINT `mktb_tgbot_conversation_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_conversation_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_edited_message`
+--
+ALTER TABLE `mktb_tgbot_edited_message`
+  ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_2` FOREIGN KEY (`chat_id`, `message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
+  ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_inline_query`
+--
+ALTER TABLE `mktb_tgbot_inline_query`
+  ADD CONSTRAINT `mktb_tgbot_inline_query_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_message`
+--
+ALTER TABLE `mktb_tgbot_message`
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_3` FOREIGN KEY (`forward_from`) REFERENCES `mktb_tgbot_user` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_4` FOREIGN KEY (`forward_from_chat`) REFERENCES `mktb_tgbot_chat` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_5` FOREIGN KEY (`reply_to_chat`, `reply_to_message`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_6` FOREIGN KEY (`forward_from`) REFERENCES `mktb_tgbot_user` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_7` FOREIGN KEY (`left_chat_member`) REFERENCES `mktb_tgbot_user` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_store_cart`
+--
+ALTER TABLE `mktb_tgbot_store_cart`
+  ADD CONSTRAINT `mktb_tgbot_store_cart_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_store_cart_item`
+--
+ALTER TABLE `mktb_tgbot_store_cart_item`
+  ADD CONSTRAINT `mktb_tgbot_store_cart_item_ibfk_1` FOREIGN KEY (`cart_id`) REFERENCES `mktb_tgbot_store_cart` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `mktb_tgbot_store_cart_item_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `mktb_tgbot_store_product` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_store_order_item`
+--
+ALTER TABLE `mktb_tgbot_store_order_item`
+  ADD CONSTRAINT `mktb_tgbot_store_order_item_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `mktb_tgbot_store_order` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_telegram_update`
+--
+ALTER TABLE `mktb_tgbot_telegram_update`
+  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_1` FOREIGN KEY (`chat_id`, `message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
+  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_2` FOREIGN KEY (`inline_query_id`) REFERENCES `mktb_tgbot_inline_query` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_3` FOREIGN KEY (`chosen_inline_result_id`) REFERENCES `mktb_tgbot_chosen_inline_result` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_4` FOREIGN KEY (`callback_query_id`) REFERENCES `mktb_tgbot_callback_query` (`id`),
+  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_5` FOREIGN KEY (`edited_message_id`) REFERENCES `mktb_tgbot_edited_message` (`id`);
+
+--
+-- Ограничения внешнего ключа таблицы `mktb_tgbot_user_chat`
+--
+ALTER TABLE `mktb_tgbot_user_chat`
+  ADD CONSTRAINT `mktb_tgbot_user_chat_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `mktb_tgbot_user_chat_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

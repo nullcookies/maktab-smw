@@ -10,7 +10,7 @@
  *
 */
 $time_start = microtime(true);
-setcookie('developer', '1', time() + 365 * 86400);
+//setcookie('developer', '1', time() + 365 * 86400);
 if(isset($_COOKIE['developer'])){
 	define('ENVIRONMENT', 'dev'); // dev, prod
 }

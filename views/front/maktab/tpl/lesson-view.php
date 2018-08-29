@@ -113,6 +113,11 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label><?=$this->t('lesson home task', 'front')?></label>
+                <textarea name="lesson[hometask]" class="form-control"><?=$lesson->hometask?></textarea>
+            </div>
+
             <div class="form-group row">
                 <div class="col-sm-10 col-sm-offset-2">
                     <button type="submit" name="btn_save" class="btn btn-primary">

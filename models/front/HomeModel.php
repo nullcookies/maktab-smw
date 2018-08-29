@@ -4,7 +4,7 @@ namespace models\front;
 
 use \system\Document;
 use \system\Model;
-use \models\common\WorkApiModel;
+use \models\objects\Teacher;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -37,8 +37,13 @@ class HomeModel extends Model {
             $this->document->description = $home['meta_d'][LANG_ID];
             $this->document->keywords = $home['meta_k'][LANG_ID];
         }
-
         $data['home'] = $home;
+
+        $teacher = new Teacher();
+        if(!empty($_SESSION['user_id']) && !empty($_SESSION['usergroup']) && $_SESSION['usergroup'] == $teacher->usergroup){
+        	$teacher->find($_SESSION['user_id']);
+        }
+        $data['teacher'] = $teacher;
 
 
         $data['themeURL'] = THEMEURL;

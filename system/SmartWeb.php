@@ -38,6 +38,7 @@ class SmartWeb extends Component {
             $_SESSION['stock'] = 1;
         }
 
+        mb_internal_encoding("UTF-8");
         date_default_timezone_set($this->config['timezone']);
         //var_dump($_COOKIE);
         //var_dump($_SESSION);

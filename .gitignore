@@ -43,3 +43,4 @@ config/*
 views/front/*/package-lock.json
 views/front/*/node_modules/*
 views/front/*/bower_components/*
+tg-bot/config.php
