@@ -56,7 +56,7 @@ class HeaderModel extends Model {
 	        }
 	        $currentUser['icon'] = $this->linker->getIcon($user['image']);
 	        $currentUser['profile'] = $this->linker->getUrl('user/edit/' . $user['id'], true);
-	        $currentUser['reg'] = date('Y/m/d', $user['created_at']);
+	        $currentUser['reg'] = date('d-m-Y', $user['created_at']);
 	    }
 
         $data['user'] = $currentUser;

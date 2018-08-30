@@ -4,11 +4,15 @@ namespace models\back;
 
 use \system\Document;
 use \system\Model;
+use \models\objects\User;
+use \models\objects\Teacher;
+use \models\objects\Student;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class HomeModel extends Model {
+class HomeModel extends Model
+{
     
     public function index(){
         
@@ -196,6 +200,51 @@ class HomeModel extends Model {
 
 
 		$data['leader'] = $leader;
+
+        $this->data = $data;
+
+        return $this;
+    }
+
+    public function schoolIndex()
+    {
+        
+        $data = [];
+        
+		$this->document = new Document();
+        $this->document->title = $this->getTranslation('control panel') . ' - ' . $this->getTranslation('main page');
+
+		$this->document->addStyle(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.css');
+		$this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
+        
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/jquery.dataTables.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/mixitup-3/dist/mixitup.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/min/moment.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/ru.js');
+		$this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
+		$this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
+
+        $teacher = new Teacher();
+        $student = new Student();
+
+		$teachersQuantity = $this->qb->where('usergroup', $teacher->usergroup)->count('??user');
+		$data['teachersQuantity'] = $teachersQuantity;
+		$data['teachersUrl'] = $this->linker->getUrl('teacher', true);
+
+		$studentsQuantity = $this->qb->where('usergroup', $student->usergroup)->count('??user');
+		$data['studentsQuantity'] = $studentsQuantity;
+		$data['studentsUrl'] = $this->linker->getUrl('student', true);
+
+		$usersQuantity = $this->qb->count('??user');
+		$data['usersQuantity'] = $usersQuantity;
+		$data['usersUrl'] = $this->linker->getUrl('user', true);
+
+		$lessonsQuantity = $this->qb->count('??lesson');
+		$data['lessonsQuantity'] = $lessonsQuantity;
+		$data['lessonsUrl'] = $this->linker->getUrl('lesson', true);
+
+		
 
         $this->data = $data;
 

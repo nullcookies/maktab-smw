@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 29 2018 г., 07:58
+-- Время создания: Авг 30 2018 г., 16:06
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -292,19 +292,21 @@ CREATE TABLE IF NOT EXISTS `mktb_lesson` (
   `teacher_id` int(11) NOT NULL,
   `start_time` int(11) NOT NULL,
   `end_time` int(11) NOT NULL,
+  `hometask` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `mktb_lesson`
 --
 
-INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_time`, `end_time`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, 11, 1535245201, 0, 1535367039, 1535374286),
-(2, 2, 3, 11, 1535367541, 0, 1535367599, 1535367599),
-(4, 1, 3, 11, 1535373421, 0, 1535373444, 1535373444);
+INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_time`, `end_time`, `hometask`, `created_at`, `updated_at`) VALUES
+(1, 1, 3, 11, 1535245201, 0, '', 1535367039, 1535374286),
+(2, 2, 3, 11, 1535367541, 0, '', 1535367599, 1535367599),
+(4, 1, 3, 11, 1535373421, 0, '', 1535373444, 1535373444),
+(6, 1, 3, 11, 1535520121, 0, 'Упражнение 11, стр.8', 1535520182, 1535520182);
 
 -- --------------------------------------------------------
 
@@ -740,7 +742,7 @@ CREATE TABLE IF NOT EXISTS `mktb_student_attendance` (
   `student_id` int(11) NOT NULL,
   `attended` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `mktb_student_attendance`
@@ -755,7 +757,10 @@ INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attende
 (12, 4, 25, 1),
 (22, 1, 13, 1),
 (23, 1, 14, 1),
-(24, 1, 25, 0);
+(24, 1, 25, 0),
+(25, 6, 13, 1),
+(26, 6, 14, 1),
+(27, 6, 25, 1);
 
 -- --------------------------------------------------------
 
@@ -769,7 +774,7 @@ CREATE TABLE IF NOT EXISTS `mktb_student_mark` (
   `student_id` int(11) NOT NULL,
   `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `mktb_student_mark`
@@ -784,7 +789,10 @@ INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
 (12, 4, 25, '5'),
 (22, 1, 13, '3'),
 (23, 1, 14, '5'),
-(24, 1, 25, '0');
+(24, 1, 25, '0'),
+(25, 6, 13, '5'),
+(26, 6, 14, '4'),
+(27, 6, 25, '3');
 
 -- --------------------------------------------------------
 
@@ -806,7 +814,8 @@ INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
 (13, 3),
 (14, 3),
 (25, 3),
-(26, 1);
+(26, 1),
+(27, 6);
 
 -- --------------------------------------------------------
 
@@ -823,14 +832,14 @@ CREATE TABLE IF NOT EXISTS `mktb_study_period` (
   `end_time` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `mktb_study_period`
 --
 
 INSERT INTO `mktb_study_period` (`id`, `period`, `start_year`, `end_year`, `start_time`, `end_time`, `status`) VALUES
-(1, '1', 2018, 2019, 1535742001, 1540926001, 1),
+(1, '1', 2018, 2019, 1535742000, 1541012399, 1),
 (2, '2', 2018, 2019, 1541012401, 1546196401, 1),
 (3, '3', 2018, 2019, 1546282801, 1553972401, 1),
 (4, '4', 2018, 2019, 1554058801, 1567191601, 1);
@@ -1051,7 +1060,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_conversation` (
   KEY `user_id` (`user_id`),
   KEY `chat_id` (`chat_id`),
   KEY `status` (`status`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3676 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1073,7 +1082,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_edited_message` (
   KEY `message_id` (`message_id`),
   KEY `user_id` (`user_id`),
   KEY `chat_id_2` (`chat_id`,`message_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2107 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1188,7 +1197,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_request_limiter` (
   `method` char(255) DEFAULT NULL COMMENT 'Request method',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2666 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1267,7 +1276,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_product` (
   `image_file_id` varchar(255) NOT NULL,
   `url` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1338,7 +1347,7 @@ CREATE TABLE IF NOT EXISTS `mktb_translation` (
   `content` text NOT NULL,
   `context` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1290 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1302 ;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -2554,7 +2563,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1225, 1, 'teacher subjects', 'Предметы привязанные к учителю', 'back'),
 (1226, 1, 'success delete teacher', 'Успешное удаление', 'back'),
 (1227, 1, 'success delete subject', 'Успешное удаление', 'back'),
-(1228, 1, 'menu study-period', 'Учебные периоды (четверти)', 'back'),
+(1228, 1, 'menu study-period', 'Учебные периоды', 'back'),
 (1230, 1, 'study period page', 'Учебные периоды', 'back'),
 (1231, 1, 'add study period', 'Добавить учебный период', 'back'),
 (1232, 1, 'study period list', 'Учебные периоды', 'back'),
@@ -2574,7 +2583,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1248, 1, 'September', 'Сентябрь', 'back'),
 (1249, 1, 'October', 'Октябрь', 'back'),
 (1250, 1, 'November', 'Ноябрь', 'back'),
-(1251, 1, 'December', 'December', 'back'),
+(1251, 1, 'December', 'Декабрь', 'back'),
 (1252, 1, 'January', 'Январь', 'back'),
 (1253, 1, 'March', 'Март', 'back'),
 (1254, 1, 'April', 'Апрель', 'back'),
@@ -2610,7 +2619,19 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1286, 1, 'edit', 'Редактировать', 'front'),
 (1287, 1, 'student group', 'Класс', 'front'),
 (1288, 1, 'add new lesson', 'Добавить новый урок', 'front'),
-(1289, 1, 'view lessons', 'view lessons', 'front');
+(1289, 1, 'view lessons', 'Просмотр уроков', 'front'),
+(1290, 1, 'lesson home task', 'Домашнее задание', 'front'),
+(1291, 1, 'view profile', 'Просмотр профиля', 'front'),
+(1292, 1, 'birthday', 'День рождения', 'back'),
+(1293, 1, 'view user', 'Просмотр пользователя', 'back'),
+(1294, 1, 'teachers', 'Учители', 'back'),
+(1295, 1, 'students', 'Ученики', 'back'),
+(1296, 1, 'users', 'Пользователи', 'back'),
+(1297, 1, 'lessons', 'Уроки', 'back'),
+(1298, 1, 'subjects', 'subjects', 'front'),
+(1299, 1, 'groups', 'groups', 'front'),
+(1300, 1, 'teacher subjects', 'Предметы учителя', 'front'),
+(1301, 1, 'teacher groups', 'Классы учителя', 'front');
 
 -- --------------------------------------------------------
 
@@ -2687,7 +2708,7 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   `phpsessid` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
 -- Дамп данных таблицы `mktb_user`
@@ -2695,16 +2716,18 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
 
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
 (1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1535276431, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1535276431, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
-(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1535371792, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1535371792, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535276681, 1535458422, '', 0, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535458422, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(12, 'tb', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 0, 0, '', 0, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535282778, 0, '', 0, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535282764, 1535375356, '', 0, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1535634331, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1535634331, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1535633484, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535633484, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(12, 'sodiqov-abdulla', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 1535626386, 0, '', 179085600, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535626118, 0, '', 1230750000, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535626106, 1535375356, '', 1230836400, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
 (15, 'kd1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'kd1@test.com', '', 1, '', '', '', '', 1534576158, 0, 0, '', 0, 0, '', 'Dilshod', 'Karimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (22, 'test2', '0992a103ec11bc5618c10f2cc7d5c775', 10, '', '', 1, '', '', '', '', 1534598344, 1534598344, 0, '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (24, 'test3', '0992a103ec11bc5618c10f2cc7d5c775', 5, '', '', 1, '', '', '', '', 1535011435, 1535193943, 1535194265, '', 0, 0, '', 'test3', 'test3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '5050', 0, '', '', 1535194265, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
-(25, 'xamidova-zilola-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535282739, 1535282739, 0, '', 0, 0, '', 'Zilola', 'Xamidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(26, 'test-student-2010', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535283043, 1535283043, 0, '', 0, 0, '', 'student', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
+(25, 'xamidova-zilola-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535282739, 1535626141, 0, '', 1236020400, 0, '', 'Zilola', 'Xamidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(26, 'test-student-2010', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535283043, 1535626130, 0, '', 1272654000, 0, '', 'student', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(27, 'abdurahimov-abdurayim', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535626765, 1535626765, 0, '', 1, 0, '', 'Abdurayim', 'Abdurahimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(28, 'test', '5a5b2fccb9259c5975a0c6c7de7e0cb7', 10, '', '', 1, '', '', '', '', 1535630559, 1535630665, 0, '', 431802000, 0, '', 'test', 'test', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
 
 -- --------------------------------------------------------
 

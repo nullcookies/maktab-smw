@@ -73,7 +73,7 @@
             <li class="<?php if(CONTROLLER == 'option' && ACTION == 'index'){ ?> active<?php } ?>"><a href="<?=$commonSettingsUrl?>"><?=$this->getTranslation('common settings')?></a></li>
             <li class="<?php if(CONTROLLER == 'option' && ACTION == 'additional'){ ?> active<?php } ?>"><a href="<?=$additionalSettingsUrl?>"><?=$this->getTranslation('additional settings')?></a></li>
             <li class="<?php if(CONTROLLER == 'translation' && ACTION == 'index'){ ?> active<?php } ?>"><a href="<?=$translationsUrl?>"><?=$this->getTranslation('translations')?></a></li>
-            <li class="<?php if(CONTROLLER == 'importproducts' && ACTION == 'index'){ ?> active<?php } ?>"><a href="<?=$xmlUploadUrl?>"><?=$this->getTranslation('xml file upload')?></a></li>
+            <!-- <li class="<?php if(CONTROLLER == 'importproducts' && ACTION == 'index'){ ?> active<?php } ?>"><a href="<?=$xmlUploadUrl?>"><?=$this->getTranslation('xml file upload')?></a></li> -->
           </ul>
         </li>
         

@@ -51,8 +51,8 @@ class CouponModel extends Model {
             $coupons = $getCoupons->fetchAll();
             $coupons = $this->langDecode($coupons, ['name', 'descr']);
             foreach ($coupons as $key => $value) {
-                $coupons[$key]['date_start'] = date('Y/m/d', $value['date_start']);
-                $coupons[$key]['date_end'] = date('Y/m/d', $value['date_end']);
+                $coupons[$key]['date_start'] = date('d-m-Y', $value['date_start']);
+                $coupons[$key]['date_end'] = date('d-m-Y', $value['date_end']);
             }
         }
 
@@ -202,8 +202,8 @@ class CouponModel extends Model {
             if($getCoupon->rowCount() > 0){
                 $coupon = $getCoupon->fetchAll();
                 $coupon = $this->langDecode($coupon, ['name', 'descr']);
-                $coupon[0]['date_start'] = date('Y/m/d', $coupon[0]['date_start']);
-                $coupon[0]['date_end'] = date('Y/m/d', $coupon[0]['date_end']);
+                $coupon[0]['date_start'] = date('d-m-Y', $coupon[0]['date_start']);
+                $coupon[0]['date_end'] = date('d-m-Y', $coupon[0]['date_end']);
                 $current = $coupon[0];
             }
         }
@@ -291,8 +291,8 @@ class CouponModel extends Model {
 
             //$update["min_quantity"] = $_POST["min_quantity"];
 
-            $dateStart = \DateTime::createFromFormat('Y/m/d', $_POST["date_start"]);
-            $dateEnd = \DateTime::createFromFormat('Y/m/d', $_POST["date_end"]);
+            $dateStart = \DateTime::createFromFormat('d-m-Y', $_POST["date_start"]);
+            $dateEnd = \DateTime::createFromFormat('d-m-Y', $_POST["date_end"]);
 
             $update["date_start"] = ($dateStart !== false) ? $dateStart->getTimestamp() : 0;
             $update["date_end"] = ($dateEnd !== false) ? $dateEnd->getTimestamp() : time() + 7 * 86400;

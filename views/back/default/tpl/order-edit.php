@@ -45,7 +45,7 @@
                                     <?=$this->getTranslation('date')?>
                                 </label>
                                 <p class="form-control-static">
-                                    <?=date('Y/m/d', $order['date'])?>
+                                    <?=date('d-m-Y', $order['date'])?>
                                 </p>
                                 <input type="hidden" name="date" value="<?=$order['date']?>">
                             </div>

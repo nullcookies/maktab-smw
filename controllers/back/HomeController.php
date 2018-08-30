@@ -32,14 +32,19 @@ class HomeController extends Controller {
                 'position' => 'sidebar'
             ]
     	];
+
         $model = new HomeModel;
 
-        if($model){
-            $model->index();
-            $this->data = $model->data;
-            $this->document = $model->document;
-        }
-        $this->content = $this->render('home');
+        // $model->index();
+        // $viewFile = 'home';
+
+        $model->schoolIndex();
+        $viewFile = 'home-school';
+
+        $this->data = $model->data;
+        $this->document = $model->document;
+        
+        $this->content = $this->render($viewFile);
     }
 
 }

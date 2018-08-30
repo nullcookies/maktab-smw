@@ -274,10 +274,10 @@ class StudyPeriodModel extends Model
         }
 
         if($studyPeriod->start_time == 0){
-        	$studyPeriod->start_time = time();
+        	$studyPeriod->start_time = date('d-m-Y', time());
         }
         if($studyPeriod->end_time == 0){
-        	$studyPeriod->end_time = time() + 86400 * 30;
+        	$studyPeriod->end_time = date('d-m-Y', time() + 86400 * 30 * 2);
         }
 
 
@@ -299,20 +299,6 @@ class StudyPeriodModel extends Model
         $studyPeriod = new StudyPeriod();
 
         $_POST = $this->cleanForm($_POST);
-
-        //convert Y/m/d to timestamp
-        if(isset($_POST['studyPeriod']['start_time'])){
-        	$dateTime = \DateTime::createFromFormat('Y/m/d H:i:s', $_POST['studyPeriod']['start_time'] . ' 00:00:01');
-        	if($dateTime != false){
-        		$_POST['studyPeriod']['start_time'] = $dateTime->getTimestamp();
-        	}
-        }
-        if(isset($_POST['studyPeriod']['end_time'])){
-        	$dateTime = \DateTime::createFromFormat('Y/m/d H:i:s', $_POST['studyPeriod']['end_time'] . ' 00:00:01');
-        	if($dateTime != false){
-        		$_POST['studyPeriod']['end_time'] = $dateTime->getTimestamp();
-        	}
-        }
 
         $info = $_POST['studyPeriod'];
 
@@ -359,6 +345,20 @@ class StudyPeriodModel extends Model
             $studyPeriod->setFields($info);
 
             $studyPeriod->status = 1;
+
+            //convert date to timestamp
+	        if(isset($info['start_time'])){
+	        	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', $info['start_time'] . ' 00:00:00');
+	        	if($dateTime != false){
+	        		$studyPeriod->start_time = $dateTime->getTimestamp();
+	        	}
+	        }
+	        if(isset($info['end_time'])){
+	        	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', $info['end_time'] . ' 23:59:59');
+	        	if($dateTime != false){
+	        		$studyPeriod->end_time = $dateTime->getTimestamp();
+	        	}
+	        }
 
             $studyPeriod->save();
 

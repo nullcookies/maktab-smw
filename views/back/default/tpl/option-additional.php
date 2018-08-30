@@ -47,7 +47,7 @@
                       </td>
                       <td class="td-shrink">
                         <div class="status-change">
-                          <input data-toggle="toggle" data-on="<?=$this->getTranslation('toggle on')?>" data-off="<?=$this->getTranslation('toggle off')?>" data-onstyle="warning" type="checkbox" name="visible" data-controller="option" data-table="option" data-id="11" class="status-toggle" <?php echo ($value['status']) ? 'checked' : ''; ?> >
+                          <input data-toggle="toggle" data-on="<?=$this->getTranslation('toggle on')?>" data-off="<?=$this->getTranslation('toggle off')?>" data-onstyle="warning" type="checkbox" name="visible" data-controller="option" data-table="option" data-id="11" class="status-toggle" <?php if($maintainance){ ?>checked<?php } ?>>
                         </div>
                       </td>
                     </tr>

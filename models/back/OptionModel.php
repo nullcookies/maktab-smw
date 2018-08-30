@@ -103,13 +103,19 @@ class OptionModel extends Model {
 
         $data['controls'] = $controls;
 
+        $maintainance = 0;
         $options = [];
-        $getOptions = $this->qb->where('visible', '1')->order('name')->get('??option');
+        $getOptions = $this->qb->order('name')->get('??option');
         if($getOptions->rowCount() > 0){
             $options = $getOptions->fetchAll();
+            foreach ($options as $value) {
+            	if($value['name'] == 'maintainance'){
+            		$maintainance = $value['content'];
+            	}
+            }
         }
-
         $data['options'] = $options;
+        $data['maintainance'] = $maintainance;
 
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;

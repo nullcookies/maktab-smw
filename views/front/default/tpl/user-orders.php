@@ -49,7 +49,7 @@
                               #<?=$value['id']?>
                             </td>
                             <td>
-                              <?=date('Y/m/d', $value['date'])?>
+                              <?=date('d-m-Y', $value['date'])?>
                             </td>
                             <td>
                               <span class="order-status order-status-<?=$value['status']?>">

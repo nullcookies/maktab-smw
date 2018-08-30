@@ -1,5 +1,6 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+$time = -21600;
 
-$tes = (int)55;
-
-var_dump(empty($tes));
+echo date('d-m-Y', $time);

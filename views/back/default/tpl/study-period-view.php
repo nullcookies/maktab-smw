@@ -80,7 +80,7 @@
                                 <label for="start_time">
                                     <?=$this->t('study period start time', 'back')?> <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control datepicker" name="studyPeriod[start_time]" id="start_time" value="<?=date('Y/m/d', $studyPeriod->start_time)?>" />
+                                <input type="text" class="form-control datepicker" name="studyPeriod[start_time]" id="start_time" value="<?=$studyPeriod->start_time?>" />
                                 <?php if(!empty($errors['start_time'])) { ?><div class="help-block"><?=$this->t($errors['start_time'], 'back')?></div><?php } ?>
                             </div>
 
@@ -88,7 +88,7 @@
                                 <label for="end_time">
                                     <?=$this->t('study period end time', 'back')?> <span class="text-danger">*</span>
                                 </label>
-                                <input type="text" class="form-control datepicker" name="studyPeriod[end_time]" id="end_time" value="<?=date('Y/m/d', $studyPeriod->end_time)?>" />
+                                <input type="text" class="form-control datepicker" name="studyPeriod[end_time]" id="end_time" value="<?=$studyPeriod->end_time?>" />
                                 <?php if(!empty($errors['end_time'])) { ?><div class="help-block"><?=$this->t($errors['end_time'], 'back')?></div><?php } ?>
                             </div>
 

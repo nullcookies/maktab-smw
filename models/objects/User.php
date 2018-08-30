@@ -26,4 +26,19 @@ class User extends ActiveRecord
     	parent::save();
     }
 
+	public function find($id, $secure = true)
+    {
+    	$found = parent::find($id, $secure);
+
+    	if($found){
+
+	        $this->icon = $this->linker->getIcon($this->media->resize($this->image, 150, 150));
+
+	        //set date birth
+        	$this->date_birth = date('d-m-Y', $this->date_birth);
+    	}
+
+        return $found;
+    }
+
 }

@@ -287,8 +287,12 @@ class TeacherModel extends Model
         }
         elseif(!empty($_POST['teacher'])){
             $teacher->setFields($_POST['teacher']);
-            $teacher->group_id = $_POST['group_id'];
-            $teacher->subject_id = $_POST['subject_id'];
+            $teacher->group_id 		= !empty($_POST['group_id']) ? $_POST['group_id'] : [];
+            $teacher->subject_id 	= !empty($_POST['subject_id']) ? $_POST['group_id'] : [];
+        }
+
+        if($teacher->date_birth == 0){
+        	$teacher->date_birth = date('d-m-Y', time() - 30 * 365 * 86400);
         }
         //$teacher->icon = $this->linker->getIcon($this->media->resize($teacher->image, 150, 150, NULL, true));
 
@@ -337,6 +341,7 @@ class TeacherModel extends Model
         ];
 
         $_POST = $this->cleanForm($_POST);
+
         $info = $_POST['teacher'];
         $info['username'] = strtolower($info['username']);
 
@@ -370,7 +375,6 @@ class TeacherModel extends Model
             $rules['info']['password'] = ['isRequired'];
         }
 
-
         if($_FILES['image']['error'] == 0){
             $rules['files']['image'] = ['isImage', ['maxSize', $this->config['params']['max_image_size']]];
             $checkData['files'] = $_FILES;
@@ -399,14 +403,20 @@ class TeacherModel extends Model
                 $teacher->password = $this->hashPassword($info['password']);
             }
 
-
-
             $teacher->status = 1;
 
             if($new) {
                 $teacher->created_at = time();
             }
             $teacher->updated_at = time();
+
+            //convert date to timestamp
+	        if(isset($info['date_birth'])){
+	        	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', $info['date_birth'] . ' 00:00:00');
+	        	if($dateTime != false){
+	        		$teacher->date_birth = $dateTime->getTimestamp();
+	        	}
+	        }
 
             $teacher->save();
 

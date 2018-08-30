@@ -287,7 +287,11 @@ class StudentModel extends Model
         }
         elseif(!empty($_POST['student'])){
             $student->setFields($_POST['student']);
-            $student->group_id = $_POST['group_id'];
+            $student->group_id = !empty($_POST['group_id']) ? $_POST['group_id'] : '';
+        }
+
+        if($student->date_birth == 0){
+        	$student->date_birth = date('d-m-Y', time() - 7 * 365 * 86400);
         }
         //$student->icon = $this->linker->getIcon($this->media->resize($student->image, 150, 150, NULL, true));
 
@@ -329,6 +333,7 @@ class StudentModel extends Model
         ];
 
         $_POST = $this->cleanForm($_POST);
+
         $info = $_POST['student'];
         $info['username'] = strtolower($info['username']);
         
@@ -397,6 +402,14 @@ class StudentModel extends Model
                 $student->created_at = time();
             }
             $student->updated_at = time();
+
+            //convert date to timestamp
+	        if(isset($info['date_birth'])){
+	        	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', $info['date_birth'] . ' 00:00:00');
+	        	if($dateTime != false){
+	        		$student->date_birth = $dateTime->getTimestamp();
+	        	}
+	        }
 
             $student->save();
 

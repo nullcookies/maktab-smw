@@ -11,207 +11,262 @@ defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
 class UserModel extends Model {
     
-    public $usergroups = [1, 2, 3, 4, 5, 10];
+    public $usergroups = [1, 2, 3, 4, 5, 10, 11];
     public $fullAccess = [1, 2];
 
-    public function index() {
+    public function index()
+    {
         
         $data = [];
 
         $breadcrumbs = [];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('main page'),
+            'name' => $this->t('main page', 'back'),
             'url' => $this->linker->getAdminUrl()
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation($this->control . ' page'),
+            'name' => $this->t($this->control . ' page', 'back'),
             'url' => 'active'
         ];
 
         $data['breadcrumbs'] = $breadcrumbs;
         
         $this->document = new Document();
-        $this->document->title = $this->getTranslation('control panel') . ' - ' . $this->getTranslation($this->control . ' page');
+        $this->document->title = $this->t('control panel', 'back') . ' - ' . $this->t($this->control . ' page', 'back');
 
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.css');
         
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/jquery.dataTables.min.js');
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/mixitup-3/dist/mixitup.min.js');
         
         $controls = [];
-
-        $controls['add'] = $this->linker->getUrl($this->control . '/add', true);
-        $controls['edit'] = $this->linker->getUrl($this->control . '/edit', true);
+        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
-
         $data['controls'] = $controls;
 
-        $users = [];
-        //TODO: user module access
+        $dataTableAjaxParams = [];
+        $dataTableAjaxParams['page-start'] = (!empty($_GET['page_start'])) ? $_GET['page_start'] : '';
+        $dataTableAjaxParams['page-length'] = (!empty($_GET['page_length'])) ? $_GET['page_length'] : '';
+        $dataTableAjaxParams['page-order-column'] = (!empty($_GET['page_order_column'])) ? $_GET['page_order_column'] : '';
+        $dataTableAjaxParams['page-order-dir'] = (!empty($_GET['page_order_dir'])) ? $_GET['page_order_dir'] : '';
+        $data['dataTableAjaxParams'] = $dataTableAjaxParams;
+
+        $data['errors'] = $this->errors;
+        $data['errorText'] = $this->errorText;
+        $data['successText'] = $this->successText;
+
+        $this->data = $data;
+
+        return $this;
+    }
+
+    public function list_ajax()
+    {
+        
+        $data = [];
+
+        $controls = [];
+        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
+        $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
+        $data['controls'] = $controls;
+
+        $_POST = $this->cleanForm($_POST);
+
+        $data['draw'] = (int)$_POST['draw'];
+        
+        $totalWhere = [];
         if($_SESSION['usergroup'] > 0 && $_SESSION['usergroup'] <= 3){
-            if(!in_array($_SESSION['usergroup'], $this->fullAccess)){
-                $this->qb->where('usergroup >=', $_SESSION['usergroup']);
+            if(in_array($_SESSION['usergroup'], $this->fullAccess)){
+                $totalWhere[] = ['usergroup >=', $_SESSION['usergroup']];
             }
             else{
-                $this->qb->where('usergroup >', $_SESSION['usergroup']);
-            }
-            
-            
-            $this->qb->order('id', true);
-            $getUsers = $this->qb->get('??user');
-            if($getUsers->rowCount() > 0){
-                $users = $getUsers->fetchAll();
+            	$totalWhere[] = ['usergroup >', $_SESSION['usergroup']];
             }
         }
+        else{
+        	exit('Access Error');
+        }
 
-        $data['users'] = $users;
 
-        $data['errors'] = $this->errors;
-        $data['errorText'] = $this->errorText;
-        $data['successText'] = $this->successText;
+        $totalRows = $this->qb->select('id')->where($totalWhere)->count('??user');
+        $data['recordsTotal'] = $totalRows;
 
+        $offset = (int)$_POST['start'];
+        // if(isset($_POST['page_start'])){
+        //     $offset = (int)$_POST['page_start'];
+        // }
+
+        $limit = (int)$_POST['length'];
+        // if(isset($_POST['page_length'])){
+        //     $limit = (int)$_POST['page_length'];
+        // }
+        if($limit < 1){
+            $limit = 10;
+        }
+
+        $getOrder = (int)$_POST['order'][0]['column'];
+        // if(isset($_POST['page_order_column'])){
+        //     $getOrder = (int)$_POST['page_order_column'];
+        // }
+        switch ($getOrder) {
+            case 0:
+                $order = 'id';
+                break;
+            
+            case 1:
+                $order = 'lastname';
+                break;
+            
+            case 2:
+                $order = 'firstname';
+                break;
+            
+            case 3:
+                $order = 'username';
+                break;
+            
+            case 4:
+                $order = 'email';
+                break;
+            
+            case 5:
+                $order = 'phone';
+                break;
+            
+            case 6:
+                $order = 'usergroup';
+                break;
+            
+            case 7:
+                $order = 'status';
+                break;
+            
+            default:
+                $order = 'id';
+                break;
+        }
+
+        $getOrderDir = $_POST['order'][0]['dir'];
+        // if(isset($_POST['page_order_dir'])){
+        //     $getOrderDir = $_POST['page_order_dir'];
+        // }
+        $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
+
+
+        $recordsFiltered = $totalRows;
+
+        $search_where = '';
+        $where_params = null;
+
+        $search = $_POST['search']['value'];
+        $searchText = substr($search, 0, 65536);
+
+        if($searchText){
+            $where_params = [];
+            $search_where = " (username LIKE ? OR email LIKE ? OR phone LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR middlename LIKE ?) ";
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
+            $querySearch = 'SELECT id FROM ??user WHERE ' . $search_where . ' AND ' . implode(' ', $totalWhere[0]) . ' GROUP BY id ';
+            $sth1 = $this->qb->prepare($querySearch);
+            $sth1->execute($where_params);
+            $recordsFiltered = $sth1->rowCount();
+        }
+        $data['recordsFiltered'] = $recordsFiltered;
+
+
+        $query = 'SELECT id, firstname, lastname, middlename, username, phone, email, usergroup, status, activity_at FROM ??user ';
+
+        $query .= ' WHERE ' . implode(' ', $totalWhere[0]) . ' ';
+        if($searchText){
+            $query .= ' AND ' . $search_where;
+        }
+        $query .= ' GROUP BY id ';
+        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
+        $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
+
+        $getItems = $this->qb->prepare($query);
+        $getItems->execute($where_params);
+
+        $items = [];
+        if($getItems->rowCount() > 0){
+            $items = $getItems->fetchAll();
+        }
+
+        $itemsData = [];
+        foreach($items as $value){
+            $itemsDataRow = [];
+
+            $itemsDataRow[0] = $value['id'];
+            $itemsDataRow[1] = $value['username'];
+            $itemsDataRow[2] = $this->t('usergroup ' . $value['usergroup'], 'back');
+            $itemsDataRow[3] = $value['lastname'];
+            $itemsDataRow[4] = $value['firstname'];
+            $itemsDataRow[5] = $value['phone'];
+            $itemsDataRow[6] = $value['email'];
+            
+            $itemsDataRow[7] =   '<div class="status-change">' . 
+                                    '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="user" data-table="user" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
+                                    '</div>';
+            $itemsDataRow[8] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+                                        '<i class="fa fa-edit"></i>' .
+                                    '</a> ' . 
+                                    '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
+                                        '<i title="' . $this->t('btn delete', 'back') . '" class="fa fa-trash-o"></i>' . 
+                                    '</a>';
+            $itemsData[] = $itemsDataRow;
+        }
+
+
+
+        $data['data'] = $itemsData;
 
         $this->data = $data;
 
         return $this;
     }
 
-    public function add(){
+    public function view()
+    {
         
-        $data = [];
-
-        $breadcrumbs = [];
-        $breadcrumbs[] = [
-            'name' => $this->getTranslation('main page'),
-            'url' => $this->linker->getAdminUrl()
-        ];
-        $breadcrumbs[] = [
-            'name' => $this->getTranslation($this->control . ' page'),
-            'url' => $this->linker->getUrl($this->control, true)
-        ];
-        $breadcrumbs[] = [
-            'name' => $this->getTranslation('add ' . $this->control),
-            'url' => 'active'
-        ];
-
-        $data['breadcrumbs'] = $breadcrumbs;
+        $id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['user']['id']) ? (int)$_POST['user']['id'] : 0);
         
-        $this->document = new Document();
-        $this->document->title = $this->getTranslation('control panel') . ' - ' . $this->getTranslation('add ' . $this->control);
+        $user = new User();
 
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/iCheck/all.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/select2/select2.min.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/css/fileinput.css');
-        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.css');
-        
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/select2/select2.full.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/min/moment.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/'.LANG_PREFIX.'.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/iCheck/icheck.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/plugins/sortable.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/fileinput.min.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/locales/'.LANG_PREFIX.'.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/ckeditor.js');
-        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/adapters/jquery.js');
-        
-        $controls = [];
-
-        $controls['back'] = $this->linker->getUrl($this->control, true);
-        $controls['action'] = $this->linker->getUrl($this->control . '/add', true);
-
-        $data['controls'] = $controls;
-
-        $data[$this->control] = [];
-        if($_POST){
-            $data[$this->control] = $_POST;
-        }
-        $usergroups = $this->usergroups;
-        foreach ($usergroups as $key => $value) {
-            if($value < $_SESSION['usergroup']){
-                unset($usergroups[$key]);
-            }
-        }
-        $data['usergroups'] = $usergroups;
-        
-
-        $data['errors'] = $this->errors;
-        $data['errorText'] = $this->errorText;
-        $data['successText'] = $this->successText;
-
-        $this->data = $data;
-
-        return $this;
-    }
-    
-    public function edit() {
-
-        // $mysql = new \SQLBuilder\Driver\MySQLDriver;
-        // $args = new \SQLBuilder\ArgumentArray;
-
-        // $query = new \SQLBuilder\Universal\Query\SelectQuery;
-        // $query->select(array('id', 'name', 'phone', 'address','confirmed'))
-        //     ->from('users', 'u')
-        //     ->partitions('u1', 'u2', 'u3')
-        //     ->where()
-        //         ->is('confirmed', true)
-        //         ->in('id', [1,2,3])
-        //     ;
-        // $query
-        //     ->join('posts')
-        //         ->as('p')
-        //         ->on('p.user_id = u.id')
-        //     ;
-        // $query
-        //     ->orderBy('rand()')
-        //     ->orderBy('id', 'DESC')
-        //     ;
-
-        // $sql = $query->toSql($mysql, $args);
-
-        // var_dump($sql);
-        // var_dump($args);
-        
-        $id = (int)$_GET['param1'];
-        if(!$id){
-            $id = (int)$_POST['id'];
+        if($id){
+            $user->find($id);
         }
 
-        $user = new User;
-        $user->find($id);
-        if($user->usergroup < $_SESSION['usergroup']){
+        if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['user_id']) ){
             exit('Access Error');
         }
-        
+
         $data = [];
 
         $breadcrumbs = [];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('main page'),
+            'name' => $this->t('main page', 'back'),
             'url' => $this->linker->getAdminUrl()
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation($this->control . ' page'),
+            'name' => $this->t($this->control . ' page', 'back'),
             'url' => $this->linker->getUrl($this->control, true)
         ];
         $breadcrumbs[] = [
-            'name' => $this->getTranslation('edit ' . $this->control),
+            'name' => $this->t('view ' . $this->control, 'back'),
             'url' => 'active'
         ];
 
         $data['breadcrumbs'] = $breadcrumbs;
         
         $this->document = new Document();
-        $this->document->title = $this->getTranslation('control panel') . ' - ' . $this->getTranslation($this->control);
+        $this->document->title = $this->t('control panel', 'back') . ' - ' . $this->t($this->control, 'back');
 
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.css');
         $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
@@ -239,24 +294,21 @@ class UserModel extends Model {
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/adapters/jquery.js');
         
         $controls = [];
-
         $controls['back'] = $this->linker->getUrl($this->control, true);
-        $controls['action'] = $this->linker->getUrl($this->control . '/edit/' . $id, true);
-
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $data['controls'] = $controls;
+        
+        if(isset($this->user)){
+            $user = $this->user;
+        }
+        elseif(!empty($_POST['user'])){
+            $user->setFields($_POST['user']);
+        }
 
-        $current = [];
-        if($id){
-            $getuser = $this->qb->where([['id', '?'], ['usergroup >=', '?']])->get('??user', [$id, $_SESSION['usergroup']]);
-            if($getuser->rowCount() > 0){
-                $user = $getuser->fetchAll();
-                $current = $user[0];
-            }
+        if($user->date_birth == 0){
+        	$user->date_birth = date('d-m-Y', time() - 35 * 365 * 86400);
         }
-        if($_POST){
-            $current = $_POST;
-        }
-        $current['icon'] = $this->linker->getIcon($this->media->resize($current['image'], 150, 150, NULL, true));
+        $data['user'] = $user;
 
         $usergroups = $this->usergroups;
         foreach ($usergroups as $key => $value) {
@@ -266,8 +318,6 @@ class UserModel extends Model {
         }
         $data['usergroups'] = $usergroups;
 
-        $data[$this->control] = $current;
-
         $data['errors'] = $this->errors;
         $data['errorText'] = $this->errorText;
         $data['successText'] = $this->successText;
@@ -275,13 +325,12 @@ class UserModel extends Model {
         $this->data = $data;
 
         return $this;
-        
     }
     
-    public function save($new = false){
+    public function save($new = false)
+    {
         
         $user = new User;
-        
 
         $isUniqueParams = [
             'table' => '??user',
@@ -291,168 +340,176 @@ class UserModel extends Model {
             'table' => '??user',
             'column' => 'email'
         ];
-        if(!$new) {
-            $id = (int)$_POST['id'];
+
+        $_POST = $this->cleanForm($_POST);
+
+        $info = $_POST['user'];
+        $info['username'] = strtolower($info['username']);
+
+        $new = true;
+        $id = (int)$info['id'];
+
+        if($id && $user->find($id)){
             $isUniqueParams['id'] = $id;
             $isUniqueParamsEmail['id'] = $id;
-            $user->find($id);
+            $new = false;
         }
 
-        
-        if($user->usergroup < $_SESSION['usergroup']){
+        if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['user_id']) ){
             exit('Access Error');
         }
+
+        $checkData = [];
+        $checkData['info'] = $info;
 
         //usergroup 1, 2 - administrator
         //usergroup access control 1, 2 - full access
 
         $rules = [ 
-            'post' => [
+            'info' => [
                 //'name' => ['isRequired'],
-                'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
+                //'email' => ['isRequired', 'isEmail', ['isUnique', $isUniqueParamsEmail]],
                 'username' => ['isRequired', 'isUsername', ['isUnique', $isUniqueParams]],
                 'usergroup' => ['isRequired', [ 'accessControl', ['type' => '>=', 'value' => $_SESSION['usergroup']] ]],
             ],
             'files' => [
                 
             ]
-
         ];
+        if($new){
+            $rules['info']['password'] = ['isRequired'];
+        }
 
         if($_FILES['image']['error'] == 0){
             $rules['files']['image'] = ['isImage', ['maxSize', $this->config['params']['max_image_size']]];
-            $data['files'] = $_FILES;
+            $checkData['files'] = $_FILES;
         }
-
-        if($new){
-            $rules['post']['password'] = ['isRequired'];
-        }
-
-        $_POST = $this->cleanForm($_POST);
-
-        $_POST['username'] = strtolower($_POST['username']);
-
-        $data['post'] = $_POST;
         
-
-        $valid = $this->validator->validate($rules, $data);
+        $valid = $this->validator->validate($rules, $checkData);
         
         if(!$valid){
 
             if(!$new){
-                $this->errorText = $this->getTranslation('error edit ' . $this->control);
+                $this->errorText = $this->t('error edit ' . $this->control, 'back');
             }
             else{
-                $this->errorText = $this->getTranslation('error add ' . $this->control);
+                $this->errorText = $this->t('error add ' . $this->control, 'back');
             }
             $this->errors = $this->validator->lastErrors;
+
             return false;
 
         }
         else{
 
-            $user->username = $_POST['username'];
-
-            $user->email = $_POST['email'];
-            $user->usergroup = (int)$_POST['usergroup'];
-            $user->phone = $_POST['phone'];
-            $user->address = $_POST['address'];
+            $user->setFields($info);
             
-            $user->firstname = $_POST['firstname'];
-            $user->lastname = $_POST['lastname'];
-            $user->middlename = $_POST['middlename'];
+            if(!empty($info['password'])){
+                $user->password = $this->hashPassword($info['password']);
+            }
 
             $user->status = 1;
 
-            if(!$new) {
-                if(!empty($_POST['new_password'])){
-                    $user->password = $this->hashPassword($_POST['new_password']);
-                }
-            }
-            else{
+            if($new) {
                 $user->created_at = time();
-                $user->password = $this->hashPassword($_POST['password']);
             }
+            $user->updated_at = time();
+
+            //convert date to timestamp
+	        if(isset($info['date_birth'])){
+	        	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', $info['date_birth'] . ' 00:00:00');
+	        	if($dateTime != false){
+	        		$user->date_birth = $dateTime->getTimestamp();
+	        	}
+	        }
 
             $user->save();
 
             if($user->savedSuccess){
-                
+
                 if($_FILES['image']['error'] == 0){
-                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $id, true);
+                    $imageUploaded = $this->media->upload($_FILES['image'], $this->control, $this->control . '-' . $user->id, true);
                     if($imageUploaded){
+                    	if(!empty($user->image)){
+                    		$this->media->delete($user->image);
+                    	}
                         $user->image = $imageUploaded;
                         $user->save();
                     }
                 }
 
-                $this->successText = $this->getTranslation('success edit ' . $this->control);
+                $this->user = $user;
+                $this->successText = $this->t('success edit ' . $this->control, 'back');
             }
             else{
-                $this->errorText = $this->getTranslation('error edit ' . $this->control);
-                $this->errors['error db'] = $this->getTranslation('error db');
+                $this->errorText = $this->t('error edit ' . $this->control, 'back');
+                $this->errors['error db'] = $this->t('error db', 'back');
             }
             return $user->savedSuccess;
         }
     }
 
-    public function toggle() {
+    public function toggle()
+    {
         $id = $_GET['param1'];
-        $user = new User;
-        $user->find($id);
-        if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['userid']) ){
-            exit('Access Error');
-        }
-
         $status = (int)$_GET['param2'];
+
         $return = '';
-        if($id){
-            $result = $this->qb->where('id', '?')->update('??user', ['status' => $status], [$id]);
-            if($result){
+
+        $user = new User();
+        if($id && $user->find($id)){
+
+            if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['userid']) ){
+                exit('Access Error');
+            }
+            $user->status = $status;
+            $user->save();
+
+            if($user->savedSuccess){
                 $return = ($status) ? 'on' : 'off';
             }
         }
         return $return;
     }
     
-    public function delete(){
+    public function delete()
+    {
+    	$return = false;
 
-        $id = (int)$_GET['param1'];
-        
-        $user = new User;
-        $user->find($id);
-        if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['userid']) ){
-            exit('Access Error');
-        }
+        $id = (int)$_GET['id'];
+        $user = new User();
 
-        if(!$id) {
-            $this->errors['error empty id'];
-            return false;
-        }
+        if($id && $user->find($id)) {
 
-        $getuser = $this->qb->where('id', '?')->get('??user', [$id]);
-        if($getuser->rowCount() > 0){
-            $user = $getuser->fetch();
-        }
-        
-        if($user['image']){
-            $this->media->delete($user['image']);
-        }
+            if($user->usergroup < $_SESSION['usergroup'] || ($user->usergroup == $_SESSION['usergroup'] && $user->id != $_SESSION['userid']) ){
+                exit('Access Error');
+            }
 
-        $resultDelete = $this->qb->where('id', '?')->delete('??user', [$id]);
-        
-        if(!$resultDelete){
-            $this->errorText = $this->getTranslation('error delete ' . $this->control);
-            $this->errors['error db'];
-            return false;
+            if($user->image){
+                $this->media->delete($user->image);
+            }
+
+            $user->remove();
+            
+            if($user->removedSuccess){
+                $this->successText = $this->t('success delete ' . $this->control, 'back');
+            }
+            else{
+                $this->errorText = $this->t('error delete ' . $this->control, 'back');
+                $this->errors['error db'];
+            }
+
+            $return = $user->removedSuccess;
         }
         else{
-            $this->successText = $this->getTranslation('success delete ' . $this->control);
-            return true;
+            $this->errors['error invalid id'];
         }
+
+        return $return;
     }
 
-    public function login(){
+    public function login()
+    {
         $data = [];
 
         $this->document = new Document();
@@ -505,7 +562,8 @@ class UserModel extends Model {
         return $this;
     }
 
-    public function logout(){
+    public function logout()
+    {
     	unset($_SESSION['user_id']);
     	unset($_SESSION['usergroup']);
     	session_destroy();
@@ -514,6 +572,3 @@ class UserModel extends Model {
     }
 
 }
-
-
-

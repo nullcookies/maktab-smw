@@ -126,7 +126,7 @@ class PostModel extends Model {
         if($getPosts->rowCount() > 0){
             $posts = $getPosts->fetchAll();
             foreach($posts as $key => $value){
-                $datetime = \DateTime::createFromFormat('Y/m/d', $value['date']);
+                $datetime = \DateTime::createFromFormat('d-m-Y', $value['date']);
                 $posts[$key]['date'] = ($datetime !== false) ? $datetime->format('d-m-Y') : date('d-m-Y', $value['date_modify']);
                 $currentImage = $this->getMainIcon($value['images']);
                 $posts[$key]['icon'] = $this->linker->getIcon($this->media->resize($currentImage, $postIconW, $postIconH, true));

@@ -65,7 +65,7 @@
                         <?=$value['message']?>
                       </td>
                       <td>
-                        <?=date('Y/m/d', $value['date_add'])?><br>
+                        <?=date('d-m-Y', $value['date_add'])?><br>
                         <i><?=date('H:i', $value['date_add'])?></i>
                       </td>
                       <td class="td-shrink">

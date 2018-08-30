@@ -139,6 +139,14 @@
                                 <input type="text" class="form-control" name="teacher[middlename]" id="middlename" value="<?= $teacher->middlename; ?>" />
                                 <?php if(!empty($errors['middlename'])) { ?><div class="help-block"><?=$this->t($errors['middlename'], 'back')?></div><?php } ?>
                             </div>
+
+                            <div class="form-group <?php if(!empty($errors['date_birth'])) { ?>has-error<?php } ?>">
+                                <label for="date_birth">
+                                    <?=$this->t('birthday', 'back')?>
+                                </label>
+                                <input type="text" class="form-control datepicker" name="teacher[date_birth]" id="date_birth" value="<?=$teacher->date_birth?>" />
+                                <?php if(!empty($errors['date_birth'])) { ?><div class="help-block"><?=$this->t($errors['date_birth'], 'back')?></div><?php } ?>
+                            </div>
                             
                             <div class="form-group">
                                 <div class="current-image">

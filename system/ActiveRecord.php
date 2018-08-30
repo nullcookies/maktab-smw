@@ -171,9 +171,9 @@ abstract class ActiveRecord extends Object {
 	        	$this->savedSuccess = $sth->execute((array)$args);
 				if($this->savedSuccess){
 					if(empty($primaryKeyValue)){
-						$newUserId = $this->db->lastInsertId();
-						$this->find($newUserId);
+						$primaryKeyValue = $this->db->lastInsertId();
 					}
+					$this->find($primaryKeyValue);
 				}
 				else{
 					$this->errorInfo = $sth->errorInfo();

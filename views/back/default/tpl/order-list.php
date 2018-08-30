@@ -58,7 +58,7 @@
                         <?=$value['fio']?>
                       </td>
                       <td>
-                        <?=date('Y/m/d', $value['date'])?><br>
+                        <?=date('d-m-Y', $value['date'])?><br>
                         <i><?=date('H:i', $value['date'])?></i>
                       </td>
                       <td>

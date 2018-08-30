@@ -939,8 +939,8 @@ class StatsModel extends Model {
             $getPeriod = explode(' - ', $_POST['filter_period']);
 
             if($getPeriod[0] && $getPeriod[1]){
-                $datetimeStart = \DateTime::createFromFormat('Y/m/d', trim($getPeriod[0], '/'));
-                $datetimeEnd = \DateTime::createFromFormat('Y/m/d', trim($getPeriod[1], '/'));
+                $datetimeStart = \DateTime::createFromFormat('d-m-Y', trim($getPeriod[0], '/'));
+                $datetimeEnd = \DateTime::createFromFormat('d-m-Y', trim($getPeriod[1], '/'));
                 if($datetimeStart && $datetimeEnd){
                     $periodStart = $datetimeStart->getTimestamp();
                     $periodEnd = $datetimeEnd->getTimestamp();
@@ -961,10 +961,10 @@ class StatsModel extends Model {
 
         $datetime->setTimestamp($periodStart);
         $data['periodStartName'] = str_ireplace($en_months, $ru_months, $datetime->format('F d, Y'));
-        $data['periodStartDate'] = $datetime->format('Y/m/d');
+        $data['periodStartDate'] = $datetime->format('d-m-Y');
         $datetime->setTimestamp($periodEnd);
         $data['periodEndName'] = str_ireplace($en_months, $ru_months, $datetime->format('F d, Y'));
-        $data['periodEndDate'] = $datetime->format('Y/m/d');
+        $data['periodEndDate'] = $datetime->format('d-m-Y');
 
         //получаем массив всех товаров (ключи - id товара)
         $allProducts = [];

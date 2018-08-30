@@ -13,6 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class HomeController extends Controller {
     
     public function index() {
+    	
     	$this->modules = [
     		[
                 'side' => 'front',
@@ -45,23 +46,21 @@ class HomeController extends Controller {
 
         $viewFile = 'home';
 
-
         switch($_SESSION['usergroup']){
             case $teacher->usergroup: 
                 $viewFile = 'home-teacher';
                 break;
-            case $student->usergroup: 
-                $viewFile = 'home-student';
-                break;
-            case 1:
-            case 2:
-            case 3:
-                $viewFile = 'home-admin';
-                break;
+            // case $student->usergroup: 
+            //     $viewFile = 'home-student';
+            //     break;
+            // case 1:
+            // case 2:
+            // case 3:
+            //     $viewFile = 'home-admin';
+            //     break;
             default: 
                 $viewFile = 'home';
         }
-
         $this->content = $this->render($viewFile);
     }
 

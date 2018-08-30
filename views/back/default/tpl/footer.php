@@ -159,7 +159,7 @@
 	      Version <?=PROJECT_VERSION?>
 	    </div>
 	    <!-- Default to the left -->
-    	<strong>Copyright &copy; 2016 - <?php echo date("Y"); ?> <a target="_blank" href="http://smartweb.uz/"><?=PROJECT_NAME?></a></strong>
+    	<strong>&copy; <?php echo date("Y"); ?> <a target="_blank" href="http://zipwolf.uz/">Zipwolf</a></strong>
   	</footer>
 
 

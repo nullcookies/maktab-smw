@@ -11,6 +11,7 @@ defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 class UserController extends Controller {
     
     public function index() {
+    	
     	$this->modules = [
     		[
                 'side' => 'back',
@@ -33,62 +34,23 @@ class UserController extends Controller {
     	];
         $model = new UserModel;
 
-        if($model){
-            $model->index();
-            $this->data = $model->data;
-            $this->document = $model->document;
-        }
+        $model->index();
+        $this->data = $model->data;
+        $this->document = $model->document;
+
         $this->content = $this->render('user-list');
     }
 
-    public function add(){
-        
-        $this->modules = [
-            [
-                'side' => 'back',
-                'controller' => 'header',
-                'action' => 'index',
-                'position' => 'header'
-            ],
-            [
-                'side' => 'back',
-                'controller' => 'footer',
-                'action' => 'index',
-                'position' => 'footer'
-            ],
-            [
-                'side' => 'back',
-                'controller' => 'sidebar',
-                'action' => 'index',
-                'position' => 'sidebar'
-            ]
-        ];
-
+    public function list_ajax() {
         $model = new UserModel;
-        $viewFile = 'user-add';
-        if($model){
-            if(isset($_POST['btn_add'])){
-                if($model){
-                    $result = $model->save(true);
-                }
-            }
-            if($result){
-                $model->index();
-                $viewFile = 'user-list';
-            }
-            else{
-                $model->add();
-            }
 
-            $this->data = $model->data;
-            $this->document = $model->document;
-        }
-        
-        $this->content = $this->render($viewFile);
-
+        $model->list_ajax();
+        $this->data = $model->data;
+            
+        $this->json($this->data);
     }
-    
-    public function edit() {    
+
+    public function view() {    
         
         $this->modules = [
             [
@@ -113,27 +75,15 @@ class UserController extends Controller {
 
         $model = new UserModel;
 
-        $viewFile = 'user-edit';
-        if($model){
-            if(isset($_POST['btn_edit'])){
-                $id = (int)$_POST['id'];
-                if(!$id){
-                    $this->index();
-                    return;
-                }
-                $result = $model->save();
-            }
-            if($result){
-                $model->index();
-                $viewFile = 'user-list';
-            }
-            else{
-                $model->edit();
-            }
+        $viewFile = 'user-view';
         
-            $this->data = $model->data;
-            $this->document = $model->document;
+        if(isset($_POST['btn_save'])){
+            $result = $model->save();
         }
+        $model->view();
+    
+        $this->data = $model->data;
+        $this->document = $model->document;
 
         $this->content = $this->render($viewFile);
         
@@ -167,15 +117,13 @@ class UserController extends Controller {
         ];
         
         $model = new UserModel;
-        if($model){
-            $id = (int)$_GET['param1'];
-            if($id){
-                $resultDelete = $model->delete();
-            }
-            $model->index();
-            $this->data = $model->data;
-            $this->document = $model->document;
+        if(!empty($_GET['id'])){
+            $resultDelete = $model->delete();
         }
+        $model->index();
+        $this->data = $model->data;
+        $this->document = $model->document;
+
         $this->content = $this->render('user-list');
     }
 
@@ -189,11 +137,10 @@ class UserController extends Controller {
         }
         else{
             $model = new UserModel;
-            if($model){
-                $model->login();
-                $this->data = $model->data;
-                $this->document = $model->document;
-            }
+            $model->login();
+            $this->data = $model->data;
+            $this->document = $model->document;
+
             $this->content = $this->render('login');
         }
             
@@ -201,11 +148,7 @@ class UserController extends Controller {
 
     public function logout() {
         $model = new UserModel;
-        if($model){
-            $model->logout();
-        }
+        $model->logout();
     }
-
-
 
 }

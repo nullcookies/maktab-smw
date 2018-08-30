@@ -266,12 +266,12 @@ $(document).ready(function () {
       autoclose: true,
       weekStart: 1,
       language: 'ru',
-      format: 'yyyy/mm/dd'
+      format: 'dd-mm-yyyy'
     });
   }
   if($("#calendar").length){
     $("#calendar").datepicker({
-      format: 'yyyy/mm/dd',
+      format: 'dd-mm-yyyy',
       weekStart: 1,
       language: 'ru',
       todayHighlight: true

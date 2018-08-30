@@ -1,10 +1,10 @@
-Content Wrapper. Contains page content -->
+<!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        <?=$this->getTranslation('main page')?>
-        <small><?=$this->getTranslation('control panel')?></small>
+        <?=$this->t('main page', 'back')?>
+        <small><?=$this->t('control panel', 'back')?></small>
       </h1>
       <!-- <ol class="breadcrumb">
         <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -22,12 +22,12 @@ Content Wrapper. Contains page content -->
           <div class="small-box bg-red">
             <div class="inner">
               <h3><?=$newOrders?></h3>
-              <p><?=$this->getTranslation('new orders')?></p>
+              <p><?=$this->t('new orders', 'back')?></p>
             </div>
             <div class="icon">
               <i class="fa fa-shopping-basket"></i>
             </div>
-            <a href="<?=$newOrdersUrl?>" class="small-box-footer"><?=$this->getTranslation('more info')?> <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?=$newOrdersUrl?>" class="small-box-footer"><?=$this->t('more info', 'back')?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -43,7 +43,7 @@ Content Wrapper. Contains page content -->
             <div class="icon">
               <i class="fa fa-pie-chart"></i>
             </div>
-            <a href="<?=$leader['url']?>" class="small-box-footer"><?=$this->getTranslation('more info')?> <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?=$leader['url']?>" class="small-box-footer"><?=$this->t('more info', 'back')?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -52,12 +52,12 @@ Content Wrapper. Contains page content -->
           <div class="small-box bg-yellow">
             <div class="inner">
               <h3><?=$bases?></h3>
-              <p><?=$this->getTranslation('users2')?></p>
+              <p><?=$this->t('users2', 'back')?></p>
             </div>
             <div class="icon">
               <i class="fa fa-users"></i>
             </div>
-            <a href="<?=$basesUrl?>" class="small-box-footer"><?=$this->getTranslation('more info')?> <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?=$basesUrl?>" class="small-box-footer"><?=$this->t('more info', 'back')?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -66,12 +66,12 @@ Content Wrapper. Contains page content -->
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3><?=$products?></h3>
-              <p><?=$this->getTranslation('products2')?></p>
+              <p><?=$this->t('products2', 'back')?></p>
             </div>
             <div class="icon">
               <i class="fa fa-truck"></i>
             </div>
-            <a href="<?=$productsUrl?>" class="small-box-footer"><?=$this->getTranslation('more info')?> <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="<?=$productsUrl?>" class="small-box-footer"><?=$this->t('more info', 'back')?> <i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
         <!-- ./col -->
@@ -87,7 +87,7 @@ Content Wrapper. Contains page content -->
           <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
-              <li class="pull-left header"><i class="fa fa-inbox"></i> <?=$this->getTranslation('sales monthly')?> (<?=$this->getTranslation('sum')?>)</li>
+              <li class="pull-left header"><i class="fa fa-inbox"></i> <?=$this->t('sales monthly', 'back')?> (<?=$this->t('sum', 'back')?>)</li>
             </ul>
             <div class="tab-content no-padding">
               <!-- Morris chart - Sales -->
@@ -100,7 +100,7 @@ Content Wrapper. Contains page content -->
             <div class="box-header">
               <i class="fa fa-th"></i>
 
-              <h3 class="box-title"><?=$this->getTranslation('sales monthly')?> (<?=$this->getTranslation('quantity')?>)</h3>
+              <h3 class="box-title"><?=$this->t('sales monthly', 'back')?> (<?=$this->t('quantity', 'back')?>)</h3>
 
               <div class="box-tools pull-right">
                 <button type="button" class="btn bg-teal btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -159,7 +159,7 @@ Content Wrapper. Contains page content -->
             <div class="box-header">
               <i class="fa fa-calendar"></i>
 
-              <h3 class="box-title"><?=$this->getTranslation('calendar')?></h3>
+              <h3 class="box-title"><?=$this->t('calendar', 'back')?></h3>
               <!-- tools box -->
               <div class="pull-right box-tools">
                 <button type="button" class="btn btn-success btn-sm" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -182,7 +182,7 @@ Content Wrapper. Contains page content -->
           <div class="nav-tabs-custom">
             <!-- Tabs within a box -->
             <ul class="nav nav-tabs pull-right">
-              <li class="pull-left header"><i class="fa fa-inbox"></i> <?=$this->getTranslation('sales by category')?></li>
+              <li class="pull-left header"><i class="fa fa-inbox"></i> <?=$this->t('sales by category', 'back')?></li>
             </ul>
             <div class="tab-content no-padding">
               <!-- Morris chart - Sales -->
@@ -239,7 +239,7 @@ Content Wrapper. Contains page content -->
         postUnits: ' <?=$this->translation($this->getOption('currency'))?>',
         xkey: 'y',
         ykeys: ['item1'],
-        labels: ['<?=$this->getTranslation('sum')?>'],
+        labels: ['<?=$this->t('sum', 'back')?>'],
         lineColors: ['#a0d0e0'],
         hideHover: 'auto'
       });
@@ -254,10 +254,10 @@ Content Wrapper. Contains page content -->
           <?php } ?>
           <?php } ?>
         ],
-        postUnits: ' <?=$this->getTranslation('unit')?>',
+        postUnits: ' <?=$this->t('unit', 'back')?>',
         xkey: 'y',
         ykeys: ['item1'],
-        labels: ['<?=$this->getTranslation('quantity')?>'],
+        labels: ['<?=$this->t('quantity', 'back')?>'],
         lineColors: ['#efefef'],
         lineWidth: 2,
         hideHover: 'auto',
