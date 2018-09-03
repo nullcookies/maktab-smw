@@ -123,7 +123,7 @@ class Validator {
     
     public function isUsername($string) {
         $return = true;
-        if(!preg_match("/^[0-9a-zA-Z][0-9a-zA-Z-_]+[0-9a-zA-Z]$/", $string)) {
+        if(!preg_match("/^\+?[0-9a-zA-Z][0-9a-zA-Z-_]+[0-9a-zA-Z]$/", $string)) {
 			$return = false;
         	$this->lastError = 'error not username';
         }

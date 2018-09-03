@@ -117,19 +117,19 @@ class UserModel extends Model {
                 break;
             
             case 1:
-                $order = 'lastname';
-                break;
-            
-            case 2:
-                $order = 'firstname';
-                break;
-            
-            case 3:
                 $order = 'username';
                 break;
             
+            case 2:
+                $order = 'usergroup';
+                break;
+            
+            case 3:
+                $order = 'lastname';
+                break;
+            
             case 4:
-                $order = 'email';
+                $order = 'firstname';
                 break;
             
             case 5:
@@ -137,7 +137,7 @@ class UserModel extends Model {
                 break;
             
             case 6:
-                $order = 'usergroup';
+                $order = 'email';
                 break;
             
             case 7:

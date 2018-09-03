@@ -3,7 +3,7 @@
 $db_config = [
     'driver' => 'mysql',
     'host' => 'localhost',
-    'dbname' => 'db',
+    'dbname' => 'database',
     'charset' => 'utf8',
     'username' => 'root',
     'password' => '',

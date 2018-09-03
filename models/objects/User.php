@@ -8,17 +8,20 @@ class User extends ActiveRecord
 {
     protected $secureAssignColumns = ['password'];
     
-    public function save()
+    public function save($secure = true)
     {
     	if(
-    		empty($_SESSION['usergroup']) ||
-    		empty($_SESSION['user_id']) ||
-    		$this->usergroup < $_SESSION['usergroup'] || 
-    		(
-    			!empty($this->id) &&
-    			$this->usergroup == $_SESSION['usergroup'] && 
-    			$this->id != $_SESSION['user_id']
-    		) 
+            $secure &&
+        	(
+                empty($_SESSION['usergroup']) ||
+                empty($_SESSION['user_id']) ||
+                $this->usergroup < $_SESSION['usergroup'] || 
+                (
+                    !empty($this->id) &&
+                    $this->usergroup == $_SESSION['usergroup'] && 
+                    $this->id != $_SESSION['user_id']
+                ) 
+            )
     	){
     		exit('Access Error');
     	}

@@ -18,18 +18,19 @@ else{
 }
 
 $serverName = 'http' . ((isset($_SERVER['HTTPS'])) ? 's' : '') . '://' . $_SERVER['SERVER_NAME'];
-define('BASEPATH', __DIR__);
+define('BASEPATH', dirname(__DIR__));
 define('BASEURL', $serverName . '/tg-bot');
 
-require BASEPATH . '/../vendor/autoload.php';
-require BASEPATH . '/ApiClass.php';
+require BASEPATH . '/vendor/autoload.php';
+require BASEPATH . 'tg-bot//ApiClass.php';
 
 $config = require BASEPATH . '/config.php';
+$telegramConfig = $config['telegram'];
 
 mb_internal_encoding("UTF-8");
 
-$bot_api_key  = $config['bot_api_key'];
-$bot_username  = $config['bot_username'];
+$bot_api_key  = $telegramConfig['bot_api_key'];
+$bot_username  = $telegramConfig['bot_username'];
 
 $mysql_credentials = $config['db'];
 

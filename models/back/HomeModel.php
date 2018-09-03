@@ -225,6 +225,7 @@ class HomeModel extends Model
 		$this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
 		$this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
 
+        $user = new User();
         $teacher = new Teacher();
         $student = new Student();
 
@@ -236,7 +237,7 @@ class HomeModel extends Model
 		$data['studentsQuantity'] = $studentsQuantity;
 		$data['studentsUrl'] = $this->linker->getUrl('student', true);
 
-		$usersQuantity = $this->qb->count('??user');
+		$usersQuantity = $this->qb->where('usergroup', $user->usergroup)->count('??user');
 		$data['usersQuantity'] = $usersQuantity;
 		$data['usersUrl'] = $this->linker->getUrl('user', true);
 

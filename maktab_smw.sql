@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Авг 30 2018 г., 16:06
+-- Время создания: Сен 03 2018 г., 23:03
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -296,7 +296,7 @@ CREATE TABLE IF NOT EXISTS `mktb_lesson` (
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=8 ;
 
 --
 -- Дамп данных таблицы `mktb_lesson`
@@ -306,7 +306,8 @@ INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_
 (1, 1, 3, 11, 1535245201, 0, '', 1535367039, 1535374286),
 (2, 2, 3, 11, 1535367541, 0, '', 1535367599, 1535367599),
 (4, 1, 3, 11, 1535373421, 0, '', 1535373444, 1535373444),
-(6, 1, 3, 11, 1535520121, 0, 'Упражнение 11, стр.8', 1535520182, 1535520182);
+(6, 1, 3, 11, 1535520121, 0, 'Упражнение 11, стр.8', 1535520182, 1535520182),
+(7, 2, 6, 11, 1535903341, 0, '', 1535903352, 1535903352);
 
 -- --------------------------------------------------------
 
@@ -742,7 +743,7 @@ CREATE TABLE IF NOT EXISTS `mktb_student_attendance` (
   `student_id` int(11) NOT NULL,
   `attended` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=29 ;
 
 --
 -- Дамп данных таблицы `mktb_student_attendance`
@@ -760,7 +761,8 @@ INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attende
 (24, 1, 25, 0),
 (25, 6, 13, 1),
 (26, 6, 14, 1),
-(27, 6, 25, 1);
+(27, 6, 25, 1),
+(28, 7, 27, 1);
 
 -- --------------------------------------------------------
 
@@ -774,7 +776,7 @@ CREATE TABLE IF NOT EXISTS `mktb_student_mark` (
   `student_id` int(11) NOT NULL,
   `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=29 ;
 
 --
 -- Дамп данных таблицы `mktb_student_mark`
@@ -792,7 +794,8 @@ INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
 (24, 1, 25, '0'),
 (25, 6, 13, '5'),
 (26, 6, 14, '4'),
-(27, 6, 25, '3');
+(27, 6, 25, '3'),
+(28, 7, 27, '5');
 
 -- --------------------------------------------------------
 
@@ -820,6 +823,18 @@ INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `mktb_student_to_user`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_student_to_user` (
+  `student_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`student_id`,`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `mktb_study_period`
 --
 
@@ -832,7 +847,7 @@ CREATE TABLE IF NOT EXISTS `mktb_study_period` (
   `end_time` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `mktb_study_period`
@@ -2715,9 +2730,9 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
 --
 
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
-(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1535276431, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1535276431, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
+(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1535903436, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1535903436, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
 (2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1535634331, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1535634331, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1535633484, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535633484, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1535903184, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535903184, '127.0.0.1', '65h847otiuvfu72203jtmjmdd1'),
 (12, 'sodiqov-abdulla', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 1535626386, 0, '', 179085600, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535626118, 0, '', 1230750000, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535626106, 1535375356, '', 1230836400, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
@@ -2782,6 +2797,22 @@ INSERT INTO `mktb_usergroup` (`id`, `alias`, `name`) VALUES
 (5, 'teacher', 'Учитель'),
 (10, 'user', 'Пользователь'),
 (11, 'student', 'Студент');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `mktb_user_requests`
+--
+
+CREATE TABLE IF NOT EXISTS `mktb_user_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `target_id` int(11) NOT NULL,
+  `date` int(11) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 

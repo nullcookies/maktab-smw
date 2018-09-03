@@ -15,6 +15,7 @@ use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\DB;
+use \models\objects\User;
 
 /**
  * Start command
@@ -82,7 +83,20 @@ class StartCommand extends SystemCommand
         if(stripos($text, 'set_contact') === 0){
             if($message->getContact() !== null){
                 $phoneNumber = $message->getContact()->getPhoneNumber();
-                self::setContact($user_id, $phoneNumber);
+                $savedPhoneNumber = self::setContact($user_id, $phoneNumber);
+                if($savedPhoneNumber){
+                    $user = self::getUser($user_id);
+                    $lang_id = $user['language_id'];
+                    $mainUser = self::checkAddUser($message->getContact());
+                    if($mainUser->newUser){
+                        $newUserData = [
+                            'chat_id' => $chat_id,
+                            'reply_markup' => self::getKeyboard($lang_id)
+                        ];
+                        $newUserData['text'] =  self::t($lang_id, 'your_username') . ': ' . $mainUser->username . "\n" . self::t($lang_id, 'your_password') . ': ' . $mainUser->rawPassword . "\n" . self::t($lang_id, 'please_save_info_and_delete_this_message');
+                        Request::sendMessage($newUserData);
+                    }
+                }
             }
         }
 
@@ -185,13 +199,50 @@ class StartCommand extends SystemCommand
 
         return $result;
     }
+    
+    //добавление пользователя в основную таблицу
+    public static function checkAddUser($contact) {
+        $phoneNumber = $contact->getPhoneNumber();
+        $pdo = DB::getPdo();
+        $getUser = $pdo->prepare('SELECT * FROM ' . DB_PREFIX . 'user WHERE username = :username');
+        $getUser->bindParam(':username', $phoneNumber);
+        $getUser->execute();
+
+        $user = new User();
+        $user->newUser = true;
+
+        if($getUser->rowCount() > 0){
+            $currentUser = $getUser->fetch();
+            if($user->find($currentUser['id'])){
+                $user->newUser = false;
+            }
+        }
+
+        $user->firstname = $contact->getFirstName();
+        $user->lastname = $contact->getLastName();
+        $user->username = $contact->getPhoneNumber();
+        $user->status = 1;
+        $user->updated_at = time();
+
+
+        if($user->newUser){
+            $user->created_at = time();
+            $user->rawPassword = $user->generatePassword(6);
+            $user->password = $user->hashPassword($user->rawPassword);
+        }
+
+        $user->save(false);
+
+        return $user;
+        
+    }
 
     public static function getKeyboard($lang_id = 0) {
 
         $keyboard = new Keyboard(
-            [self::t($lang_id, 'button_local_mail'), self::t($lang_id, 'button_international_mail')],
-            [self::t($lang_id, 'button_tracking'), self::t($lang_id, 'button_contacts')],
-            [self::t($lang_id, 'button_feedback'), self::t($lang_id, 'button_others')]
+            [self::t($lang_id, 'button_my_children'), self::t($lang_id, 'button_statistics')],
+            [self::t($lang_id, 'button_feedback'), self::t($lang_id, 'button_view_contacts')],
+            [self::t($lang_id, 'button_others')]
         );
 
 
@@ -228,8 +279,8 @@ class StartCommand extends SystemCommand
     public static function getOthersKeyboard($lang_id) {
 
         $keyboard = new Keyboard(
-            [self::t($lang_id, 'button_change_language'), self::t($lang_id, 'button_view_contacts')],
-            [self::t($lang_id, 'button_news'), self::t($lang_id, 'button_main_page')]
+            [self::t($lang_id, 'button_change_language'), self::t($lang_id, 'button_change_phone')],
+            [self::t($lang_id, 'button_change_password'), self::t($lang_id, 'button_main_page')]
         );
 
         $keyboard
