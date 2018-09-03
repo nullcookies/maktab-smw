@@ -28,9 +28,9 @@ class OthersCommand extends UserCommand
         $keyboard = StartCommand::getOthersKeyboard($lang_id);
 		
         if($text == 'contacts'){
-            $sendtext = '207-08-09' . "\n";
-            $sendtext .= 'info@bts.uz' . "\n";
-            $sendtext .= 'www.bts.uz';
+            $sendtext = '00-000-00-00' . "\n";
+            $sendtext .= 'info@domain.uz' . "\n";
+            $sendtext .= 'www.domain.uz';
         }
         else{
             $sendtext = self::t($lang_id, 'choose_action');

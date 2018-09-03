@@ -84,6 +84,9 @@
                 			</th>
                 			<th>
                 				<?=$this->t('student attendance', 'front')?>
+                                &nbsp;
+                                &nbsp;
+                                &nbsp;
                 				<div class="custom-control custom-checkbox custom-control-inline">
 								  	<input type="checkbox" class="custom-control-input" name="check_all" id="check_all_students_attendance">
 								  	<label class="custom-control-label" for="check_all_students_attendance"><?=$this->t('all', 'front')?></label>
