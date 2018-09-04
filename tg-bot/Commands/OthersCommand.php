@@ -25,13 +25,16 @@ class OthersCommand extends UserCommand
         
         $lang_id = StartCommand::getLanguage($user_id);
 
-        //$keyboard = StartCommand::getOthersKeyboard($lang_id);
-        $keyboard = StartCommand::getKeyboard($lang_id);
+        $keyboard = StartCommand::getOthersKeyboard($lang_id);
 		
         if($text == 'contacts'){
-            $sendtext = '00-000-00-00' . "\n";
-            $sendtext .= 'info@domain.uz' . "\n";
-            $sendtext .= 'www.domain.uz';
+
+        	$keyboard = StartCommand::getKeyboard($lang_id);
+
+            $sendtext = 	self::t($lang_id, 'our_contacts') . "\n";
+            $sendtext .= 	self::t($lang_id, 'phone') . ': ' . '00-000-00-00' . "\n";
+            $sendtext .= 	self::t($lang_id, 'email') . ': ' . 'info@domain.uz' . "\n";
+            $sendtext .= 	self::t($lang_id, 'site') . ': ' . 'www.domain.uz';
         }
         else{
             $sendtext = self::t($lang_id, 'choose_action');

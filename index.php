@@ -29,6 +29,7 @@ else{
 
 $serverName = 'http' . ((isset($_SERVER['HTTPS'])) ? 's' : '') . '://' . $_SERVER['SERVER_NAME'];
 define('BASEPATH', $_SERVER['DOCUMENT_ROOT']);
+define('BOTPATH', BASEPATH . '/tg-bot');
 define('BASEURL', $serverName);
 
 require_once(BASEPATH . '/system/Autoloader.php');

@@ -116,7 +116,7 @@ class StartCommand extends SystemCommand
         }
 
         //если нету номера телефона - спросить
-        if($user['phone'] == ''){
+        if($user['phone'] == '' || stripos($text, 'change_phone') === 0){
             $keyboard = self::getContactKeyboard($lang_id);
             $data = [
                 'chat_id' => $chat_id,
@@ -126,8 +126,21 @@ class StartCommand extends SystemCommand
             return Request::sendMessage($data);
         }
 
+        //запрос изменения пароля
+        if(stripos($text, 'change_password') === 0){
+            $passwordChanged = self::changePassword($user_id);
+        }
+
         //все в порядке - показываем главную страницу
-        $responseText   = self::t($lang_id, 'choose_action');
+        $responseText   = ''; 
+        if(!empty($savedPhoneNumber)){
+        	$responseText .= self::t($lang_id, 'phone_number_saved') . "\n";
+        } 
+        if(!empty($passwordChanged)){
+        	$responseText .= self::t($lang_id, 'password_changed') . "\n";
+        	$responseText .= self::t($lang_id, 'your_password') . ': ' . $passwordChanged . "\n";
+        }
+        $responseText   .= self::t($lang_id, 'choose_action');
         $keyboard       = self::getKeyboard($lang_id);       
 
         $data = [
@@ -140,7 +153,8 @@ class StartCommand extends SystemCommand
     }
 
     //возвращает пользователя
-    public static function getUser($user_id) {
+    public static function getUser($user_id)
+    {
         $user = array();
         $pdo = DB::getPdo();
         $getUser = $pdo->prepare('SELECT * FROM ' . TB_USER . ' WHERE id = :user_id');
@@ -153,7 +167,8 @@ class StartCommand extends SystemCommand
     }
 
     //возвращает id языка, если не найден возвращает 0
-    public static function getLanguage($user_id) {
+    public static function getLanguage($user_id)
+    {
         $lang_id = 0;
         $pdo = DB::getPdo();
         $getLang = $pdo->prepare('SELECT language_id FROM ' . TB_USER . ' WHERE id = :user_id');
@@ -170,7 +185,8 @@ class StartCommand extends SystemCommand
     }
 
     //обновляет запись в таблице user, возвращает id языка
-    public static function setLanguage($user_id, $lang_id) {
+    public static function setLanguage($user_id, $lang_id)
+    {
         $pdo = DB::getPdo();
 
         if(!in_array($lang_id, self::$language_ids)){
@@ -186,7 +202,8 @@ class StartCommand extends SystemCommand
     }
 
     //обновляет запись в таблице user, возвращает результат
-    public static function setContact($user_id, $phoneNumber) {
+    public static function setContact($user_id, $phoneNumber)
+    {
         $pdo = DB::getPdo();
         $phoneNumber = preg_replace('#[^\+0-9]#', '', $phoneNumber);
         if(substr($phoneNumber, 0, 1) != '+'){
@@ -201,7 +218,8 @@ class StartCommand extends SystemCommand
     }
     
     //добавление пользователя в основную таблицу
-    public static function checkAddUser($contact) {
+    public static function checkAddUser($contact)
+    {
         $phoneNumber = $contact->getPhoneNumber();
         $pdo = DB::getPdo();
         $getUser = $pdo->prepare('SELECT * FROM ' . DB_PREFIX . 'user WHERE username = :username');
@@ -221,6 +239,7 @@ class StartCommand extends SystemCommand
         $user->firstname = $contact->getFirstName();
         $user->lastname = $contact->getLastName();
         $user->username = $contact->getPhoneNumber();
+        $user->phone = $contact->getPhoneNumber();
         $user->status = 1;
         $user->updated_at = time();
 
@@ -236,13 +255,45 @@ class StartCommand extends SystemCommand
         return $user;
         
     }
+    
+    //изменение пароля в основной таблице пользователей
+    public static function changePassword($user_id)
+    {
+    	$return = false;
 
-    public static function getKeyboard($lang_id = 0) {
+        $pdo = DB::getPdo();
+        $getTgUser = $pdo->prepare('SELECT * FROM ' . TB_USER . ' WHERE id = :user_id');
+        $getTgUser->bindParam(':user_id', $user_id);
+        $getTgUser->execute();
+
+        if($getTgUser->rowCount() > 0){
+            $tgUser = $getTgUser->fetch();
+            $phone = $tgUser['phone'];
+            $getUser = $pdo->prepare('SELECT id FROM ' . DB_PREFIX . 'user WHERE username = :username');
+	        $getUser->bindParam(':username', $phone);
+	        $getUser->execute();
+	        if($getUser->rowCount() > 0){
+	            $currentUser = $getUser->fetch();
+	            $user = new User();
+	            if($user->find($currentUser['id'])){
+	            	$user->rawPassword = $user->generatePassword(6);
+            		$user->password = $user->hashPassword($user->rawPassword);
+            		$user->save(false);
+            		if($user->savedSuccess){
+            			$return = $user->rawPassword;
+            		}
+	            }
+	        }
+        }
+        return $return;
+    }
+
+    public static function getKeyboard($lang_id = 0)
+    {
 
         $keyboard = new Keyboard(
-            [self::t($lang_id, 'button_my_children'), self::t($lang_id, 'button_statistics')],
-            [self::t($lang_id, 'button_feedback'), self::t($lang_id, 'button_view_contacts')],
-            [self::t($lang_id, 'button_others')]
+            [self::t($lang_id, 'button_my_children'), self::t($lang_id, 'button_view_contacts')],
+            [self::t($lang_id, 'button_feedback'), self::t($lang_id, 'button_others')]
         );
 
 
@@ -253,7 +304,8 @@ class StartCommand extends SystemCommand
         return $keyboard;
     }
 
-    public static function getLanguageKeyboard($lang_id) {
+    public static function getLanguageKeyboard($lang_id)
+    {
 
         $keyboard = new Keyboard(
             [self::t($lang_id, 'set_uzbek'), self::t($lang_id, 'set_russian')]
@@ -265,7 +317,8 @@ class StartCommand extends SystemCommand
         return $keyboard;
     }
 
-    public static function getContactKeyboard($lang_id) {
+    public static function getContactKeyboard($lang_id)
+    {
 
         $keyboard = (new Keyboard(
                 [(new KeyboardButton(self::t($lang_id, 'send_my_number')))->setRequestContact(true)]
@@ -276,7 +329,8 @@ class StartCommand extends SystemCommand
         return $keyboard;
     }
 
-    public static function getOthersKeyboard($lang_id) {
+    public static function getOthersKeyboard($lang_id)
+    {
 
         $keyboard = new Keyboard(
             [self::t($lang_id, 'button_change_language'), self::t($lang_id, 'button_change_phone')],
