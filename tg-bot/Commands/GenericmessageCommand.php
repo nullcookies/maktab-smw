@@ -29,6 +29,7 @@ use Longman\TelegramBot\Commands\UserCommands\SettingsCommand;
 use Longman\TelegramBot\Commands\UserCommands\OthersCommand;
 use Longman\TelegramBot\Commands\UserCommands\FeedbackCommand;
 use Longman\TelegramBot\Commands\UserCommands\TrackingCommand;
+use Longman\TelegramBot\Commands\UserCommands\MyChildrenCommand;
 use Longman\TelegramBot\Commands\UserCommands\MailCommand;
 
 /**
@@ -157,6 +158,14 @@ class GenericmessageCommand extends SystemCommand
         elseif($text === self::t($lang_id, 'button_feedback')){
             $update['message']['text'] = '/feedback';
             return (new FeedbackCommand($this->telegram, new Update($update)))->preExecute();
+        }
+        elseif($text === self::t($lang_id, 'button_my_children')){
+            $update['message']['text'] = '/mychildren';
+            return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
+        }
+        elseif($text === self::t($lang_id, 'button_add_children')){
+            $update['message']['text'] = '/mychildren add_children';
+            return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
         }
         elseif($text === self::t($lang_id, 'button_tracking')){
             $update['message']['text'] = '/tracking';
