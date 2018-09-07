@@ -16,6 +16,7 @@ use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Commands\UserCommands\ProductCommand;
 use Longman\TelegramBot\Commands\UserCommands\ContactCommand;
+use Longman\TelegramBot\Commands\UserCommands\MyChildrenCommand;
 
 /**
  * Callback query command
@@ -77,16 +78,36 @@ class CallbackqueryCommand extends SystemCommand
                 return (new ContactCommand($this->telegram, new Update($update)))->preExecute();
             }
 		}
+        elseif (strpos($callback_data, 'mychildren_group_id_') !== false) {
+			
+			$group_id = (int)substr($callback_data, mb_strlen('mychildren_group_id_'));
+            if(is_numeric($group_id)){
+                $update = $update->getRawData();
+                $update['callback_query']['message']['text'] = '/mychildren ' . $callback_data;
+                return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
+            }
+		}
+        elseif (strpos($callback_data, 'mychildren_add_student_id_') !== false) {
+			
+			$student_id = (int)substr($callback_data, mb_strlen('mychildren_add_student_id_'));
+            if(is_numeric($student_id)){
+                $update = $update->getRawData();
+                $update['callback_query']['message']['text'] = '/mychildren ' . $callback_data;
+                return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
+            }
+		}
 		
 		
 		return Request::emptyResponse();
 		
-        // $data = [
-            // 'callback_query_id' => $callback_query_id,
-            // 'text'              => 'Hello World!',
-            // 'show_alert'        => $callback_data === 'thumb up',
-            // 'cache_time'        => 5,
-        // ];
+
+		//callback query answer
+  //       $data = [
+  //           'callback_query_id' => $callback_query_id,
+  //           'text'              => 'Hello World!',
+  //           'show_alert'        => $callback_data === 'thumb up',
+  //           'cache_time'        => 5,
+  //       ];
 		
 		// return Request::answerCallbackQuery($data);
 		

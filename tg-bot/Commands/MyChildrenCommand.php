@@ -12,6 +12,8 @@ use Longman\TelegramBot\Conversation;
 
 use Longman\TelegramBot\Commands\SystemCommands\StartCommand;
 use \models\objects\User;
+use \models\objects\Student;
+use \models\front\LessonModel;
 
 class MyChildrenCommand extends UserCommand
 {
@@ -42,24 +44,11 @@ class MyChildrenCommand extends UserCommand
         $lang_id = StartCommand::getLanguage($user_id);
 
 
-
-
-
-		// if(strpos($text, 'group_') !== false) {
-  //           $region_id = (int)substr($text, mb_strlen('group_'));
-  //           $sendtext = self::getGroups($region_id, $lang_id);
-  //           $keyboard = StartCommand::getKeyboard($lang_id);
-  //       }
-  //       else{
-  //           $sendtext = self::t($lang_id, 'contact_page_text') . "\n";
-  //           $keyboard = self::getInlineKeyboard($lang_id);
-  //       }
-
-        
-
         $pdo = DB::getPdo();
+
         $mainUser = [];
         $myStudents = [];
+
         $checkMainUser = [];
         $checkMainUser = $pdo->prepare("SELECT * FROM " . DB_PREFIX . "user WHERE username = :username");
         $checkMainUser->execute([':username' => $user['phone']]);
@@ -67,16 +56,25 @@ class MyChildrenCommand extends UserCommand
             $mainUser = $checkMainUser->fetch();
         }
         if($mainUser){
+
         	$getMystudents = $pdo->prepare("SELECT u.id, u.firstname, u.lastname FROM " . DB_PREFIX . "student_to_user s2u LEFT JOIN " . DB_PREFIX . "user u ON s2u.student_id = u.id WHERE s2u.user_id = :user_id" );
         	$getMystudents->execute([':user_id' => $mainUser['id']]);
         	if($getMystudents->rowCount() > 0){
         		$myStudents = $getMystudents->fetchAll();
         	}
-        	//запрос изменения пароля
+
+
+        	//список групп для добавления ребенка
 	        if(stripos($text, 'add_children') === 0){
-	            //self::getGroups($user_id);
-	            $sendtext = 'test';
-	            $keyboard = self::getInlineKeyboard($lang_id);
+
+	            $keyboard = self::chooseGroupKeyboard($lang_id);
+	        	if($keyboard != false){
+	        		$sendtext = self::t($lang_id, 'choose_group');
+	        	}
+	            else{
+	            	$keyboard = self::getKeyboard($lang_id);
+	            	$sendtext = self::t($lang_id, 'no_groups_added');
+	            }
 	            $data = [
 		            'chat_id'      => $chat_id,
 		            'reply_markup' => $keyboard,
@@ -84,6 +82,73 @@ class MyChildrenCommand extends UserCommand
 		        ];
 		        return Request::sendMessage($data);
         	}
+        	elseif(strpos($text, 'mychildren_group_id_') !== false) {
+	            $group_id = (int)substr($text, mb_strlen('mychildren_group_id_'));
+
+	            $keyboard = self::chooseStudentKeyboard($lang_id, $group_id);
+	        	if($keyboard != false){
+	        		$sendtext = self::t($lang_id, 'choose_student');
+	        	}
+	            else{
+	            	$keyboard = self::getKeyboard($lang_id);
+	            	$sendtext = self::t($lang_id, 'no_students_added');
+	            }
+	            $data = [
+		            'chat_id'      => $chat_id,
+		            'reply_markup' => $keyboard,
+		            'text'         => $sendtext,
+		        ];
+		        return Request::sendMessage($data);
+	        }
+        	elseif(strpos($text, 'mychildren_add_student_id_') !== false) {
+	            $student_id = (int)substr($text, mb_strlen('mychildren_add_student_id_'));
+	            $student = new Student();
+	            $checkIsStudent = $pdo->prepare("SELECT id FROM " . DB_PREFIX . "user WHERE id = :id AND usergroup = :usergroup");
+	            $checkIsStudent->bindValue(':id', $student_id);
+	            $checkIsStudent->bindValue(':usergroup', $student->usergroup);
+	            $checkIsStudent->execute();
+
+	            $checkAddedBefore = $pdo->prepare("SELECT id FROM " . DB_PREFIX . "student_to_user WHERE student_id = :student_id AND user_id = :user_id");
+	            $checkAddedBefore->bindValue(':student_id', $student_id);
+	            $checkAddedBefore->bindValue(':user_id', $mainUser['id']);
+	            $checkAddedBefore->execute();
+
+	            $sendtext = '';
+	            if($checkAddedBefore->rowCount() > 0){
+	            	//student added before
+	            	$sendtext .= self::t($lang_id, 'student_has_been_already_added');
+	            }
+	            elseif($checkIsStudent->rowCount() == 0){
+	            	//student_id does not belong to students usergroup
+	            	$sendtext .= self::t($lang_id, 'there_was_an_error');
+	            }
+	            else{
+	            	//no errors
+	            	$checkIsStudent = $pdo->prepare("INSERT INTO " . DB_PREFIX . "user_request (user_id, type, target_id, date, status) VALUES (:user_id, :type, :target_id, :date, :status)");
+	            	$newRequest = [];
+	            	$newRequest[':user_id'] = $mainUser['id'];
+	            	$newRequest[':type'] = 'add student to user';
+	            	$newRequest[':target_id'] = $student_id;
+	            	$newRequest[':date'] = time();
+	            	$newRequest[':status'] = '0';
+	            	if($checkIsStudent->execute($newRequest)){
+	            		$sendtext .= self::t($lang_id, 'request_has_been_sent') . "\n";
+		            	$sendtext .= self::t($lang_id, 'wait_for_approval');
+	            	}
+	            	else{
+	            		$sendtext .= self::t($lang_id, 'there_was_an_error') . ' 2';
+	            	}
+	            }
+	            $keyboard = self::getKeyboard($lang_id);
+
+	            $data = [
+		            'chat_id'      => $chat_id,
+		            'reply_markup' => $keyboard,
+		            'text'         => $sendtext,
+		        ];
+		        return Request::sendMessage($data);
+	        }
+
         }
 
 		$sendtext = '';
@@ -117,25 +182,26 @@ class MyChildrenCommand extends UserCommand
 
     public static function chooseGroupKeyboard($lang_id)
     {
-    	$keyboard = new InlineKeyboard(
-    		[['text' => 'group 1', 'callback_data' => 'group_1'], ['text' => 'group 2', 'callback_data' => 'group_2']],
-    		[['text' => 'group 3', 'callback_data' => 'group_3'], ['text' => 'group 4', 'callback_data' => 'group_4']],
-    		[['text' => 'group 5', 'callback_data' => 'group_5'], ['text' => 'group 6', 'callback_data' => 'group_6']]
-    	);
-    	return $keyboard;
-
         $keyboard_buttons = [];
-        $groups = self::getGroups($lang_id);
-        foreach ($regions as $value) {
-            $keyboard_buttons[] = [new InlineKeyboardButton(
-                [
-                    'text'          => $value['content'],
-                    'callback_data' => 'region_' . $value['id'],
-                ]
-            )];
+        $groups = self::getGroups();
+        if(count($groups)){
+        	foreach ($groups as $value) {
+        		if(!array_key_exists($value['start_year'], $keyboard_buttons)){
+        			$keyboard_buttons[$value['start_year']] = [];
+        		}
+	            $keyboard_buttons[$value['start_year']][] = 
+	            [
+                    'text'          => $value['grade'] . '-' . $value['name'],
+                    'callback_data' => 'mychildren_group_id_' . $value['id'],
+                ];
+	        }
+	        krsort($keyboard_buttons);
         }
-        
-        
+        else{
+        	return false;
+        }
+
+
         if(version_compare(PHP_VERSION, '5.6.0', '>=')){
             $keyboard = new InlineKeyboard(...$keyboard_buttons);
         } else {
@@ -143,65 +209,73 @@ class MyChildrenCommand extends UserCommand
             $keyboard = $reflect->newInstanceArgs($keyboard_buttons);
         }
         
+        return $keyboard;
+    }
+
+    public static function getGroups()
+    {
+    	$groups = [];
+    	$pdo = DB::getPdo();
+        $getGroups = $pdo->prepare('SELECT * FROM ' . DB_PREFIX . 'group WHERE start_year >= :start_year');
+        $lesson = new LessonModel();
+        $studyStartMonth = $lesson->getOption('study_start_month');
+        $startYear = (date('n') >= $studyStartMonth) ? date('Y') - 11 : date('Y') - 12;
+        $getGroups->bindParam(':start_year', $startYear);
+        $getGroups->execute();
+        if($getGroups->rowCount() > 0){
+        	$groups = $getGroups->fetchAll();
+        	foreach ($groups as $key => $value) {
+        		$groups[$key]['grade'] = $lesson->getGrade($value['start_year'], $value['end_year']);
+        	}
+        }
+        return $groups;
+    }
+
+    public static function chooseStudentKeyboard($lang_id, $group_id)
+    {
+        $keyboard_buttons = [];
+        $students = self::getStudents($group_id);
+        if(count($students)){
+        	$startIndex = 0;
+        	foreach ($students as $value) {
+        		if(isset($keyboard_buttons[$startIndex]) && count($keyboard_buttons[$startIndex]) == 3){
+        			$startIndex++;
+        		}
+        		if(!array_key_exists($startIndex, $keyboard_buttons)){
+        			$keyboard_buttons[$startIndex] = [];
+        		}
+	            $keyboard_buttons[$startIndex][] = 
+	            [
+                    'text'          => $value['lastname'] . ' ' . $value['firstname'],
+                    'callback_data' => 'mychildren_student_id_' . $value['id'],
+                ];
+	        }
+        }
+        else{
+        	return false;
+        }
+
+        if(version_compare(PHP_VERSION, '5.6.0', '>=')){
+            $keyboard = new InlineKeyboard(...$keyboard_buttons);
+        } else {
+            $reflect  = new \ReflectionClass('Longman\TelegramBot\Entities\InlineKeyboard');
+            $keyboard = $reflect->newInstanceArgs($keyboard_buttons);
+        }
         
         return $keyboard;
     }
 
-    public static function getRegionText($id, $lang_id)
+    public static function getStudents($group_id)
     {
-    	$region = self::getRegion($id, $lang_id);
-    	$regionText = strtoupper($region['content']) . "\n";
-    	$offices  = self::getOffices($id, $lang_id);
-    	if($offices){
-    		foreach($offices as $value){
-                file_put_contents('ppp.txt', $value['content']);
-    			$value['content'] = json_decode($value['content'], true);
-    			foreach ($value['content'] as $key1 => $value1) {
-    				$regionText .= self::t($lang_id, $key1) . ": " . $value1 . "\n";
-    			}
-    		}
-    		$regionText .= "\n";
-	    		
-    	}
-        return $regionText;
+    	$students = [];
+    	$pdo = DB::getPdo();
+        $getStudents = $pdo->prepare('SELECT u.* FROM ' . DB_PREFIX . 'student_to_group s2g LEFT JOIN ' . DB_PREFIX . 'user u ON s2g.student_id = u.id WHERE s2g.group_id = :group_id ORDER BY u.lastname');
+        $getStudents->bindParam(':group_id', $group_id);
+        $getStudents->execute();
+        if($getStudents->rowCount() > 0){
+        	$students = $getStudents->fetchAll();
+        }
+        return $students;
     }
 
-    public static function getOffices($id, $lang_id)
-    {
-    	//$lang_id = 1;
-    	$pdo = DB::getPdo();
-        $items = [];
-        $getItems = $pdo->query("SELECT * FROM " . TB_INFORMATION . " WHERE parent_id = " . (int)$id . " AND language_id = " . (int)$lang_id . " AND type = 'office' ORDER BY sort_number");
-        if($getItems->rowCount() > 0){
-            $items = $getItems->fetchAll();
-        }
-        return $items;
-    }
-
-    public static function getRegions($lang_id)
-    {
-    	//$lang_id = 1;
-    	$pdo = DB::getPdo();
-        $items = [];
-        $getItems = $pdo->query("SELECT * FROM " . TB_INFORMATION . " WHERE type = 'region' AND language_id = " . (int)$lang_id . " ORDER BY sort_number");
-        if($getItems->rowCount() > 0){
-            $items = $getItems->fetchAll();
-        }
-        // foreach ($items as $key => $value) {
-        // 	$items[$key]['content'] = json_decode($value['content'], true);
-        // }
-        return $items;
-    }
-
-    public static function getRegion($id, $lang_id)
-    {
-    	//$lang_id = 1;
-    	$pdo = DB::getPdo();
-        $item = [];
-        $getItem = $pdo->query("SELECT * FROM " . TB_INFORMATION . " WHERE type = 'region' AND language_id = " . (int)$lang_id . " AND id = " . (int)$id);
-        if($getItem->rowCount() > 0){
-            $item = $getItem->fetch();
-        }
-        return $item;
-    }
 }

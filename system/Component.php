@@ -65,13 +65,13 @@ abstract class Component {
         }
 	}
 
-	protected function getOption($name) {
+	public function getOption($name) {
 		$option = (isset(self::$options[$name])) ? self::$options[$name] : $name;
         return $option;
 	}
 	
 	
-    protected function translation($name, $context = 'front', $lang = LANG_ID) {
+    public function translation($name, $context = 'front', $lang = LANG_ID) {
         $translation = $name;
         if(isset(self::$translations[$context][$lang][$name])){
             $translation = self::$translations[$context][$lang][$name];
@@ -95,20 +95,20 @@ abstract class Component {
         return $translation;
     }
 
-    protected function t($name, $context = 'front', $lang = LANG_ID) {
+    public function t($name, $context = 'front', $lang = LANG_ID) {
         return $this->translation($name, $context, $lang);
     }
-    protected function getTranslation($name, $context = 'back', $lang = LANG_ID) {
+    public function getTranslation($name, $context = 'back', $lang = LANG_ID) {
         return $this->translation($name, $context, $lang);
     }
 
-	protected function lang() {
+	public function lang() {
 		return self::$lang;
 	}
-	protected function hashPassword($password) {
+	public function hashPassword($password) {
 		return md5($this->config['params']['salt'] . $password);
 	}
-	protected function langDecode($arraySth = [], $langDecode = [], $multi = true, $curLang = false){
+	public function langDecode($arraySth = [], $langDecode = [], $multi = true, $curLang = false){
         if($multi){
             foreach($arraySth as $key => $value){
                 foreach($langDecode as $valueDecode){
@@ -131,7 +131,7 @@ abstract class Component {
         return $arraySth;
     }
 	
-	protected function showSize($f, $format = true) {
+	public function showSize($f, $format = true) {
         if(!file_exists($f)){
 			return 0;
 		}
@@ -219,7 +219,7 @@ abstract class Component {
     /**
 	 * return formatted price with getting parameters from db
 	 */
-    protected function formatPrice($price, $currency = 0){
+    public function formatPrice($price, $currency = 0){
         $decimals = 2;
         if(null !== $this->getOption('price_decimals')){
             $decimals = (int)$this->getOption('price_decimals');
@@ -246,7 +246,7 @@ abstract class Component {
     /**
      * redirect function
      */
-    protected function redirect($url, $statusCode = null)
+    public function redirect($url, $statusCode = null)
 	{
 	   header('Location: ' . $url, true, $statusCode);
 	   exit();

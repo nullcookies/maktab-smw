@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Сен 06 2018 г., 15:58
+-- Время создания: Сен 07 2018 г., 16:14
 -- Версия сервера: 5.5.45-log
 -- Версия PHP: 5.6.12
 
@@ -2805,10 +2805,10 @@ INSERT INTO `mktb_usergroup` (`id`, `alias`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `mktb_user_requests`
+-- Структура таблицы `mktb_user_request`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_user_requests` (
+CREATE TABLE IF NOT EXISTS `mktb_user_request` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
