@@ -252,6 +252,12 @@ abstract class Component {
 	   exit();
 	}
 
+    /**
+     * is ajax
+     */
+    public function isAjax() {
+        return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest';
+    }
 
 	
 }

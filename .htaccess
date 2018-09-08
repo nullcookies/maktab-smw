@@ -20,7 +20,7 @@ RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 
 #add slash at the end if not a real file
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !(.*)(/|\.(|jpe?g|png|gif|js|txt|css|xml|html|mp3|ogg))$
+RewriteCond %{REQUEST_URI} !(.*)(/|\.(|jpe?g|png|gif|JPE?G|PNG|GIF|js|txt|css|xml|rss|html|mp3|ogg|mp4|webm|ogv))$
 RewriteRule ^(.*[^/])$ $1/ [L]
 
 #redirect to the main script

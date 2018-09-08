@@ -204,6 +204,9 @@ $(document).ready(function () {
               //   d.page_order_dir = dataTableAjax.data('page-order-dir');
               // }
               // d.testControl = 'control';
+            },
+            error: function (xhr, error, thrown) {
+                // console.log(xhr);
             }
         }
 
@@ -420,6 +423,40 @@ $(document).ready(function () {
     }
     return false;
   });
+
+    $('body').on('click', '.request-send-btn', function(e){
+        e.preventDefault();
+        var elem = $(this);
+        if(elem.hasClass('disabled')){
+            return false;
+        }
+        var container = elem.parent();
+        var url = elem.data('target');
+        var id = elem.data('id');
+        var targetText = $('#request_target_' + id);
+        $.ajax({
+            beforeSend: function(){
+                elem.addClass('disabled');
+                targetText.html('<i class="fa fa-circle-o-notch fa-spin"></i>');
+            },
+            url: url
+        })
+        .done(function(data) {
+            if(data.success){
+                container.find('.request-send-btn').removeClass('active disabled').find('.fa-check').remove();
+                elem.addClass('active disabled').append('<i style="margin-left: 10px;" class="fa fa-check"></i>');
+                $('#request_target_' + data.id).html(data.text).focus();
+            }
+        })
+        .fail(function(data) {
+            //console.log(data);
+        })
+        .always(function(data) {
+            //console.log(data);
+            targetText.find('.fa-spin').remove();
+        });
+        return false;
+    });
   
   $('input.translit-from').on('input change', function(){
     var generateAlias = true;

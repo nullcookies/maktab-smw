@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.10
+-- version 4.4.15.7
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Сен 07 2018 г., 16:14
--- Версия сервера: 5.5.45-log
--- Версия PHP: 5.6.12
+-- Время создания: Сен 08 2018 г., 14:37
+-- Версия сервера: 5.6.31
+-- Версия PHP: 5.6.23
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `maktab_smw`
@@ -27,16 +27,15 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_banner` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `position` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `images` text NOT NULL,
   `sort_number` int(11) NOT NULL,
   `name` text NOT NULL,
-  `url` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `url` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -45,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `mktb_banner` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_brand` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
@@ -56,9 +55,8 @@ CREATE TABLE IF NOT EXISTS `mktb_brand` (
   `descr_full` text NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -67,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `mktb_brand` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `parent_category_id` int(11) NOT NULL,
   `category_type_id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
@@ -81,9 +79,8 @@ CREATE TABLE IF NOT EXISTS `mktb_category` (
   `descr_full` text NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -94,8 +91,7 @@ CREATE TABLE IF NOT EXISTS `mktb_category` (
 CREATE TABLE IF NOT EXISTS `mktb_category_name` (
   `category_id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`category_id`,`lang_id`)
+  `lang_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -105,13 +101,10 @@ CREATE TABLE IF NOT EXISTS `mktb_category_name` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_category_search` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `search_text` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `product_id` (`category_id`),
-  FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=63 ;
+  `search_text` text NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -120,15 +113,14 @@ CREATE TABLE IF NOT EXISTS `mktb_category_search` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_contact` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `type` tinyint(2) NOT NULL,
-  `date` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `date` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -137,13 +129,12 @@ CREATE TABLE IF NOT EXISTS `mktb_contact` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_file` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL,
   `sort_number` int(11) NOT NULL,
   `name` text NOT NULL,
-  `mime` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `mime` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_file`
@@ -161,8 +152,7 @@ INSERT INTO `mktb_file` (`id`, `path`, `sort_number`, `name`, `mime`) VALUES
 CREATE TABLE IF NOT EXISTS `mktb_file_name` (
   `file_id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`file_id`,`lang_id`)
+  `lang_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -179,10 +169,9 @@ INSERT INTO `mktb_file_name` (`file_id`, `name`, `lang_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_filter` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -192,8 +181,7 @@ CREATE TABLE IF NOT EXISTS `mktb_filter` (
 
 CREATE TABLE IF NOT EXISTS `mktb_filter_to_category` (
   `filter_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  PRIMARY KEY (`filter_id`,`category_id`)
+  `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -204,8 +192,7 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_to_category` (
 
 CREATE TABLE IF NOT EXISTS `mktb_filter_to_product` (
   `filter_value_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  PRIMARY KEY (`filter_value_id`,`product_id`)
+  `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -215,13 +202,12 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_to_product` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_filter_value` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
   `name` text NOT NULL,
   `color` varchar(255) NOT NULL,
-  `sort_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `sort_number` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -230,15 +216,14 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_value` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_year` smallint(4) NOT NULL,
   `end_year` smallint(4) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_group`
@@ -259,15 +244,14 @@ INSERT INTO `mktb_group` (`id`, `name`, `start_year`, `end_year`, `status`, `cre
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_lang` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
   `lang_prefix` varchar(255) NOT NULL,
   `icon` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `main` tinyint(1) NOT NULL,
-  `sort_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `sort_number` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_lang`
@@ -286,7 +270,7 @@ INSERT INTO `mktb_lang` (`id`, `name`, `lang_prefix`, `icon`, `status`, `main`, 
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_lesson` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `subject_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
@@ -294,9 +278,8 @@ CREATE TABLE IF NOT EXISTS `mktb_lesson` (
   `end_time` int(11) NOT NULL,
   `hometask` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=8 ;
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_lesson`
@@ -316,15 +299,14 @@ INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_module` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `access` int(11) NOT NULL,
   `sort_order` smallint(6) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `show_menu` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
+  `show_menu` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_module`
@@ -365,7 +347,8 @@ INSERT INTO `mktb_module` (`id`, `alias`, `name`, `access`, `sort_order`, `statu
 (34, 'student', 'Студенты', 3, 91, 1, 1),
 (35, 'group', 'Группы', 3, 80, 1, 1),
 (36, 'subject', 'Предметы', 3, 81, 1, 1),
-(37, 'study-period', 'Учебные периоды', 3, 83, 1, 1);
+(37, 'study-period', 'Учебные периоды', 3, 83, 1, 1),
+(38, 'user-request', 'Запросы', 3, 95, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -375,8 +358,7 @@ INSERT INTO `mktb_module` (`id`, `alias`, `name`, `access`, `sort_order`, `statu
 
 CREATE TABLE IF NOT EXISTS `mktb_module_to_usergroup` (
   `module_id` int(11) NOT NULL,
-  `usergroup_id` int(11) NOT NULL,
-  PRIMARY KEY (`usergroup_id`,`module_id`)
+  `usergroup_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -386,13 +368,12 @@ CREATE TABLE IF NOT EXISTS `mktb_module_to_usergroup` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `comment` varchar(255) NOT NULL,
-  `visible` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
+  `visible` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_option`
@@ -461,7 +442,7 @@ INSERT INTO `mktb_option` (`id`, `name`, `content`, `comment`, `visible`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `status` tinyint(2) NOT NULL,
   `new` tinyint(1) NOT NULL,
@@ -476,9 +457,8 @@ CREATE TABLE IF NOT EXISTS `mktb_order` (
   `dover_date` varchar(255) NOT NULL,
   `comment` text NOT NULL,
   `last_stock_change` varchar(255) NOT NULL,
-  `last_balance_change` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `last_balance_change` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -487,14 +467,13 @@ CREATE TABLE IF NOT EXISTS `mktb_order` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_order_change` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `new_status` tinyint(2) NOT NULL,
   `date` int(11) NOT NULL,
   `comment` varchar(2000) NOT NULL,
-  `customer_notified` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `customer_notified` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -503,7 +482,7 @@ CREATE TABLE IF NOT EXISTS `mktb_order_change` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `controller` varchar(255) NOT NULL,
   `method` varchar(255) NOT NULL,
   `side` varchar(255) NOT NULL,
@@ -517,9 +496,8 @@ CREATE TABLE IF NOT EXISTS `mktb_page` (
   `descr_full` text NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_page`
@@ -537,14 +515,13 @@ INSERT INTO `mktb_page` (`id`, `controller`, `method`, `side`, `layout`, `status
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_page_module` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `page_id` int(11) NOT NULL,
   `side` varchar(255) NOT NULL,
   `controller` varchar(255) NOT NULL,
   `action` varchar(255) NOT NULL,
-  `position` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `position` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -553,7 +530,7 @@ CREATE TABLE IF NOT EXISTS `mktb_page_module` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_post` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `type` tinyint(3) NOT NULL,
@@ -570,9 +547,8 @@ CREATE TABLE IF NOT EXISTS `mktb_post` (
   `views` int(11) NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -581,7 +557,7 @@ CREATE TABLE IF NOT EXISTS `mktb_post` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_product` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `category_type_id` int(11) NOT NULL,
   `brand_id` int(11) NOT NULL,
@@ -621,9 +597,8 @@ CREATE TABLE IF NOT EXISTS `mktb_product` (
   `date_modify` int(11) NOT NULL,
   `views` int(11) NOT NULL,
   `request_product` tinyint(1) NOT NULL DEFAULT '0',
-  `recommended` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `recommended` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -634,8 +609,7 @@ CREATE TABLE IF NOT EXISTS `mktb_product` (
 CREATE TABLE IF NOT EXISTS `mktb_product_name` (
   `product_id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`product_id`,`lang_id`)
+  `lang_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -645,11 +619,10 @@ CREATE TABLE IF NOT EXISTS `mktb_product_name` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_product_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `type` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `type` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -659,8 +632,7 @@ CREATE TABLE IF NOT EXISTS `mktb_product_option` (
 
 CREATE TABLE IF NOT EXISTS `mktb_product_option_to_product` (
   `product_option_value_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  PRIMARY KEY (`product_option_value_id`,`product_id`)
+  `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -670,14 +642,13 @@ CREATE TABLE IF NOT EXISTS `mktb_product_option_to_product` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_product_option_value` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `product_option_id` int(11) NOT NULL,
   `name` text NOT NULL,
   `price` decimal(11,2) NOT NULL,
   `file_id` int(11) NOT NULL,
-  `color` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `color` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -686,13 +657,10 @@ CREATE TABLE IF NOT EXISTS `mktb_product_option_value` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_product_search` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `search_text` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `product_id` (`product_id`),
-  FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
+  `search_text` text NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -701,7 +669,7 @@ CREATE TABLE IF NOT EXISTS `mktb_product_search` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_review` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -710,9 +678,8 @@ CREATE TABLE IF NOT EXISTS `mktb_review` (
   `rating` tinyint(1) NOT NULL,
   `date_add` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `new` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `new` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -721,15 +688,14 @@ CREATE TABLE IF NOT EXISTS `mktb_review` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_slider` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sort_number` int(11) NOT NULL,
   `name` text NOT NULL,
   `url` text NOT NULL,
-  `descr_full` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `descr_full` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -738,12 +704,11 @@ CREATE TABLE IF NOT EXISTS `mktb_slider` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_student_attendance` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `attended` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=29 ;
+  `attended` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_student_attendance`
@@ -771,12 +736,11 @@ INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attende
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_student_mark` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=29 ;
+  `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_student_mark`
@@ -805,8 +769,7 @@ INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
 
 CREATE TABLE IF NOT EXISTS `mktb_student_to_group` (
   `student_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`student_id`,`group_id`)
+  `group_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -818,7 +781,8 @@ INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
 (14, 3),
 (25, 3),
 (26, 1),
-(27, 6);
+(27, 6),
+(31, 3);
 
 -- --------------------------------------------------------
 
@@ -828,8 +792,7 @@ INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
 
 CREATE TABLE IF NOT EXISTS `mktb_student_to_user` (
   `student_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`student_id`,`user_id`)
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -839,15 +802,14 @@ CREATE TABLE IF NOT EXISTS `mktb_student_to_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_study_period` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `period` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_year` smallint(4) NOT NULL,
   `end_year` smallint(4) NOT NULL,
   `start_time` int(11) NOT NULL,
   `end_time` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_study_period`
@@ -866,11 +828,10 @@ INSERT INTO `mktb_study_period` (`id`, `period`, `start_year`, `end_year`, `star
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_subject` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=4 ;
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_subject`
@@ -889,8 +850,7 @@ INSERT INTO `mktb_subject` (`id`, `name`, `status`) VALUES
 
 CREATE TABLE IF NOT EXISTS `mktb_subject_to_teacher` (
   `subject_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  PRIMARY KEY (`subject_id`,`teacher_id`)
+  `teacher_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -909,12 +869,11 @@ INSERT INTO `mktb_subject_to_teacher` (`subject_id`, `teacher_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_subscribe` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `subscribe` tinyint(1) NOT NULL,
-  `type` tinyint(2) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `type` tinyint(2) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_subscribe`
@@ -930,11 +889,10 @@ INSERT INTO `mktb_subscribe` (`id`, `email`, `subscribe`, `type`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `lang_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -944,8 +902,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tag` (
 
 CREATE TABLE IF NOT EXISTS `mktb_tag_to_product` (
   `tag_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  PRIMARY KEY (`tag_id`,`product_id`)
+  `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -956,8 +913,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tag_to_product` (
 
 CREATE TABLE IF NOT EXISTS `mktb_teacher_to_group` (
   `teacher_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`teacher_id`,`group_id`)
+  `group_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -979,12 +935,11 @@ INSERT INTO `mktb_teacher_to_group` (`teacher_id`, `group_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_api_token` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `token` varchar(32) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `counter` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  `counter` int(11) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -993,14 +948,12 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_api_token` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_botan_shortener` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `id` bigint(20) unsigned NOT NULL COMMENT 'Unique identifier for this entry',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `url` text NOT NULL COMMENT 'Original URL',
   `short_url` char(255) NOT NULL DEFAULT '' COMMENT 'Shortened URL',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1015,12 +968,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_callback_query` (
   `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
   `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the message sent via the bot in inline mode, that originated the query',
   `data` char(255) NOT NULL DEFAULT '' COMMENT 'Data associated with the callback button',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `chat_id` (`chat_id`),
-  KEY `message_id` (`message_id`),
-  KEY `chat_id_2` (`chat_id`,`message_id`)
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1037,9 +985,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_chat` (
   `all_members_are_administrators` tinyint(1) DEFAULT '0' COMMENT 'True if a all members of this group are admins',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
-  `old_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier, this is filled when a group is converted to a supergroup',
-  PRIMARY KEY (`id`),
-  KEY `old_id` (`old_id`)
+  `old_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier, this is filled when a group is converted to a supergroup'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1049,16 +995,14 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_chat` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_chosen_inline_result` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `id` bigint(20) unsigned NOT NULL COMMENT 'Unique identifier for this entry',
   `result_id` char(255) NOT NULL DEFAULT '' COMMENT 'Identifier for this result',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `location` char(255) DEFAULT NULL COMMENT 'Location object, user''s location',
   `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the sent inline message',
   `query` text NOT NULL COMMENT 'The query that was used to obtain the result',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1067,19 +1011,15 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_chosen_inline_result` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_conversation` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `id` bigint(20) unsigned NOT NULL COMMENT 'Unique identifier for this entry',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique user or chat identifier',
   `status` enum('active','cancelled','stopped') NOT NULL DEFAULT 'active' COMMENT 'Conversation state',
   `command` varchar(160) DEFAULT '' COMMENT 'Default command to execute',
   `notes` text COMMENT 'Data stored from command',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `chat_id` (`chat_id`),
-  KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1088,20 +1028,15 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_conversation` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_edited_message` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `id` bigint(20) unsigned NOT NULL COMMENT 'Unique identifier for this entry',
   `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
   `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `edit_date` timestamp NULL DEFAULT NULL COMMENT 'Date the message was edited in timestamp format',
   `text` text COMMENT 'For text messages, the actual UTF-8 text of the message max message length 4096 char utf8',
   `entities` text COMMENT 'For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text',
-  `caption` text COMMENT 'For message with caption, the actual UTF-8 text of the caption',
-  PRIMARY KEY (`id`),
-  KEY `chat_id` (`chat_id`),
-  KEY `message_id` (`message_id`),
-  KEY `user_id` (`user_id`),
-  KEY `chat_id_2` (`chat_id`,`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `caption` text COMMENT 'For message with caption, the actual UTF-8 text of the caption'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1110,11 +1045,10 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_edited_message` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_file` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `file_id` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+  `url` varchar(255) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1123,15 +1057,14 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_file` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_information` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `type` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
-  `sort_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
+  `sort_number` int(11) NOT NULL
+) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1145,9 +1078,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_inline_query` (
   `location` char(255) DEFAULT NULL COMMENT 'Location of the user',
   `query` text NOT NULL COMMENT 'Text of the query',
   `offset` char(255) DEFAULT NULL COMMENT 'Offset of the result',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1190,17 +1121,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
   `channel_chat_created` tinyint(1) DEFAULT '0' COMMENT 'Informs that the channel chat has been created',
   `migrate_to_chat_id` bigint(20) DEFAULT NULL COMMENT 'Migrate to chat identifier. The group has been migrated to a supergroup with the specified identifier',
   `migrate_from_chat_id` bigint(20) DEFAULT NULL COMMENT 'Migrate from chat identifier. The supergroup has been migrated from a group with the specified identifier',
-  `pinned_message` text COMMENT 'Message object. Specified message was pinned',
-  PRIMARY KEY (`chat_id`,`id`),
-  KEY `user_id` (`user_id`),
-  KEY `forward_from` (`forward_from`),
-  KEY `forward_from_chat` (`forward_from_chat`),
-  KEY `reply_to_chat` (`reply_to_chat`),
-  KEY `reply_to_message` (`reply_to_message`),
-  KEY `left_chat_member` (`left_chat_member`),
-  KEY `migrate_from_chat_id` (`migrate_from_chat_id`),
-  KEY `migrate_to_chat_id` (`migrate_to_chat_id`),
-  KEY `reply_to_chat_2` (`reply_to_chat`,`reply_to_message`)
+  `pinned_message` text COMMENT 'Message object. Specified message was pinned'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1210,13 +1131,12 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_request_limiter` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+  `id` bigint(20) unsigned NOT NULL COMMENT 'Unique identifier for this entry',
   `chat_id` char(255) DEFAULT NULL COMMENT 'Unique chat identifier',
   `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the sent inline message',
   `method` char(255) DEFAULT NULL COMMENT 'Request method',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1225,11 +1145,9 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_request_limiter` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier',
-  `user_id` bigint(20) DEFAULT NULL COMMENT 'User ID',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `id` bigint(20) NOT NULL COMMENT 'Unique cart identifier',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'User ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1238,14 +1156,11 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart_item` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart item identifier',
+  `id` bigint(20) NOT NULL COMMENT 'Unique cart item identifier',
   `cart_id` bigint(20) NOT NULL COMMENT 'Cart identifier',
   `product_id` bigint(20) NOT NULL COMMENT 'Product identifier',
-  `quantity` int(10) NOT NULL COMMENT 'Product quantity in cart',
-  PRIMARY KEY (`id`),
-  KEY `cart_id` (`cart_id`),
-  KEY `product_id` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `quantity` int(10) NOT NULL COMMENT 'Product quantity in cart'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1254,15 +1169,14 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart_item` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier',
+  `id` bigint(20) NOT NULL COMMENT 'Unique cart identifier',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'User identifier',
   `date_created` int(11) NOT NULL COMMENT 'Date order placed timestamp',
   `total` decimal(15,2) NOT NULL COMMENT 'Order total price',
   `phone` char(255) DEFAULT '' COMMENT 'Phone number',
   `address` text NOT NULL COMMENT 'Order address',
-  `status` tinyint(2) NOT NULL COMMENT 'Order status',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `status` tinyint(2) NOT NULL COMMENT 'Order status'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1271,15 +1185,13 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order_item` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Order item identifier',
+  `id` bigint(20) NOT NULL COMMENT 'Order item identifier',
   `order_id` bigint(20) NOT NULL COMMENT 'Order identifier',
   `product_id` bigint(20) NOT NULL COMMENT 'Product identifier',
   `title` char(255) DEFAULT '' COMMENT 'Product title',
   `price` decimal(10,2) NOT NULL COMMENT 'Product price',
-  `quantity` int(10) NOT NULL COMMENT 'Product quantity in order',
-  PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `quantity` int(10) NOT NULL COMMENT 'Product quantity in order'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1288,14 +1200,13 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order_item` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_product` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique product identifier',
+  `id` bigint(20) NOT NULL COMMENT 'Unique product identifier',
   `price` decimal(10,2) NOT NULL COMMENT 'Product price',
   `title` char(255) DEFAULT '' COMMENT 'Product title',
   `description` varchar(5000) NOT NULL COMMENT 'Product description',
   `image_file_id` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `url` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1310,13 +1221,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_telegram_update` (
   `inline_query_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique inline query identifier',
   `chosen_inline_result_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local chosen inline result identifier',
   `callback_query_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique callback query identifier',
-  `edited_message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local edited message identifier',
-  PRIMARY KEY (`id`),
-  KEY `message_id` (`chat_id`,`message_id`),
-  KEY `inline_query_id` (`inline_query_id`),
-  KEY `chosen_inline_result_id` (`chosen_inline_result_id`),
-  KEY `callback_query_id` (`callback_query_id`),
-  KEY `edited_message_id` (`edited_message_id`)
+  `edited_message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local edited message identifier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1335,9 +1240,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_user` (
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
   `phone` varchar(255) NOT NULL DEFAULT '',
-  `language_id` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  KEY `username` (`username`)
+  `language_id` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1348,9 +1251,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_user` (
 
 CREATE TABLE IF NOT EXISTS `mktb_tgbot_user_chat` (
   `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user identifier',
-  `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier',
-  PRIMARY KEY (`user_id`,`chat_id`),
-  KEY `chat_id` (`chat_id`)
+  `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1360,13 +1261,12 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_user_chat` (
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_translation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `lang` tinyint(2) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
-  `context` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1302 ;
+  `context` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1318 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -2192,8 +2092,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (831, 1, 'gift certificates', 'Подарочные сертификаты', 'front'),
 (832, 1, 'our promotions', 'Наши акции', 'front'),
 (833, 1, 'terms of payment', 'Условия оплаты', 'front'),
-(834, 1, 'shipping policy', 'Условия доставки', 'front');
-INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALUES
+(834, 1, 'shipping policy', 'Условия доставки', 'front'),
 (835, 1, 'return policy', 'Условия возврата', 'front'),
 (836, 1, 'privacy policy', 'Конфиденциальность', 'front'),
 (837, 1, 'certificates and partners', 'Сертификаты и партнеры', 'front'),
@@ -2342,7 +2241,8 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (982, 1, 'file category product', 'Продукт', 'back'),
 (983, 1, 'file category category', 'Категория', 'back'),
 (984, 1, 'file category brand', 'Бренд', 'back'),
-(985, 1, 'file category post', 'Запись', 'back'),
+(985, 1, 'file category post', 'Запись', 'back');
+INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALUES
 (986, 1, 'edit gallery file', 'Редактировать файл', 'back'),
 (987, 1, 'gallery', 'Галерея', 'back'),
 (988, 1, 'gallery name', 'Название (альт)', 'back'),
@@ -2471,7 +2371,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1112, 1, 'customer notified', 'customer notified', 'back'),
 (1113, 1, 'shopping cart', 'shopping cart', 'front'),
 (1114, 1, 'success delete page', 'Успешное удаление', 'back'),
-(1115, 1, 'error min username length', 'error min username length', 'front'),
+(1115, 1, 'error min username length', 'Минимальная длина имени пользователя', 'front'),
 (1116, 1, 'register btn', 'register btn', 'front'),
 (1117, 1, 'error accept rules and privacy policy', 'error accept rules and privacy policy', 'front'),
 (1118, 2, 'view category', 'view category', 'front'),
@@ -2650,7 +2550,19 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1298, 1, 'subjects', 'subjects', 'front'),
 (1299, 1, 'groups', 'groups', 'front'),
 (1300, 1, 'teacher subjects', 'Предметы учителя', 'front'),
-(1301, 1, 'teacher groups', 'Классы учителя', 'front');
+(1301, 1, 'teacher groups', 'Классы учителя', 'front'),
+(1302, 1, 'user-request page', 'Запросы', 'back'),
+(1303, 1, 'user-request list', 'Список запросов', 'back'),
+(1305, 1, 'type', 'type', 'back'),
+(1306, 1, 'target', 'target', 'back'),
+(1308, 1, 'user_request_type add student to user', 'Добавить ученика к пользователю', 'back'),
+(1309, 1, 'user_request_status 0', 'Ожидание', 'back'),
+(1310, 1, 'user_request_status -1', 'Отказать', 'back'),
+(1311, 1, 'user_request_status 1', 'Принять', 'back'),
+(1312, 1, 'user_request_status_result 0', 'В ожидании', 'back'),
+(1314, 1, 'user_request_status_result 1', 'Принято', 'back'),
+(1316, 1, 'user_request_status_result -1', 'Отказано', 'back'),
+(1317, 1, 'menu user-request', 'Запросы', 'back');
 
 -- --------------------------------------------------------
 
@@ -2659,13 +2571,10 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_url` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `alias` varchar(255) NOT NULL,
-  `route` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `url` (`alias`),
-  UNIQUE KEY `route` (`route`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=554 ;
+  `route` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=554 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_url`
@@ -2684,7 +2593,7 @@ INSERT INTO `mktb_url` (`id`, `alias`, `route`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(32) NOT NULL,
   `usergroup` smallint(6) NOT NULL DEFAULT '10',
@@ -2724,29 +2633,30 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   `activationkey` varchar(32) NOT NULL,
   `last_login` int(11) NOT NULL,
   `last_ip` varchar(255) NOT NULL,
-  `phpsessid` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+  `phpsessid` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_user`
 --
 
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
-(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1536056135, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1536056135, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1536060607, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1536060607, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1536059312, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1536059312, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
+(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1536392938, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1536392938, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
+(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1536395195, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1536395195, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
+(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1536058863, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1536058863, '83.221.181.130', 'uctk104jobh01hfp8i4ak0rh43'),
 (12, 'sodiqov-abdulla', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 1535626386, 0, '', 179085600, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535626118, 0, '', 1230750000, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535626106, 1535375356, '', 1230836400, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(15, 'kd1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'kd1@test.com', '', 1, '', '', '', '', 1534576158, 1536056461, 0, '', -21600, 0, '', 'Dilshod', 'Karimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(15, 'kd1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'kd1@test.com', '', 1, '', '', '', '', 1534576158, 0, 0, '', 0, 0, '', 'Dilshod', 'Karimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (22, 'test2', '0992a103ec11bc5618c10f2cc7d5c775', 10, '', '', 1, '', '', '', '', 1534598344, 1534598344, 0, '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (24, 'test3', '0992a103ec11bc5618c10f2cc7d5c775', 5, '', '', 1, '', '', '', '', 1535011435, 1535193943, 1535194265, '', 0, 0, '', 'test3', 'test3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '5050', 0, '', '', 1535194265, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
 (25, 'xamidova-zilola-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535282739, 1535626141, 0, '', 1236020400, 0, '', 'Zilola', 'Xamidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (26, 'test-student-2010', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535283043, 1535626130, 0, '', 1272654000, 0, '', 'student', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (27, 'abdurahimov-abdurayim', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535626765, 1535626765, 0, '', 1, 0, '', 'Abdurayim', 'Abdurahimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(28, 'test', '5a5b2fccb9259c5975a0c6c7de7e0cb7', 10, '', '', 1, '', '', '', '', 1535630559, 1535630665, 0, '', 431802000, 0, '', 'test', 'test', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
+(28, 'test', '5a5b2fccb9259c5975a0c6c7de7e0cb7', 10, '', '', 1, '', '', '', '', 1535630559, 1535630665, 0, '', 431802000, 0, '', 'test', 'test', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(29, '+998911667886', 'fd1710261f03135079fde2be41b053ae', 10, '', '', 1, '', '', '', '', 1536029265, 1536029265, 0, '', 0, 0, '', 'KLeoPaTRa', '123', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(30, '+998908081239', '5b87692dd9f3b3e83123efc98ea15d6f', 10, '', '', 1, '', '', '', '', 1536061331, 1536062176, 0, '', 1, 0, '', 'Ulugbek', 'Yusupxodjayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(31, 'abdullayeva-durdona', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1536324603, 1536324603, 0, '', 1252436400, 0, '', 'Durdona', 'Abdullayeva', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
 
 -- --------------------------------------------------------
 
@@ -2755,7 +2665,7 @@ INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `ra
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_usercontract` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `contract_year` smallint(4) NOT NULL,
   `contract_number` varchar(255) NOT NULL,
@@ -2763,9 +2673,8 @@ CREATE TABLE IF NOT EXISTS `mktb_usercontract` (
   `quarter_2` text NOT NULL,
   `quarter_3` text NOT NULL,
   `quarter_4` text NOT NULL,
-  `price` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `price` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_usercontract`
@@ -2783,11 +2692,10 @@ INSERT INTO `mktb_usercontract` (`id`, `user_id`, `contract_year`, `contract_num
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_usergroup` (
-  `id` tinyint(2) NOT NULL AUTO_INCREMENT,
+  `id` tinyint(2) NOT NULL,
   `alias` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_usergroup`
@@ -2809,14 +2717,20 @@ INSERT INTO `mktb_usergroup` (`id`, `alias`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `mktb_user_request` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `target_id` int(11) NOT NULL,
   `date` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1 ;
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `mktb_user_request`
+--
+
+INSERT INTO `mktb_user_request` (`id`, `user_id`, `type`, `target_id`, `date`, `status`) VALUES
+(1, 30, 'add student to user', 31, 1536386009, -1);
 
 -- --------------------------------------------------------
 
@@ -2825,7 +2739,7 @@ CREATE TABLE IF NOT EXISTS `mktb_user_request` (
 --
 
 CREATE TABLE IF NOT EXISTS `transactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `paycom_transaction_id` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `paycom_time` varchar(13) COLLATE utf8_unicode_ci NOT NULL,
   `paycom_time_datetime` datetime NOT NULL,
@@ -2836,10 +2750,723 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `state` tinyint(2) NOT NULL,
   `reason` tinyint(2) DEFAULT NULL,
   `receivers` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'JSON array of receivers',
-  `order_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `order_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `mktb_banner`
+--
+ALTER TABLE `mktb_banner`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_brand`
+--
+ALTER TABLE `mktb_brand`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_category`
+--
+ALTER TABLE `mktb_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_category_name`
+--
+ALTER TABLE `mktb_category_name`
+  ADD PRIMARY KEY (`category_id`,`lang_id`);
+
+--
+-- Индексы таблицы `mktb_category_search`
+--
+ALTER TABLE `mktb_category_search`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_id` (`category_id`),
+  ADD FULLTEXT KEY `search_text` (`search_text`);
+
+--
+-- Индексы таблицы `mktb_contact`
+--
+ALTER TABLE `mktb_contact`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_file`
+--
+ALTER TABLE `mktb_file`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_file_name`
+--
+ALTER TABLE `mktb_file_name`
+  ADD PRIMARY KEY (`file_id`,`lang_id`);
+
+--
+-- Индексы таблицы `mktb_filter`
+--
+ALTER TABLE `mktb_filter`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_filter_to_category`
+--
+ALTER TABLE `mktb_filter_to_category`
+  ADD PRIMARY KEY (`filter_id`,`category_id`);
+
+--
+-- Индексы таблицы `mktb_filter_to_product`
+--
+ALTER TABLE `mktb_filter_to_product`
+  ADD PRIMARY KEY (`filter_value_id`,`product_id`);
+
+--
+-- Индексы таблицы `mktb_filter_value`
+--
+ALTER TABLE `mktb_filter_value`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_group`
+--
+ALTER TABLE `mktb_group`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_lang`
+--
+ALTER TABLE `mktb_lang`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_lesson`
+--
+ALTER TABLE `mktb_lesson`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_module`
+--
+ALTER TABLE `mktb_module`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_module_to_usergroup`
+--
+ALTER TABLE `mktb_module_to_usergroup`
+  ADD PRIMARY KEY (`usergroup_id`,`module_id`);
+
+--
+-- Индексы таблицы `mktb_option`
+--
+ALTER TABLE `mktb_option`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_order`
+--
+ALTER TABLE `mktb_order`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_order_change`
+--
+ALTER TABLE `mktb_order_change`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_page`
+--
+ALTER TABLE `mktb_page`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_page_module`
+--
+ALTER TABLE `mktb_page_module`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_post`
+--
+ALTER TABLE `mktb_post`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product`
+--
+ALTER TABLE `mktb_product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product_name`
+--
+ALTER TABLE `mktb_product_name`
+  ADD PRIMARY KEY (`product_id`,`lang_id`);
+
+--
+-- Индексы таблицы `mktb_product_option`
+--
+ALTER TABLE `mktb_product_option`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product_option_to_product`
+--
+ALTER TABLE `mktb_product_option_to_product`
+  ADD PRIMARY KEY (`product_option_value_id`,`product_id`);
+
+--
+-- Индексы таблицы `mktb_product_option_value`
+--
+ALTER TABLE `mktb_product_option_value`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product_search`
+--
+ALTER TABLE `mktb_product_search`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_id` (`product_id`),
+  ADD FULLTEXT KEY `search_text` (`search_text`);
+
+--
+-- Индексы таблицы `mktb_review`
+--
+ALTER TABLE `mktb_review`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_slider`
+--
+ALTER TABLE `mktb_slider`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_student_attendance`
+--
+ALTER TABLE `mktb_student_attendance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_student_mark`
+--
+ALTER TABLE `mktb_student_mark`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_student_to_group`
+--
+ALTER TABLE `mktb_student_to_group`
+  ADD PRIMARY KEY (`student_id`,`group_id`);
+
+--
+-- Индексы таблицы `mktb_student_to_user`
+--
+ALTER TABLE `mktb_student_to_user`
+  ADD PRIMARY KEY (`student_id`,`user_id`);
+
+--
+-- Индексы таблицы `mktb_study_period`
+--
+ALTER TABLE `mktb_study_period`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_subject`
+--
+ALTER TABLE `mktb_subject`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_subject_to_teacher`
+--
+ALTER TABLE `mktb_subject_to_teacher`
+  ADD PRIMARY KEY (`subject_id`,`teacher_id`);
+
+--
+-- Индексы таблицы `mktb_subscribe`
+--
+ALTER TABLE `mktb_subscribe`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tag`
+--
+ALTER TABLE `mktb_tag`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tag_to_product`
+--
+ALTER TABLE `mktb_tag_to_product`
+  ADD PRIMARY KEY (`tag_id`,`product_id`);
+
+--
+-- Индексы таблицы `mktb_teacher_to_group`
+--
+ALTER TABLE `mktb_teacher_to_group`
+  ADD PRIMARY KEY (`teacher_id`,`group_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_api_token`
+--
+ALTER TABLE `mktb_tgbot_api_token`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_botan_shortener`
+--
+ALTER TABLE `mktb_tgbot_botan_shortener`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_callback_query`
+--
+ALTER TABLE `mktb_tgbot_callback_query`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `message_id` (`message_id`),
+  ADD KEY `chat_id_2` (`chat_id`,`message_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_chat`
+--
+ALTER TABLE `mktb_tgbot_chat`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `old_id` (`old_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_chosen_inline_result`
+--
+ALTER TABLE `mktb_tgbot_chosen_inline_result`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_conversation`
+--
+ALTER TABLE `mktb_tgbot_conversation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `status` (`status`);
+
+--
+-- Индексы таблицы `mktb_tgbot_edited_message`
+--
+ALTER TABLE `mktb_tgbot_edited_message`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `message_id` (`message_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `chat_id_2` (`chat_id`,`message_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_file`
+--
+ALTER TABLE `mktb_tgbot_file`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_information`
+--
+ALTER TABLE `mktb_tgbot_information`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_inline_query`
+--
+ALTER TABLE `mktb_tgbot_inline_query`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_message`
+--
+ALTER TABLE `mktb_tgbot_message`
+  ADD PRIMARY KEY (`chat_id`,`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `forward_from` (`forward_from`),
+  ADD KEY `forward_from_chat` (`forward_from_chat`),
+  ADD KEY `reply_to_chat` (`reply_to_chat`),
+  ADD KEY `reply_to_message` (`reply_to_message`),
+  ADD KEY `left_chat_member` (`left_chat_member`),
+  ADD KEY `migrate_from_chat_id` (`migrate_from_chat_id`),
+  ADD KEY `migrate_to_chat_id` (`migrate_to_chat_id`),
+  ADD KEY `reply_to_chat_2` (`reply_to_chat`,`reply_to_message`);
+
+--
+-- Индексы таблицы `mktb_tgbot_request_limiter`
+--
+ALTER TABLE `mktb_tgbot_request_limiter`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_cart`
+--
+ALTER TABLE `mktb_tgbot_store_cart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_cart_item`
+--
+ALTER TABLE `mktb_tgbot_store_cart_item`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cart_id` (`cart_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_order`
+--
+ALTER TABLE `mktb_tgbot_store_order`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_order_item`
+--
+ALTER TABLE `mktb_tgbot_store_order_item`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_product`
+--
+ALTER TABLE `mktb_tgbot_store_product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_telegram_update`
+--
+ALTER TABLE `mktb_tgbot_telegram_update`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `message_id` (`chat_id`,`message_id`),
+  ADD KEY `inline_query_id` (`inline_query_id`),
+  ADD KEY `chosen_inline_result_id` (`chosen_inline_result_id`),
+  ADD KEY `callback_query_id` (`callback_query_id`),
+  ADD KEY `edited_message_id` (`edited_message_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_user`
+--
+ALTER TABLE `mktb_tgbot_user`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`);
+
+--
+-- Индексы таблицы `mktb_tgbot_user_chat`
+--
+ALTER TABLE `mktb_tgbot_user_chat`
+  ADD PRIMARY KEY (`user_id`,`chat_id`),
+  ADD KEY `chat_id` (`chat_id`);
+
+--
+-- Индексы таблицы `mktb_translation`
+--
+ALTER TABLE `mktb_translation`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_url`
+--
+ALTER TABLE `mktb_url`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `url` (`alias`),
+  ADD UNIQUE KEY `route` (`route`);
+
+--
+-- Индексы таблицы `mktb_user`
+--
+ALTER TABLE `mktb_user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Индексы таблицы `mktb_usercontract`
+--
+ALTER TABLE `mktb_usercontract`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_usergroup`
+--
+ALTER TABLE `mktb_usergroup`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_user_request`
+--
+ALTER TABLE `mktb_user_request`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT для сохранённых таблиц
+--
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_banner`
+--
+ALTER TABLE `mktb_banner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_brand`
+--
+ALTER TABLE `mktb_brand`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_category`
+--
+ALTER TABLE `mktb_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_category_search`
+--
+ALTER TABLE `mktb_category_search`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=63;
+--
+-- AUTO_INCREMENT для таблицы `mktb_contact`
+--
+ALTER TABLE `mktb_contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_file`
+--
+ALTER TABLE `mktb_file`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT для таблицы `mktb_filter`
+--
+ALTER TABLE `mktb_filter`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_filter_value`
+--
+ALTER TABLE `mktb_filter_value`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_group`
+--
+ALTER TABLE `mktb_group`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблицы `mktb_lang`
+--
+ALTER TABLE `mktb_lang`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблицы `mktb_lesson`
+--
+ALTER TABLE `mktb_lesson`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT для таблицы `mktb_module`
+--
+ALTER TABLE `mktb_module`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=39;
+--
+-- AUTO_INCREMENT для таблицы `mktb_option`
+--
+ALTER TABLE `mktb_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
+--
+-- AUTO_INCREMENT для таблицы `mktb_order`
+--
+ALTER TABLE `mktb_order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_order_change`
+--
+ALTER TABLE `mktb_order_change`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_page`
+--
+ALTER TABLE `mktb_page`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+--
+-- AUTO_INCREMENT для таблицы `mktb_page_module`
+--
+ALTER TABLE `mktb_page_module`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_post`
+--
+ALTER TABLE `mktb_post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_product`
+--
+ALTER TABLE `mktb_product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_product_option`
+--
+ALTER TABLE `mktb_product_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_product_option_value`
+--
+ALTER TABLE `mktb_product_option_value`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_product_search`
+--
+ALTER TABLE `mktb_product_search`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=42;
+--
+-- AUTO_INCREMENT для таблицы `mktb_review`
+--
+ALTER TABLE `mktb_review`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_slider`
+--
+ALTER TABLE `mktb_slider`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_student_attendance`
+--
+ALTER TABLE `mktb_student_attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+--
+-- AUTO_INCREMENT для таблицы `mktb_student_mark`
+--
+ALTER TABLE `mktb_student_mark`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+--
+-- AUTO_INCREMENT для таблицы `mktb_study_period`
+--
+ALTER TABLE `mktb_study_period`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблицы `mktb_subject`
+--
+ALTER TABLE `mktb_subject`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблицы `mktb_subscribe`
+--
+ALTER TABLE `mktb_subscribe`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `mktb_tag`
+--
+ALTER TABLE `mktb_tag`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_api_token`
+--
+ALTER TABLE `mktb_tgbot_api_token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_botan_shortener`
+--
+ALTER TABLE `mktb_tgbot_botan_shortener`
+  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_chosen_inline_result`
+--
+ALTER TABLE `mktb_tgbot_chosen_inline_result`
+  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_conversation`
+--
+ALTER TABLE `mktb_tgbot_conversation`
+  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_edited_message`
+--
+ALTER TABLE `mktb_tgbot_edited_message`
+  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_file`
+--
+ALTER TABLE `mktb_tgbot_file`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_information`
+--
+ALTER TABLE `mktb_tgbot_information`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66;
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_request_limiter`
+--
+ALTER TABLE `mktb_tgbot_request_limiter`
+  MODIFY `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_cart`
+--
+ALTER TABLE `mktb_tgbot_store_cart`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_cart_item`
+--
+ALTER TABLE `mktb_tgbot_store_cart_item`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart item identifier';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_order`
+--
+ALTER TABLE `mktb_tgbot_store_order`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_order_item`
+--
+ALTER TABLE `mktb_tgbot_store_order_item`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Order item identifier';
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_product`
+--
+ALTER TABLE `mktb_tgbot_store_product`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique product identifier';
+--
+-- AUTO_INCREMENT для таблицы `mktb_translation`
+--
+ALTER TABLE `mktb_translation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=1318;
+--
+-- AUTO_INCREMENT для таблицы `mktb_url`
+--
+ALTER TABLE `mktb_url`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=554;
+--
+-- AUTO_INCREMENT для таблицы `mktb_user`
+--
+ALTER TABLE `mktb_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=32;
+--
+-- AUTO_INCREMENT для таблицы `mktb_usercontract`
+--
+ALTER TABLE `mktb_usercontract`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблицы `mktb_usergroup`
+--
+ALTER TABLE `mktb_usergroup`
+  MODIFY `id` tinyint(2) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT для таблицы `mktb_user_request`
+--
+ALTER TABLE `mktb_user_request`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --

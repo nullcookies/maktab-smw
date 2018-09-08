@@ -66,7 +66,7 @@ class Controller extends Component {
 
 
 
-    public function json($data) {
+    public function json($data, $return = false) {
         header("Content-Type: application/json;charset=utf-8");
 
         // Collect what you need in the $data variable.
@@ -77,6 +77,9 @@ class Controller extends Component {
                 $json = '{"jsonError": "unknown"}';
             }
             http_response_code(500);
+        }
+        if($return){
+            return $json;
         }
         echo $json;
         exit;
