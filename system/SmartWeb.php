@@ -2,6 +2,8 @@
 
 namespace system;
 
+use \models\objects\User;
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class SmartWeb extends Component {
@@ -32,16 +34,24 @@ class SmartWeb extends Component {
     }
     
     public function run(){
+
+        mb_internal_encoding("UTF-8");
+
         session_start();
         
         if(!isset($_SESSION['stock'])){
             $_SESSION['stock'] = 1;
         }
 
-        mb_internal_encoding("UTF-8");
+        $user = new User();
+        // if(!empty($_COOKIE['AUTH']) && $user->findByAuthkey($_COOKIE['AUTH'])){
+        //     $result = $user->login();
+        // }
+
+        
         date_default_timezone_set($this->config['timezone']);
-        //var_dump($_COOKIE);
-        //var_dump($_SESSION);
+        // var_dump($_COOKIE);
+        // var_dump($_SESSION);
         $pageParams = $this->router->parseUrl();
         $this->page->get($pageParams);
     }

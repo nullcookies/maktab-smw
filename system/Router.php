@@ -151,7 +151,8 @@ class Router extends Component {
 
         //контроллер
         if(!empty($urlPieces[0])){
-            $this->controller = array_shift($urlPieces);
+            $getController = array_shift($urlPieces);
+            $this->controller = $this->toCamelCase($getController);
         }
         else{
             $this->controller = $this->getOption('default_controller');
@@ -159,7 +160,8 @@ class Router extends Component {
 
         //метод
         if(!empty($urlPieces[0])){
-            $this->action = array_shift($urlPieces);
+            $getAction = array_shift($urlPieces);
+            $this->action = $this->toCamelCase($getAction);
         }
         else{
             $this->action = $this->getOption('default_action');
