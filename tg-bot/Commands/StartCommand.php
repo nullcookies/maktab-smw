@@ -70,7 +70,6 @@ class StartCommand extends SystemCommand
         $user_id = $message->getFrom()->getId();
         $text    = trim($message->getText(true));
 
-
         //set language
         if(stripos($text, 'set_language_') === 0){
             $get_lang_id = explode('_', $text);
@@ -292,7 +291,7 @@ class StartCommand extends SystemCommand
     {
 
         $keyboard = new Keyboard(
-            [self::t($lang_id, 'button_my_children'), self::t($lang_id, 'button_view_contacts')],
+            [self::t($lang_id, 'button_my_students'), self::t($lang_id, 'button_view_contacts')],
             [self::t($lang_id, 'button_feedback'), self::t($lang_id, 'button_others')]
         );
 

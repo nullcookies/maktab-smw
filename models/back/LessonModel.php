@@ -1,39 +1,58 @@
 <?php
 
-namespace models\front;
+namespace models\back;
 
 use \system\Document;
 use \system\Model;
 use \models\objects\Lesson;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class LessonModel extends Model {
+class LessonModel extends Model 
+{
     
-    public function index(){
+    public function index()
+    {
+        
         $data = [];
+
+        $breadcrumbs = [];
+        $breadcrumbs[] = [
+            'name' => $this->t('main page', 'back'),
+            'url' => $this->linker->getAdminUrl()
+        ];
+        $breadcrumbs[] = [
+            'name' => $this->t($this->control . ' page', 'back'),
+            'url' => 'active'
+        ];
+
+        $data['breadcrumbs'] = $breadcrumbs;
+        
         $this->document = new Document();
+        $this->document->title = $this->t('control panel', 'back') . ' - ' . $this->t($this->control . ' page', 'back');
 
-        $mediumIconW = (int)$this->getOption('icon_medium_w');
-        $mediumIconH = (int)$this->getOption('icon_medium_h');
-
-        $postIconW = (int)$this->getOption('icon_post_w');
-        $postIconH = (int)$this->getOption('icon_post_h');
-        if(!$postIconW){
-            $postIconW = $mediumIconW;
-        }
-        if(!$postIconH){
-            $postIconH = $mediumIconH;
-        }
-
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.css');
+        
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/jquery.dataTables.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datatables/dataTables.bootstrap.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/mixitup-3/dist/mixitup.min.js');
+        
         $controls = [];
-        $controls['list_ajax'] = $this->linker->getUrl('lesson/list_ajax');
-        $controls['view'] = $this->linker->getUrl('lesson/view');
-        $controls['delete'] = $this->linker->getUrl('lesson/delete');
+        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
+        $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
         $data['controls'] = $controls;
 
+        $dataTableAjaxParams = [];
+        $dataTableAjaxParams['page-start'] = (!empty($_GET['page_start'])) ? $_GET['page_start'] : '';
+        $dataTableAjaxParams['page-length'] = (!empty($_GET['page_length'])) ? $_GET['page_length'] : '';
+        $dataTableAjaxParams['page-order-column'] = (!empty($_GET['page_order_column'])) ? $_GET['page_order_column'] : '';
+        $dataTableAjaxParams['page-order-dir'] = (!empty($_GET['page_order_dir'])) ? $_GET['page_order_dir'] : '';
+        $data['dataTableAjaxParams'] = $dataTableAjaxParams;
+
         $groups = [];
-        $getGroups = $this->qb->select('g.*')->where('t2g.teacher_id', '?')->join('??teacher_to_group t2g', 't2g.group_id = g.id')->get('??group g', [$_SESSION['user_id']]);
+        $getGroups = $this->qb->get('??group');
         if($getGroups->rowCount() > 0){
             $groups = $getGroups->fetchAll();
             foreach ($groups as $key => $value) {
@@ -43,7 +62,7 @@ class LessonModel extends Model {
         $data['groups'] = $groups;
 
         $subjects = [];
-        $getSubjects = $this->qb->select('s.*')->where('s2t.teacher_id', '?')->join('??subject_to_teacher s2t', 's2t.subject_id = s.id')->get('??subject s', [$_SESSION['user_id']]);
+        $getSubjects = $this->qb->get('??subject');
         if($getSubjects->rowCount() > 0){
             $subjects = $getSubjects->fetchAll();
         }
@@ -63,16 +82,16 @@ class LessonModel extends Model {
         $data = [];
 
         $controls = [];
-        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax');
-        $controls['view'] = $this->linker->getUrl($this->control . '/view');
-        $controls['delete'] = $this->linker->getUrl($this->control . '/delete');
+        $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
+        $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
         $data['controls'] = $controls;
 
         $_POST = $this->cleanForm($_POST);
 
         $data['draw'] = (int)$_POST['draw'];
 
-        $totalRows = $this->qb->select('id')->where('teacher_id', $_SESSION['user_id'])->count('??lesson');
+        $totalRows = $this->qb->select('id')->count('??lesson');
         $data['recordsTotal'] = $totalRows;
 
         $offset = (int)$_POST['start'];
@@ -129,7 +148,6 @@ class LessonModel extends Model {
         $search = $_POST['search']['value'];
         $searchText = substr($search, 0, 65536);
 
-
         if($searchText){
         	//todo: search by group name preg
         	$search_where = " ( ";
@@ -170,7 +188,7 @@ class LessonModel extends Model {
 
             $search_where .= " ) ";
 
-            $querySearch = 'SELECT l.id FROM ??lesson l LEFT JOIN ??group g on l.group_id = g.id LEFT JOIN ??subject s on l.subject_id = s.id WHERE ' . $search_where . ' AND l.teacher_id = ' . $_SESSION['user_id'] . ' GROUP BY l.id ';
+            $querySearch = 'SELECT l.id FROM ??lesson l LEFT JOIN ??group g on l.group_id = g.id LEFT JOIN ??subject s on l.subject_id = s.id WHERE ' . $search_where . ' GROUP BY l.id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -180,9 +198,8 @@ class LessonModel extends Model {
 
         $query = 'SELECT l.*, g.name g_name, g.start_year g_start_year, g.end_year g_end_year, s.name s_name FROM ??lesson l LEFT JOIN ??group g on l.group_id = g.id LEFT JOIN ??subject s on l.subject_id = s.id  ';
 
-        $query .= ' WHERE l.teacher_id = ' . $_SESSION['user_id'] . ' ';
         if($searchText){
-            $query .= ' AND ' . $search_where;
+            $query .= ' WHERE ' . $search_where;
         }
         $query .= ' GROUP BY l.id ';
         $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
@@ -204,11 +221,11 @@ class LessonModel extends Model {
             $itemsDataRow[1] = $this->getGrade($value['g_start_year'], $value['g_end_year']) . ' - ' . $value['g_name'];
             $itemsDataRow[2] = $value['s_name'];
             $itemsDataRow[3] = date('d-m-Y H:i', $value['start_time']);
-            $itemsDataRow[4] = '<a class="btn btn-info entry-edit-btn" title="' . $this->t('edit', 'front') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+            $itemsDataRow[4] = '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
                                     '</a> ' . 
-                                    '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" title="' . $this->t('delete', 'front') . '" data-confirm-text="' . $this->t('are you sure?', 'front') . '" >' . 
-                                        '<i class="fa fa-trash-o"></i>' . 
+                                    '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
+                                        '<i title="' . $this->t('btn delete', 'back') . '" class="fa fa-trash-o"></i>' . 
                                     '</a>';
             $itemsData[] = $itemsDataRow;
         }
@@ -222,33 +239,71 @@ class LessonModel extends Model {
         return $this;
     }
     
-    public function view(){
+    public function view()
+    {
 
     	$id = !empty($_GET['id']) ? (int)$_GET['id'] : (!empty($_POST['lesson']['id']) ? (int)$_POST['lesson']['id'] : 0);
         
         $lesson = new Lesson();
+
         if($id){
             $lesson->find($id);
         }
 
 
         $data = [];
+
+        $breadcrumbs = [];
+        $breadcrumbs[] = [
+            'name' => $this->t('main page', 'back'),
+            'url' => $this->linker->getAdminUrl()
+        ];
+        $breadcrumbs[] = [
+            'name' => $this->t($this->control . ' page', 'back'),
+            'url' => $this->linker->getUrl($this->control, true)
+        ];
+        $breadcrumbs[] = [
+            'name' => $this->t('view ' . $this->control, 'back'),
+            'url' => 'active'
+        ];
+
+        $data['breadcrumbs'] = $breadcrumbs;
+
         $this->document = new Document();
+        $this->document->title = $this->t('control panel', 'back') . ' - ' . $this->t($this->control, 'back');
 
-        $mediumIconW = (int)$this->getOption('icon_medium_w');
-        $mediumIconH = (int)$this->getOption('icon_medium_h');
-
-        $postIconW = (int)$this->getOption('icon_post_w');
-        $postIconH = (int)$this->getOption('icon_post_h');
-        if(!$postIconW){
-            $postIconW = $mediumIconW;
-        }
-        if(!$postIconH){
-            $postIconH = $mediumIconH;
-        }
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/datepicker/datepicker3.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/iCheck/all.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/select2/select2.min.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/css/fileinput.css');
+        $this->document->addStyle(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.css');
+        
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/select2/select2.full.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/min/moment.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/moment/locale/'.LANG_PREFIX.'.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/daterangepicker/daterangepicker.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/bootstrap-datepicker.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/datepicker/locales/bootstrap-datepicker.' . LANG_PREFIX . '.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/colorpicker/bootstrap-colorpicker.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/iCheck/icheck.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/cropper/dist/cropper.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/plugins/sortable.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/fileinput.min.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/js/locales/'.LANG_PREFIX.'.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/bootstrap-fileinput/themes/explorer/theme.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/ckeditor.js');
+        $this->document->addScript(THEMEURL_ADMIN . '/plugins/ckeditor/adapters/jquery.js');
+        
+        $controls = [];
+        $controls['back'] = $this->linker->getUrl($this->control, true);
+        $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
+        $data['controls'] = $controls;
 
         $groups = [];
-        $getGroups = $this->qb->select('g.*')->where('t2g.teacher_id', '?')->join('??teacher_to_group t2g', 't2g.group_id = g.id')->get('??group g', [$_SESSION['user_id']]);
+        $getGroups = $this->qb->get('??group');
         if($getGroups->rowCount() > 0){
             $groups = $getGroups->fetchAll();
             foreach ($groups as $key => $value) {
@@ -258,16 +313,11 @@ class LessonModel extends Model {
         $data['groups'] = $groups;
 
         $subjects = [];
-        $getSubjects = $this->qb->select('s.*')->where('s2t.teacher_id', '?')->join('??subject_to_teacher s2t', 's2t.subject_id = s.id')->get('??subject s', [$_SESSION['user_id']]);
+        $getSubjects = $this->qb->get('??subject');
         if($getSubjects->rowCount() > 0){
             $subjects = $getSubjects->fetchAll();
         }
         $data['subjects'] = $subjects;
-
-        $controls = [];
-        $controls['back'] = $this->linker->getUrl('lesson');
-        $controls['view'] = $this->linker->getUrl('lesson/view');
-        $data['controls'] = $controls;
         
         if(isset($this->lesson)){
             $lesson = $this->lesson;
@@ -281,19 +331,6 @@ class LessonModel extends Model {
         }
 
         $students = [];
-
-        if($lesson->group_id){
-            $checkGroup = $this->qb->where([['teacher_id', '?'], ['group_id', '?']])->get('??teacher_to_group', [$_SESSION['user_id'], $lesson->group_id]);
-            if($checkGroup && $checkGroup->rowCount() == 0){
-                $this->errors['group_id'] = 'error not this teacher group';
-            }
-        }
-        if($lesson->subject_id){
-            $checkSubject = $this->qb->where([['teacher_id', '?'], ['subject_id', '?']])->get('??subject_to_teacher', [$_SESSION['user_id'], $lesson->subject_id]);
-            if($checkSubject && $checkSubject->rowCount() == 0){
-                $this->errors['subject_id'] = 'error not this teacher subject';
-            }
-        }
         if(!$this->errors){
             $getStudents = $this->qb->select('u.id, u.firstname, u.lastname')->where('s2g.group_id', '?')->join('??student_to_group s2g', 's2g.student_id = u.id')->get('??user u', [$lesson->group_id]);
             $students = $getStudents->fetchAll();
@@ -331,31 +368,15 @@ class LessonModel extends Model {
         $checkData = [];
         $checkData['info'] = $info;
 
-        $groupBelongs = [
-        	'table' => '??teacher_to_group',
-        	'columns' => [
-	        	'teacher_id' => $_SESSION['user_id'],
-	        	'group_id' => $info['group_id'],
-	        ]
-        ];
-        $subjectBelongs = [
-        	'table' => '??subject_to_teacher',
-        	'columns' => [
-	        	'teacher_id' => $_SESSION['user_id'],
-	        	'subject_id' => $info['subject_id'],
-	        ]
-        ];
-
         $rules = [ 
             'info' => [
-                'group_id' => [['belongsTo', $groupBelongs], 'isRequired'],
-                'subject_id' => [['belongsTo', $subjectBelongs], 'isRequired'],
+
             ]
         ];
 
         $valid = $this->validator->validate($rules, $checkData);
         if(!$valid){
-        	$this->errorText = $this->t('error save lesson', 'front');
+        	$this->errorText = $this->t('error save lesson', 'back');
             $this->errors = $this->validator->lastErrors;
             return false;
         }
@@ -366,7 +387,7 @@ class LessonModel extends Model {
                 $lesson->created_at = time();
             }
             $lesson->updated_at = time();
-            $lesson->teacher_id = $_SESSION['user_id'];
+            // $lesson->teacher_id = $_SESSION['user_id'];
 
             $dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', $lesson->start_time . ':01');
         	if($dateTime != false){
@@ -396,11 +417,11 @@ class LessonModel extends Model {
                 }
 
                 $this->lesson = $lesson;
-                $this->successText = $this->t('success save lesson', 'front');
+                $this->successText = $this->t('success save lesson', 'back');
             }
             else{
-                $this->errorText = $this->t('error save lesson', 'front');
-                $this->errors['error db'] = $this->t('error db', 'front');
+                $this->errorText = $this->t('error save lesson', 'back');
+                $this->errors['error db'] = $this->t('error db', 'back');
             }
             return $lesson->savedSuccess;
         }
@@ -415,9 +436,9 @@ class LessonModel extends Model {
 
         if($id && $lesson->find($id)) {
 
-            if($lesson->teacher_id != $_SESSION['user_id']){
-                exit('Access Error');
-            }
+            // if($lesson->teacher_id != $_SESSION['user_id']){
+            //     exit('Access Error');
+            // }
 
             $this->qb->where('lesson_id', '?')->delete('??student_attendance', [$lesson->id]);
             $this->qb->where('lesson_id', '?')->delete('??student_mark', [$lesson->id]);
@@ -425,10 +446,10 @@ class LessonModel extends Model {
             $lesson->remove();
             
             if($lesson->removedSuccess){
-                $this->successText = $this->t('success delete lesson', 'front');
+                $this->successText = $this->t('success delete lesson', 'back');
             }
             else{
-                $this->errorText = $this->t('error delete lesson', 'front');
+                $this->errorText = $this->t('error delete lesson', 'back');
                 $this->errors['error db'];
             }
 
@@ -450,7 +471,7 @@ class LessonModel extends Model {
         $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
 
         $grade = $currentYear - $start_year + $addition;
-        return ($grade <= 11) ? $grade : $this->t('study finished', 'front') . ' ' . $end_year;
+        return ($grade <= 11) ? $grade : $this->t('study finished', 'back') . ' ' . $end_year;
     }
 
     public function getStartYear($grade)

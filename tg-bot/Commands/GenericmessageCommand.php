@@ -115,10 +115,10 @@ class GenericmessageCommand extends SystemCommand
             $update['message']['text'] = '/start change_password';
             return (new StartCommand($this->telegram, new Update($update)))->preExecute();
         }
-        elseif($text === self::t($lang_id, 'catalogue')){
-            $update['message']['text'] = '/product';
-            return (new ProductCommand($this->telegram, new Update($update)))->preExecute();
-        }
+        // elseif($text === self::t($lang_id, 'catalogue')){
+        //     $update['message']['text'] = '/product';
+        //     return (new ProductCommand($this->telegram, new Update($update)))->preExecute();
+        // }
         elseif($text === self::t($lang_id, 'button_settings')){
             $update['message']['text'] = '/settings';
             return (new SettingsCommand($this->telegram, new Update($update)))->preExecute();
@@ -131,54 +131,58 @@ class GenericmessageCommand extends SystemCommand
             $update['message']['text'] = '/others contacts';
             return (new OthersCommand($this->telegram, new Update($update)))->preExecute();
         }
-        elseif($text === self::t($lang_id, 'cart')){
-            $update['message']['text'] = '/cart';
-            return (new CartCommand($this->telegram, new Update($update)))->preExecute();
-        }
-        elseif($text === self::t($lang_id, 'clear_cart')){
-            $update['message']['text'] = '/cart clean';
-            return (new CartCommand($this->telegram, new Update($update)))->preExecute();
-        }
-        elseif($text === self::t($lang_id, 'submit_order')){
-            $update['message']['text'] = '/order';
-            return (new OrderCommand($this->telegram, new Update($update)))->preExecute();
-        }
-        elseif($text === self::t($lang_id, 'orders')){
-            $update['message']['text'] = '/order view_order_history';
-            return (new OrderCommand($this->telegram, new Update($update)))->preExecute();
-        }
-        elseif($text === self::t($lang_id, 'promotion')){
-            $update['message']['text'] = '/promotion';
-            return (new PromotionCommand($this->telegram, new Update($update)))->preExecute();
-        }
-        elseif($text === self::t($lang_id, 'button_contacts')){
-            $update['message']['text'] = '/contact';
-            return (new ContactCommand($this->telegram, new Update($update)))->preExecute();
-        }
+        // elseif($text === self::t($lang_id, 'cart')){
+        //     $update['message']['text'] = '/cart';
+        //     return (new CartCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'clear_cart')){
+        //     $update['message']['text'] = '/cart clean';
+        //     return (new CartCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'submit_order')){
+        //     $update['message']['text'] = '/order';
+        //     return (new OrderCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'orders')){
+        //     $update['message']['text'] = '/order view_order_history';
+        //     return (new OrderCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'promotion')){
+        //     $update['message']['text'] = '/promotion';
+        //     return (new PromotionCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'button_contacts')){
+        //     $update['message']['text'] = '/contact';
+        //     return (new ContactCommand($this->telegram, new Update($update)))->preExecute();
+        // }
         elseif($text === self::t($lang_id, 'button_feedback')){
             $update['message']['text'] = '/feedback';
             return (new FeedbackCommand($this->telegram, new Update($update)))->preExecute();
         }
-        elseif($text === self::t($lang_id, 'button_my_children')){
+        elseif($text === self::t($lang_id, 'button_my_students')){
             $update['message']['text'] = '/mychildren';
             return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
         }
-        elseif($text === self::t($lang_id, 'button_add_children')){
-            $update['message']['text'] = '/mychildren add_children';
+        elseif($text === self::t($lang_id, 'button_add_student')){
+            $update['message']['text'] = '/mychildren add_student';
             return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
         }
-        elseif($text === self::t($lang_id, 'button_tracking')){
-            $update['message']['text'] = '/tracking';
-            return (new TrackingCommand($this->telegram, new Update($update)))->preExecute();
+        elseif($text === self::t($lang_id, 'button_delete_student')){
+            $update['message']['text'] = '/mychildren delete_student';
+            return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
         }
-        elseif($text === self::t($lang_id, 'button_local_mail')){
-            $update['message']['text'] = '/mail local';
-            return (new MailCommand($this->telegram, new Update($update)))->preExecute();
-        }
-        elseif($text === self::t($lang_id, 'button_international_mail')){
-            $update['message']['text'] = '/mail international';
-            return (new MailCommand($this->telegram, new Update($update)))->preExecute();
-        }
+        // elseif($text === self::t($lang_id, 'button_tracking')){
+        //     $update['message']['text'] = '/tracking';
+        //     return (new TrackingCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'button_local_mail')){
+        //     $update['message']['text'] = '/mail local';
+        //     return (new MailCommand($this->telegram, new Update($update)))->preExecute();
+        // }
+        // elseif($text === self::t($lang_id, 'button_international_mail')){
+        //     $update['message']['text'] = '/mail international';
+        //     return (new MailCommand($this->telegram, new Update($update)))->preExecute();
+        // }
 
         //save contacts
         if($message->getContact() != null){

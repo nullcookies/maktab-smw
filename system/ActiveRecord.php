@@ -33,7 +33,8 @@ abstract class ActiveRecord extends Object {
 		$this->setTableName();
 		
 		$this->media = new \system\Media($this->config);
-		$lang_prefix = (LANG_ID != LANG_MAIN) ? LANG_PREFIX : '';
+		$lang_prefix = (defined('LANG_PREFIX')) ? LANG_PREFIX : '';
+
         $this->linker = new Linker($lang_prefix);
 
 		$getColumns = $this->db->query('SHOW COLUMNS FROM ' . $this->tableName);

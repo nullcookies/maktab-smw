@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Сен 08 2018 г., 14:37
+-- Время создания: Сен 15 2018 г., 16:53
 -- Версия сервера: 5.6.31
 -- Версия PHP: 5.6.23
 
@@ -286,10 +286,10 @@ CREATE TABLE IF NOT EXISTS `mktb_lesson` (
 --
 
 INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_time`, `end_time`, `hometask`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, 11, 1535245201, 0, '', 1535367039, 1535374286),
-(2, 2, 3, 11, 1535367541, 0, '', 1535367599, 1535367599),
-(4, 1, 3, 11, 1535373421, 0, '', 1535373444, 1535373444),
-(6, 1, 3, 11, 1535520121, 0, 'Упражнение 11, стр.8', 1535520182, 1535520182),
+(1, 1, 3, 11, 1536472801, 0, '', 1535367039, 1536997130),
+(2, 2, 3, 11, 1536404401, 0, '', 1535367599, 1536997116),
+(4, 1, 3, 11, 1536299101, 0, '', 1535373444, 1536997108),
+(6, 1, 3, 11, 1536210001, 0, 'Упражнение 11, стр.8', 1535520182, 1536997077),
 (7, 2, 6, 11, 1535903341, 0, '', 1535903352, 1535903352);
 
 -- --------------------------------------------------------
@@ -708,26 +708,30 @@ CREATE TABLE IF NOT EXISTS `mktb_student_attendance` (
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
   `attended` tinyint(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_student_attendance`
 --
 
 INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attended`) VALUES
-(4, 2, 13, 1),
-(5, 2, 14, 1),
-(6, 2, 25, 1),
-(10, 4, 13, 1),
-(11, 4, 14, 1),
-(12, 4, 25, 1),
-(22, 1, 13, 1),
-(23, 1, 14, 1),
-(24, 1, 25, 0),
-(25, 6, 13, 1),
-(26, 6, 14, 1),
-(27, 6, 25, 1),
-(28, 7, 27, 1);
+(28, 7, 27, 1),
+(29, 6, 13, 1),
+(30, 6, 14, 1),
+(31, 6, 25, 1),
+(32, 6, 31, 0),
+(33, 4, 13, 1),
+(34, 4, 14, 1),
+(35, 4, 25, 1),
+(36, 4, 31, 0),
+(37, 2, 13, 1),
+(38, 2, 14, 1),
+(39, 2, 25, 1),
+(40, 2, 31, 0),
+(41, 1, 13, 1),
+(42, 1, 14, 1),
+(43, 1, 25, 0),
+(44, 1, 31, 0);
 
 -- --------------------------------------------------------
 
@@ -740,26 +744,30 @@ CREATE TABLE IF NOT EXISTS `mktb_student_mark` (
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
   `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_student_mark`
 --
 
 INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
-(4, 2, 13, '4'),
-(5, 2, 14, '4'),
-(6, 2, 25, '5'),
-(10, 4, 13, '5'),
-(11, 4, 14, '5'),
-(12, 4, 25, '5'),
-(22, 1, 13, '3'),
-(23, 1, 14, '5'),
-(24, 1, 25, '0'),
-(25, 6, 13, '5'),
-(26, 6, 14, '4'),
-(27, 6, 25, '3'),
-(28, 7, 27, '5');
+(28, 7, 27, '5'),
+(29, 6, 13, '5'),
+(30, 6, 14, '4'),
+(31, 6, 25, '3'),
+(32, 6, 31, '0'),
+(33, 4, 13, '5'),
+(34, 4, 14, '5'),
+(35, 4, 25, '5'),
+(36, 4, 31, '0'),
+(37, 2, 13, '4'),
+(38, 2, 14, '4'),
+(39, 2, 25, '5'),
+(40, 2, 31, '0'),
+(41, 1, 13, '3'),
+(42, 1, 14, '5'),
+(43, 1, 25, '0'),
+(44, 1, 31, '0');
 
 -- --------------------------------------------------------
 
@@ -2643,7 +2651,7 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
 (1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1536392938, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1536392938, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
 (2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1536395195, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1536395195, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
-(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1536058863, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1536058863, '83.221.181.130', 'uctk104jobh01hfp8i4ak0rh43'),
+(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1536996641, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1536996641, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
 (12, 'sodiqov-abdulla', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 1535626386, 0, '', 179085600, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535626118, 0, '', 1230750000, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535626106, 1535375356, '', 1230836400, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
@@ -3341,12 +3349,12 @@ ALTER TABLE `mktb_slider`
 -- AUTO_INCREMENT для таблицы `mktb_student_attendance`
 --
 ALTER TABLE `mktb_student_attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT для таблицы `mktb_student_mark`
 --
 ALTER TABLE `mktb_student_mark`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT для таблицы `mktb_study_period`
 --

@@ -97,13 +97,25 @@ class CallbackqueryCommand extends SystemCommand
             }
         }
         elseif (strpos($callback_data, 'mychildren_view_student_id_') !== false) {
-			
-			$student_id = (int)substr($callback_data, mb_strlen('mychildren_view_student_id_'));
+            $student_id = (int)substr($callback_data, mb_strlen('mychildren_view_student_id_'));
             if(is_numeric($student_id)){
                 $update = $update->getRawData();
                 $update['callback_query']['message']['text'] = '/mychildren ' . $callback_data;
                 return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
             }
+        }
+        elseif (strpos($callback_data, 'mychildren_delete_student_id_') !== false) {
+            $student_id = (int)substr($callback_data, mb_strlen('mychildren_delete_student_id_'));
+            if(is_numeric($student_id)){
+                $update = $update->getRawData();
+                $update['callback_query']['message']['text'] = '/mychildren ' . $callback_data;
+                return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
+            }
+        }
+        elseif (strpos($callback_data, 'mychildren_view_lessons_') !== false) {
+            $update = $update->getRawData();
+            $update['callback_query']['message']['text'] = '/mychildren ' . $callback_data;
+            return (new MyChildrenCommand($this->telegram, new Update($update)))->preExecute();
 		}
 		
 		
