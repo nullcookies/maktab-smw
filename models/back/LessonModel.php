@@ -5,6 +5,7 @@ namespace models\back;
 use \system\Document;
 use \system\Model;
 use \models\objects\Lesson;
+use \models\back\GroupModel;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
@@ -51,12 +52,13 @@ class LessonModel extends Model
         $dataTableAjaxParams['page-order-dir'] = (!empty($_GET['page_order_dir'])) ? $_GET['page_order_dir'] : '';
         $data['dataTableAjaxParams'] = $dataTableAjaxParams;
 
+        $groupModel = new GroupModel();
         $groups = [];
         $getGroups = $this->qb->get('??group');
         if($getGroups->rowCount() > 0){
             $groups = $getGroups->fetchAll();
             foreach ($groups as $key => $value) {
-                $groups[$key]['grade'] = $this->getGrade($value['start_year'], $value['end_year']) . ' - ' . $value['name'];
+                $groups[$key]['grade'] = $groupModel->getGrade($value['start_year'], $value['end_year']) . ' - ' . $value['name'];
             }
         }
         $data['groups'] = $groups;
@@ -77,7 +79,8 @@ class LessonModel extends Model
         return $this;
     }
 
-    public function list_ajax() {
+    public function list_ajax()
+    {
         
         $data = [];
 
@@ -86,6 +89,8 @@ class LessonModel extends Model
         $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
         $data['controls'] = $controls;
+
+        $groupModel = new GroupModel();
 
         $_POST = $this->cleanForm($_POST);
 
@@ -117,14 +122,20 @@ class LessonModel extends Model
                 break;
             
             case 1:
-                $order = 'l.group_id';
+                $order = 'u.lastname';
+                $order2 = 'u.firstname';
                 break;
             
             case 2:
-                $order = 'l.subject_id';
+                $order = 'g.start_year';
+                $order2 = 'g.name';
                 break;
             
             case 3:
+                $order = 's.name';
+                break;
+            
+            case 4:
                 $order = 'l.start_time';
                 break;
             
@@ -138,6 +149,12 @@ class LessonModel extends Model
         //     $getOrderDir = $_POST['page_order_dir'];
         // }
         $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
+        if(isset($order2)){
+        	$orderDir2 = $orderDir;
+        }
+        if($order == 'g.start_year'){
+        	$orderDir = ($orderDir == 'DESC') ? 'ASC' : 'DESC';
+        }
 
 
         $recordsFiltered = $totalRows;
@@ -152,15 +169,17 @@ class LessonModel extends Model
         	//todo: search by group name preg
         	$search_where = " ( ";
             $where_params = [];
-            $search_where .= " s.name LIKE ? ";
+            $search_where .= " s.name LIKE ? OR u.lastname LIKE ? OR u.firstname LIKE ? ";
+            $where_params[] = '%' . $searchText . '%';
+            $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             
             $matches = [];
             $checkRegex = preg_match('/^(\d{1,2})\s?-?\s?(.)$/u', trim($searchText), $matches);
 
             if(isset($matches[1]) && isset($matches[2])){
-            	$searchStartYear = $this->getStartYear($matches[1]);
-            	$search_where .= " OR (g.start_year = ? AND g.name = ?)";
+            	$searchStartYear = $groupModel->getStartYear($matches[1]);
+            	$search_where .= " OR (g.start_year = ? AND g.name = ?) ";
 	        	$where_params[] = $searchStartYear;
 	        	$where_params[] = $matches[2];
             }
@@ -169,8 +188,8 @@ class LessonModel extends Model
 	            	$search_where .= " OR g.name LIKE ? ";
 	        		$where_params[] = '%' . $searchText . '%';
 	            }
-	            if( is_numeric($searchText) && $searchText >=1 && $searchText <=11 ){
-	            	$searchStartYear = $this->getStartYear($searchText);
+	            if( is_numeric($searchText) && $searchText >= 1 && $searchText <= 11 ){
+	            	$searchStartYear = $groupModel->getStartYear($searchText);
 	            	$search_where .= " OR g.start_year LIKE ? ";
 	            	$where_params[] = '%' . $searchStartYear . '%';
 	            }
@@ -178,7 +197,7 @@ class LessonModel extends Model
 	            	$dateTime = \DateTime::createFromFormat('d-m-Y H:i:s', trim($searchText . ' 00:00:00'));
 	            	$dayStart = $dateTime->getTimestamp();
 	            	$dayEnd = $dayStart + 86400;
-	            	$search_where .= " OR (l.start_time >= ? AND l.start_time <= ? )";
+	            	$search_where .= " OR (l.start_time >= ? AND l.start_time <= ? ) ";
 	            	$where_params[] = $dayStart;
 	            	$where_params[] = $dayEnd;
 	            }
@@ -188,7 +207,7 @@ class LessonModel extends Model
 
             $search_where .= " ) ";
 
-            $querySearch = 'SELECT l.id FROM ??lesson l LEFT JOIN ??group g on l.group_id = g.id LEFT JOIN ??subject s on l.subject_id = s.id WHERE ' . $search_where . ' GROUP BY l.id ';
+            $querySearch = 'SELECT l.id FROM ??lesson l LEFT JOIN ??group g ON l.group_id = g.id LEFT JOIN ??subject s ON l.subject_id = s.id LEFT JOIN ??user u ON l.teacher_id = u.id WHERE ' . $search_where . ' GROUP BY l.id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -196,13 +215,13 @@ class LessonModel extends Model
         $data['recordsFiltered'] = $recordsFiltered;
 
 
-        $query = 'SELECT l.*, g.name g_name, g.start_year g_start_year, g.end_year g_end_year, s.name s_name FROM ??lesson l LEFT JOIN ??group g on l.group_id = g.id LEFT JOIN ??subject s on l.subject_id = s.id  ';
+        $query = 'SELECT l.*, g.name g_name, g.start_year g_start_year, g.end_year g_end_year, s.name s_name, u.firstname u_firstname, u.lastname u_lastname FROM ??lesson l LEFT JOIN ??group g ON l.group_id = g.id LEFT JOIN ??subject s ON l.subject_id = s.id LEFT JOIN ??user u ON l.teacher_id = u.id ';
 
         if($searchText){
             $query .= ' WHERE ' . $search_where;
         }
         $query .= ' GROUP BY l.id ';
-        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
+        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ' . (!empty($order2) && !empty($orderDir2) ? (', ' . $order2 . ' ' . $orderDir2) : '') . ' ';
         $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
 
         $getItems = $this->qb->prepare($query);
@@ -218,10 +237,11 @@ class LessonModel extends Model
             $itemsDataRow = [];
 
             $itemsDataRow[0] = $value['id'];
-            $itemsDataRow[1] = $this->getGrade($value['g_start_year'], $value['g_end_year']) . ' - ' . $value['g_name'];
-            $itemsDataRow[2] = $value['s_name'];
-            $itemsDataRow[3] = date('d-m-Y H:i', $value['start_time']);
-            $itemsDataRow[4] = '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+            $itemsDataRow[1] = $value['u_lastname'] . ' ' . $value['u_firstname'];
+            $itemsDataRow[2] = $groupModel->getGrade($value['g_start_year'], $value['g_end_year']) . ' - ' . $value['g_name'];
+            $itemsDataRow[3] = $value['s_name'];
+            $itemsDataRow[4] = date('d-m-Y H:i', $value['start_time']);
+            $itemsDataRow[5] = '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
                                     '</a> ' . 
                                     '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 
@@ -460,30 +480,6 @@ class LessonModel extends Model
         }
 
         return $return;
-    }
-
-    public function getGrade($start_year, $end_year)
-    {
-        $studyStartMonth = $this->getOption('study_start_month');
-        $currentYear = date('Y');
-        $currentMonth = date('n');
-        //для определения номера класса
-        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
-
-        $grade = $currentYear - $start_year + $addition;
-        return ($grade <= 11) ? $grade : $this->t('study finished', 'back') . ' ' . $end_year;
-    }
-
-    public function getStartYear($grade)
-    {
-        $studyStartMonth = $this->getOption('study_start_month');
-        $currentYear = date('Y');
-        $currentMonth = date('n');
-        //для определения номера класса
-        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
-
-        $start_year = $currentYear - $grade + $addition;
-        return $start_year;
     }
 }
 

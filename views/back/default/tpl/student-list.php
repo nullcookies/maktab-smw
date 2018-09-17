@@ -39,6 +39,7 @@
                       <th class="wh"><?=$this->t('id', 'back')?></th>
                       <th><?=$this->t('lastname', 'back')?></th>
                       <th><?=$this->t('firstname', 'back')?></th>
+                      <th><?=$this->t('group', 'back')?></th>
                       <th><?=$this->t('username', 'back')?></th>
                       <th><?=$this->t('phone', 'back')?></th>
                       <th><?=$this->t('email', 'back')?></th>
@@ -52,6 +53,7 @@
                       <th class="wh"><?=$this->t('id', 'back')?></th>
                       <th><?=$this->t('lastname', 'back')?></th>
                       <th><?=$this->t('firstname', 'back')?></th>
+                      <th><?=$this->t('group', 'back')?></th>
                       <th><?=$this->t('username', 'back')?></th>
                       <th><?=$this->t('phone', 'back')?></th>
                       <th><?=$this->t('email', 'back')?></th>

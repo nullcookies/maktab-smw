@@ -421,4 +421,16 @@ class GroupModel extends Model
         return ($grade <= 11) ? $grade : $this->t('study finished', 'back') . ' ' . $end_year;
     }
 
+    public function getStartYear($grade)
+    {
+        $studyStartMonth = $this->getOption('study_start_month');
+        $currentYear = date('Y');
+        $currentMonth = date('n');
+        //для определения номера класса
+        $addition = ($currentMonth < $studyStartMonth) ? 0 : 1;
+
+        $start_year = $currentYear - $grade + $addition;
+        return $start_year;
+    }
+
 }

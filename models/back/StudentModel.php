@@ -6,6 +6,7 @@ use \system\Document;
 use \system\Model;
 use \models\objects\User;
 use \models\objects\Student;
+use \models\back\GroupModel;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
@@ -76,6 +77,8 @@ class StudentModel extends Model
         $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
         $data['controls'] = $controls;
 
+        $groupModel = new GroupModel();
+
         $_POST = $this->cleanForm($_POST);
 
         $data['draw'] = (int)$_POST['draw'];
@@ -102,35 +105,40 @@ class StudentModel extends Model
         // }
         switch ($getOrder) {
             case 0:
-                $order = 'id';
+                $order = 'u.id';
                 break;
             
             case 1:
-                $order = 'lastname';
+                $order = 'u.lastname';
                 break;
             
             case 2:
-                $order = 'firstname';
+                $order = 'u.firstname';
                 break;
             
             case 3:
-                $order = 'username';
+                $order = 'g.start_year';
+                $order2 = 'g.name';
                 break;
             
             case 4:
-                $order = 'email';
+                $order = 'u.username';
                 break;
             
             case 5:
-                $order = 'phone';
+                $order = 'u.email';
                 break;
             
             case 6:
-                $order = 'status';
+                $order = 'u.phone';
+                break;
+            
+            case 7:
+                $order = 'u.status';
                 break;
             
             default:
-                $order = 'lastname';
+                $order = 'u.lastname';
                 break;
         }
 
@@ -139,6 +147,12 @@ class StudentModel extends Model
         //     $getOrderDir = $_POST['page_order_dir'];
         // }
         $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
+        if(isset($order2)){
+        	$orderDir2 = $orderDir;
+        }
+        if($order == 'g.start_year'){
+        	$orderDir = ($orderDir == 'DESC') ? 'ASC' : 'DESC';
+        }
 
 
         $recordsFiltered = $totalRows;
@@ -150,15 +164,44 @@ class StudentModel extends Model
         $searchText = substr($search, 0, 65536);
 
         if($searchText){
+
+        	$search_where = " ( ";
             $where_params = [];
-            $search_where = " (username LIKE ? OR email LIKE ? OR phone LIKE ? OR firstname LIKE ? OR lastname LIKE ? OR middlename LIKE ?) ";
+            
+            $search_where .= " u.username LIKE ? OR u.email LIKE ? OR u.phone LIKE ? OR u.firstname LIKE ? OR u.lastname LIKE ? OR u.middlename LIKE ? ";
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
             $where_params[] = '%' . $searchText . '%';
-            $querySearch = 'SELECT id FROM ??user WHERE ' . $search_where . ' AND usergroup = ' . $this->usergroup . ' GROUP BY id ';
+
+
+            $matches = [];
+            $checkRegex = preg_match('/^(\d{1,2})\s?-?\s?(.)$/u', trim($searchText), $matches);
+
+            if(isset($matches[1]) && isset($matches[2])){
+            	$searchStartYear = $groupModel->getStartYear($matches[1]);
+            	$search_where .= " OR (g.start_year = ? AND g.name = ?) ";
+	        	$where_params[] = $searchStartYear;
+	        	$where_params[] = $matches[2];
+            }
+            else{
+            	if( mb_strlen($searchText) == 1 ){
+	            	$search_where .= " OR g.name LIKE ? ";
+	        		$where_params[] = '%' . $searchText . '%';
+	            }
+	            if( is_numeric($searchText) && $searchText >= 1 && $searchText <= 11 ){
+	            	$searchStartYear = $groupModel->getStartYear($searchText);
+	            	$search_where .= " OR g.start_year LIKE ? ";
+	            	$where_params[] = '%' . $searchStartYear . '%';
+	            }
+            } 
+
+            $search_where .= " ) ";
+
+
+            $querySearch = 'SELECT u.id FROM ??user u WHERE ' . $search_where . ' AND u.usergroup = ' . $this->usergroup . ' GROUP BY u.id ';
             $sth1 = $this->qb->prepare($querySearch);
             $sth1->execute($where_params);
             $recordsFiltered = $sth1->rowCount();
@@ -166,15 +209,19 @@ class StudentModel extends Model
         $data['recordsFiltered'] = $recordsFiltered;
 
 
-        $query = 'SELECT id, firstname, lastname, middlename, username, phone, email, status, activity_at FROM ??user ';
+        $query = 'SELECT u.id, u.firstname, u.lastname, u.middlename, u.username, u.phone, u.email, u.status, u.activity_at, g.name g_name, g.start_year, g.end_year FROM ??user u LEFT JOIN ??student_to_group s2g ON u.id = s2g.student_id LEFT JOIN ??group g ON s2g.group_id = g.id ';
 
-        $query .= ' WHERE usergroup = ' . $this->usergroup . ' ';
+        $query .= ' WHERE u.usergroup = ' . $this->usergroup . ' ';
         if($searchText){
             $query .= ' AND ' . $search_where;
         }
-        $query .= ' GROUP BY id ';
-        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
+        $query .= ' GROUP BY u.id ';
+        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ' . (!empty($order2) && !empty($orderDir2) ? (', ' . $order2 . ' ' . $orderDir2) : '') . ' ';
         $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
+
+
+        file_put_contents('ppp1.txt', print_R($query,true));
+        file_put_contents('ppp2.txt', print_R($where_params,true));
 
         $getItems = $this->qb->prepare($query);
         $getItems->execute($where_params);
@@ -191,14 +238,15 @@ class StudentModel extends Model
             $itemsDataRow[0] = $value['id'];
             $itemsDataRow[1] = $value['lastname'];
             $itemsDataRow[2] = $value['firstname'];
-            $itemsDataRow[3] = $value['username'];
-            $itemsDataRow[4] = $value['phone'];
-            $itemsDataRow[5] = $value['email'];
+            $itemsDataRow[3] = $groupModel->getGrade($value['start_year'], $value['end_year']) . ' - ' . $value['g_name'];
+            $itemsDataRow[4] = $value['username'];
+            $itemsDataRow[5] = $value['phone'];
+            $itemsDataRow[6] = $value['email'];
             
-            $itemsDataRow[6] =   '<div class="status-change">' . 
+            $itemsDataRow[7] =   '<div class="status-change">' . 
                                     '<input data-toggle="toggle" data-on="' . $this->t('toggle on', 'back') . '" data-off="' . $this->t('toggle off', 'back') . '" data-onstyle="warning" type="checkbox" name="status" data-controller="student" data-table="user" data-id="' . $value['id'] . '" class="status-toggle" ' . (($value['status']) ? 'checked' : '') . '>' .
                                     '</div>';
-            $itemsDataRow[7] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
+            $itemsDataRow[8] =   '<a class="btn btn-info entry-edit-btn" title="' . $this->t('btn edit', 'back') . '" href="' . $controls['view'] . '?id=' .  $value['id'] . '">' .
                                         '<i class="fa fa-edit"></i>' .
                                     '</a> ' . 
                                     '<a class="btn btn-danger entry-delete-btn" href="' . $controls['delete'] . '?id=' . $value['id'] . '" data-toggle="confirmation" data-btn-ok-label="' . $this->t('confirm yes', 'back') . '" data-btn-ok-icon="fa fa-check" data-btn-ok-class="btn-success btn-xs" data-btn-cancel-label=" ' . $this->t('confirm no', 'back') . '" data-btn-cancel-icon="fa fa-times" data-btn-cancel-class="btn-danger btn-xs" data-title="' . $this->t('are you sure', 'back') . '" >' . 

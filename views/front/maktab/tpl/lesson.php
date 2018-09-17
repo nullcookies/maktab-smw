@@ -80,7 +80,7 @@
                                 <th>ID</th>
                                 <th><?=$this->t('student group', 'front')?></th>
                                 <th><?=$this->t('subject', 'front')?></th>
-                                <th><?=$this->t('student group', 'front')?></th>
+                                <th><?=$this->t('lesson start time', 'front')?></th>
                                 <th></th>
                             </tr>
                         </tfoot>

@@ -38,7 +38,7 @@ class LessonController extends Controller {
         $this->data = $model->data;
         $this->document = $model->document;
 
-        $viewFile = 'lesson';
+        $viewFile = 'lesson-list';
 
         $this->content = $this->render($viewFile);
     }
@@ -121,7 +121,7 @@ class LessonController extends Controller {
         $this->data = $model->data;
         $this->document = $model->document;
 
-        $this->content = $this->render('lesson');
+        $this->content = $this->render('lesson-list');
     }
 
 }

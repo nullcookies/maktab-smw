@@ -170,13 +170,18 @@ class MyChildrenCommand extends UserCommand
                     $checkRequest[':target_id'] = $student_id;
                     $checkRequestedBefore->execute($checkRequest);
                     if($checkRequestedBefore->rowCount() == 0){
-                        $addRequestStudent = $pdo->prepare("INSERT INTO " . DB_PREFIX . "user_request (user_id, type, target_id, date, status) VALUES (:user_id, :type, :target_id, :date, :status)");
+                        $addRequestStudent = $pdo->prepare("INSERT INTO " . DB_PREFIX . "user_request (user_id, type, target_id, date, status, information) VALUES (:user_id, :type, :target_id, :date, :status, :information)");
                         $newRequest = [];
                         $newRequest[':user_id'] = $mainUser['id'];
                         $newRequest[':type'] = UserRequest::TYPE_ADD_USER_STUDENT;
                         $newRequest[':target_id'] = $student_id;
                         $newRequest[':date'] = time();
                         $newRequest[':status'] = UserRequest::STATUS_PENDING;
+                        $newRequestInformation = [
+                        	'source' => 'telegram-bot',
+                        	'chat_id' => $chat_id,
+                        ];
+                        $newRequest[':information'] = json_encode($newRequestInformation);
                         if($addRequestStudent->execute($newRequest)){
                             $sendtext .= self::t($lang_id, 'request_has_been_sent') . "\n";
                             $sendtext .= self::t($lang_id, 'wait_for_approval');
@@ -391,7 +396,7 @@ class MyChildrenCommand extends UserCommand
         $data = [
             'chat_id'      => $chat_id,
             'reply_markup' => $keyboard,
-            'text'         => self::t($lang_id, 'choose_student'),
+            'text'         => $sendtext,
         ];
         $response = Request::sendMessage($data);
 
@@ -400,7 +405,7 @@ class MyChildrenCommand extends UserCommand
             $data = [
                 'chat_id'       => $chat_id,
                 'reply_markup'  => $studentsKeyboard,
-                'text'          => $sendtext,
+                'text'          => self::t($lang_id, 'choose_student'),
             ];
             Request::sendMessage($data);
         }

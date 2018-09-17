@@ -98,11 +98,12 @@ class LessonModel extends Model {
                 break;
             
             case 1:
-                $order = 'l.group_id';
+                $order = 'g.start_year';
+                $order2 = 'g.name';
                 break;
             
             case 2:
-                $order = 'l.subject_id';
+                $order = 's.name';
                 break;
             
             case 3:
@@ -119,6 +120,9 @@ class LessonModel extends Model {
         //     $getOrderDir = $_POST['page_order_dir'];
         // }
         $orderDir = ($getOrderDir == 'desc') ? 'DESC' : 'ASC';
+        if(isset($order2)){
+        	$orderDir2 = $orderDir;
+        }
 
 
         $recordsFiltered = $totalRows;
@@ -185,7 +189,7 @@ class LessonModel extends Model {
             $query .= ' AND ' . $search_where;
         }
         $query .= ' GROUP BY l.id ';
-        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ';
+        $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ' . (!empty($order2) && !empty($orderDir2) ? (', ' . $order2 . ' ' . $orderDir2) : '') . ' ';
         $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
 
         $getItems = $this->qb->prepare($query);
