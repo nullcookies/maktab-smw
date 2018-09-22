@@ -81,12 +81,12 @@ class StartCommand extends SystemCommand
         //set contact
         if(stripos($text, 'set_contact') === 0){
             if($message->getContact() !== null){
-                $phoneNumber = $message->getContact()->getPhoneNumber();
+                $phoneNumber = self::formatPhoneNumber($message->getContact()->getPhoneNumber());
                 $savedPhoneNumber = self::setContact($user_id, $phoneNumber);
                 if($savedPhoneNumber){
                     $user = self::getUser($user_id);
                     $lang_id = $user['language_id'];
-                    $mainUser = self::checkAddUser($message->getContact());
+                    $mainUser = self::saveMainUser($message->getContact());
                     if($mainUser->newUser){
                         $newUserData = [
                             'chat_id' => $chat_id,
@@ -204,25 +204,22 @@ class StartCommand extends SystemCommand
     public static function setContact($user_id, $phoneNumber)
     {
         $pdo = DB::getPdo();
-        $phoneNumber = preg_replace('#[^\+0-9]#', '', $phoneNumber);
-        if(substr($phoneNumber, 0, 1) != '+'){
-            $phoneNumber = '+' . $phoneNumber;
-        }
+        $phoneNumber = self::formatPhoneNumber($phoneNumber);
         $setContact = $pdo->prepare('UPDATE ' . TB_USER . ' SET phone = :phone WHERE id = :user_id');
-        $setContact->bindParam(':user_id', $user_id);
-        $setContact->bindParam(':phone', $phoneNumber);
+        $setContact->bindValue(':user_id', $user_id);
+        $setContact->bindValue(':phone', $phoneNumber);
         $result = $setContact->execute();
 
         return $result;
     }
     
     //добавление пользователя в основную таблицу
-    public static function checkAddUser($contact)
+    public static function saveMainUser($contact)
     {
-        $phoneNumber = $contact->getPhoneNumber();
+        $phoneNumber = self::formatPhoneNumber($contact->getPhoneNumber());
         $pdo = DB::getPdo();
         $getUser = $pdo->prepare('SELECT * FROM ' . DB_PREFIX . 'user WHERE username = :username');
-        $getUser->bindParam(':username', $phoneNumber);
+        $getUser->bindValue(':username', $phoneNumber);
         $getUser->execute();
 
         $user = new User();
@@ -237,8 +234,8 @@ class StartCommand extends SystemCommand
 
         $user->firstname = $contact->getFirstName();
         $user->lastname = $contact->getLastName();
-        $user->username = $contact->getPhoneNumber();
-        $user->phone = $contact->getPhoneNumber();
+        $user->username = $phoneNumber;
+        $user->phone = $phoneNumber;
         $user->status = 1;
         $user->updated_at = time();
 
@@ -253,6 +250,16 @@ class StartCommand extends SystemCommand
 
         return $user;
         
+    }
+
+    //форматирование номера телефона
+    public static function formatPhoneNumber($phone)
+    {
+    	$phone = preg_replace('#[^\+0-9]#', '', $phone);
+        if(substr($phone, 0, 1) != '+'){
+            $phone = '+' . $phone;
+        }
+        return $phone;
     }
     
     //изменение пароля в основной таблице пользователей
@@ -333,7 +340,8 @@ class StartCommand extends SystemCommand
 
         $keyboard = new Keyboard(
             [self::t($lang_id, 'button_change_language'), self::t($lang_id, 'button_change_phone')],
-            [self::t($lang_id, 'button_change_password'), self::t($lang_id, 'button_main_page')]
+            [self::t($lang_id, 'button_change_password'), self::t($lang_id, 'button_school_schedule')],
+            [self::t($lang_id, 'button_main_page')]
         );
 
         $keyboard

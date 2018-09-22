@@ -1,23 +1,25 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10.10
--- http://www.phpmyadmin.net
+-- version 4.7.7
+-- https://www.phpmyadmin.net/
 --
--- Хост: 127.0.0.1:3306
--- Время создания: Сен 17 2018 г., 15:28
--- Версия сервера: 5.5.45-log
--- Версия PHP: 5.6.12
+-- Хост: localhost:3306
+-- Время создания: Сен 22 2018 г., 12:56
+-- Версия сервера: 5.7.22-cll-lve
+-- Версия PHP: 5.6.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `maktab_smw`
+-- База данных: `crobrand_maktab`
 --
 
 -- --------------------------------------------------------
@@ -26,17 +28,16 @@ SET time_zone = "+00:00";
 -- Структура таблицы `mktb_banner`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_banner` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_banner` (
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `position` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `images` text NOT NULL,
   `sort_number` int(11) NOT NULL,
   `name` text NOT NULL,
-  `url` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `url` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -44,8 +45,8 @@ CREATE TABLE IF NOT EXISTS `mktb_banner` (
 -- Структура таблицы `mktb_brand`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_brand` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_brand` (
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
@@ -56,9 +57,8 @@ CREATE TABLE IF NOT EXISTS `mktb_brand` (
   `descr_full` text NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS `mktb_brand` (
 -- Структура таблицы `mktb_category`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_category` (
+  `id` int(11) NOT NULL,
   `parent_category_id` int(11) NOT NULL,
   `category_type_id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
@@ -81,9 +81,8 @@ CREATE TABLE IF NOT EXISTS `mktb_category` (
   `descr_full` text NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -91,11 +90,10 @@ CREATE TABLE IF NOT EXISTS `mktb_category` (
 -- Структура таблицы `mktb_category_name`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_category_name` (
+CREATE TABLE `mktb_category_name` (
   `category_id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`category_id`,`lang_id`)
+  `lang_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -104,14 +102,11 @@ CREATE TABLE IF NOT EXISTS `mktb_category_name` (
 -- Структура таблицы `mktb_category_search`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_category_search` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_category_search` (
+  `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
-  `search_text` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `product_id` (`category_id`),
-  FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=63 ;
+  `search_text` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -119,16 +114,15 @@ CREATE TABLE IF NOT EXISTS `mktb_category_search` (
 -- Структура таблицы `mktb_contact`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_contact` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_contact` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `phone` varchar(255) NOT NULL,
   `message` text NOT NULL,
   `type` tinyint(2) NOT NULL,
-  `date` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `date` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -136,14 +130,13 @@ CREATE TABLE IF NOT EXISTS `mktb_contact` (
 -- Структура таблицы `mktb_file`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_file` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_file` (
+  `id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL,
   `sort_number` int(11) NOT NULL,
   `name` text NOT NULL,
-  `mime` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `mime` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_file`
@@ -158,11 +151,10 @@ INSERT INTO `mktb_file` (`id`, `path`, `sort_number`, `name`, `mime`) VALUES
 -- Структура таблицы `mktb_file_name`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_file_name` (
+CREATE TABLE `mktb_file_name` (
   `file_id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`file_id`,`lang_id`)
+  `lang_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -178,11 +170,10 @@ INSERT INTO `mktb_file_name` (`file_id`, `name`, `lang_id`) VALUES
 -- Структура таблицы `mktb_filter`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_filter` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+CREATE TABLE `mktb_filter` (
+  `id` int(11) NOT NULL,
+  `name` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -190,10 +181,9 @@ CREATE TABLE IF NOT EXISTS `mktb_filter` (
 -- Структура таблицы `mktb_filter_to_category`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_filter_to_category` (
+CREATE TABLE `mktb_filter_to_category` (
   `filter_id` int(11) NOT NULL,
-  `category_id` int(11) NOT NULL,
-  PRIMARY KEY (`filter_id`,`category_id`)
+  `category_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -202,10 +192,9 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_to_category` (
 -- Структура таблицы `mktb_filter_to_product`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_filter_to_product` (
+CREATE TABLE `mktb_filter_to_product` (
   `filter_value_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  PRIMARY KEY (`filter_value_id`,`product_id`)
+  `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -214,14 +203,13 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_to_product` (
 -- Структура таблицы `mktb_filter_value`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_filter_value` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_filter_value` (
+  `id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
   `name` text NOT NULL,
   `color` varchar(255) NOT NULL,
-  `sort_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `sort_number` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -229,16 +217,15 @@ CREATE TABLE IF NOT EXISTS `mktb_filter_value` (
 -- Структура таблицы `mktb_group`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_group` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_year` smallint(4) NOT NULL,
   `end_year` smallint(4) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=7 ;
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_group`
@@ -249,8 +236,8 @@ INSERT INTO `mktb_group` (`id`, `name`, `start_year`, `end_year`, `status`, `cre
 (2, 'Б', 2017, 2028, 1, 1534588442, 1534589330),
 (3, 'А', 2016, 2027, 1, 1534591092, 1534591092),
 (4, 'А', 2006, 2017, 1, 1534591603, 1534591603),
-(5, 'А', 2018, 2029, 1, 1534591937, 1534591937),
-(6, 'Б', 2016, 2027, 1, 1534591976, 1534591993);
+(6, 'Б', 2016, 2027, 1, 1534591976, 1534591993),
+(7, '1 A', 2018, 2029, 1, 1537527038, 1537527038);
 
 -- --------------------------------------------------------
 
@@ -258,16 +245,15 @@ INSERT INTO `mktb_group` (`id`, `name`, `start_year`, `end_year`, `status`, `cre
 -- Структура таблицы `mktb_lang`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_lang` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_lang` (
+  `id` int(10) NOT NULL,
   `name` varchar(255) NOT NULL,
   `lang_prefix` varchar(255) NOT NULL,
   `icon` varchar(255) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `main` tinyint(1) NOT NULL,
-  `sort_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `sort_number` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_lang`
@@ -277,7 +263,7 @@ INSERT INTO `mktb_lang` (`id`, `name`, `lang_prefix`, `icon`, `status`, `main`, 
 (1, 'Русский', 'ru', 'lang/ru.jpg', 1, 1, 1),
 (2, 'English', 'en', 'lang/en.jpg', 0, 0, 3),
 (3, 'Казахский', 'kz', 'lang/kz.jpg', 0, 0, 4),
-(4, 'O''zbek', 'uz', 'lang/uz.jpg', 0, 0, 2);
+(4, 'O\'zbek', 'uz', 'lang/uz.jpg', 0, 0, 2);
 
 -- --------------------------------------------------------
 
@@ -285,8 +271,8 @@ INSERT INTO `mktb_lang` (`id`, `name`, `lang_prefix`, `icon`, `status`, `main`, 
 -- Структура таблицы `mktb_lesson`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_lesson` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_lesson` (
+  `id` int(11) NOT NULL,
   `subject_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
   `teacher_id` int(11) NOT NULL,
@@ -294,21 +280,22 @@ CREATE TABLE IF NOT EXISTS `mktb_lesson` (
   `end_time` int(11) NOT NULL,
   `hometask` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=9 ;
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_lesson`
 --
 
 INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_time`, `end_time`, `hometask`, `created_at`, `updated_at`) VALUES
-(1, 1, 3, 11, 1536472801, 0, '', 1535367039, 1536997130),
-(2, 2, 3, 11, 1536404401, 0, '', 1535367599, 1536997116),
+(1, 1, 3, 11, 1536472801, 0, 'Упражнение 14, стр.10', 1535367039, 1536997130),
+(2, 2, 3, 11, 1536404401, 0, 'Упражнение 15, стр.14', 1535367599, 1536997116),
 (4, 1, 3, 11, 1536299101, 0, '', 1535373444, 1536997108),
 (6, 1, 3, 11, 1536210001, 0, 'Упражнение 11, стр.8', 1535520182, 1536997077),
 (7, 2, 6, 11, 1535903341, 0, '', 1535903352, 1535903352),
-(8, 3, 1, 15, 1537183801, 0, 'sdfsdf sdfsdf sdfsdf', 1537183826, 1537183826);
+(8, 1, 1, 40, 1537525621, 0, '5 dars', 1537525700, 1537525700),
+(9, 1, 3, 42, 1537526521, 0, '15 chi dars, 20 bet', 1537526563, 1537526563),
+(10, 1, 3, 42, 1537526701, 0, 'gullar mavzusi', 1537526769, 1537526769);
 
 -- --------------------------------------------------------
 
@@ -316,16 +303,15 @@ INSERT INTO `mktb_lesson` (`id`, `subject_id`, `group_id`, `teacher_id`, `start_
 -- Структура таблицы `mktb_module`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_module` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_module` (
+  `id` int(11) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `access` int(11) NOT NULL,
   `sort_order` smallint(6) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `show_menu` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
+  `show_menu` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_module`
@@ -376,10 +362,9 @@ INSERT INTO `mktb_module` (`id`, `alias`, `name`, `access`, `sort_order`, `statu
 -- Структура таблицы `mktb_module_to_usergroup`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_module_to_usergroup` (
+CREATE TABLE `mktb_module_to_usergroup` (
   `module_id` int(11) NOT NULL,
-  `usergroup_id` int(11) NOT NULL,
-  PRIMARY KEY (`usergroup_id`,`module_id`)
+  `usergroup_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -388,14 +373,13 @@ CREATE TABLE IF NOT EXISTS `mktb_module_to_usergroup` (
 -- Структура таблицы `mktb_option`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_option` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
   `comment` varchar(255) NOT NULL,
-  `visible` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
+  `visible` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_option`
@@ -455,7 +439,8 @@ INSERT INTO `mktb_option` (`id`, `name`, `content`, `comment`, `visible`) VALUES
 (51, 'google_maps_api_key', '1', 'Ключ для карт Google', 1),
 (52, 'map_lat', '1', 'Координаты карты (широта)', 1),
 (53, 'map_lng', '1', 'Координаты карты (долгота)', 1),
-(54, 'study_start_month', '9', 'Месяц начало учёбы', 1);
+(54, 'study_start_month', '9', 'Месяц начало учёбы', 1),
+(55, 'school_schedule_file', 'schedule19110.jpg', 'Файл расписания школы', 1);
 
 -- --------------------------------------------------------
 
@@ -463,8 +448,8 @@ INSERT INTO `mktb_option` (`id`, `name`, `content`, `comment`, `visible`) VALUES
 -- Структура таблицы `mktb_order`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_order` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `status` tinyint(2) NOT NULL,
   `new` tinyint(1) NOT NULL,
@@ -479,9 +464,8 @@ CREATE TABLE IF NOT EXISTS `mktb_order` (
   `dover_date` varchar(255) NOT NULL,
   `comment` text NOT NULL,
   `last_stock_change` varchar(255) NOT NULL,
-  `last_balance_change` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `last_balance_change` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -489,15 +473,14 @@ CREATE TABLE IF NOT EXISTS `mktb_order` (
 -- Структура таблицы `mktb_order_change`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_order_change` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_order_change` (
+  `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `new_status` tinyint(2) NOT NULL,
   `date` int(11) NOT NULL,
   `comment` varchar(2000) NOT NULL,
-  `customer_notified` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `customer_notified` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -505,8 +488,8 @@ CREATE TABLE IF NOT EXISTS `mktb_order_change` (
 -- Структура таблицы `mktb_page`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_page` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_page` (
+  `id` int(11) NOT NULL,
   `controller` varchar(255) NOT NULL,
   `method` varchar(255) NOT NULL,
   `side` varchar(255) NOT NULL,
@@ -520,18 +503,17 @@ CREATE TABLE IF NOT EXISTS `mktb_page` (
   `descr_full` text NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_page`
 --
 
 INSERT INTO `mktb_page` (`id`, `controller`, `method`, `side`, `layout`, `status`, `alias`, `name`, `text_name`, `nav_name`, `descr`, `descr_full`, `meta_t`, `meta_d`, `meta_k`) VALUES
-(1, 'home', 'index', 'front', 'default', 1, '', '{"1":"Maktab"}', '{"1":"Maktab"}', '{"1":"Главная"}', '{"1":""}', '{"1":"&lt;p&gt;Maktab&lt;\\/p&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(21, 'contact', 'index', 'front', 'default', 1, 'contact', '{"1":"Контакты"}', '{"1":"Связаться с нами"}', '{"1":"Контакты"}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}', '{"1":""}'),
-(24, 'information', 'view', 'front', 'default', 1, 'rules.html', '{"1":"Пользовательское соглашение"}', '{"1":"Пользовательское соглашение"}', '{"1":"Пользовательское соглашение"}', '{"1":""}', '{"1":"&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati fuga itaque debitis dolorum veritatis deserunt sit illum rerum fugit voluptatem, at odio, reprehenderit, dolores deleniti dignissimos qui dolor repudiandae ullam.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Praesentium modi voluptatibus velit excepturi qui reprehenderit rerum, totam, nesciunt, obcaecati neque quos quisquam! Ab molestiae qui veniam voluptatem deleniti in inventore, maxime itaque cumque recusandae odit nisi ut. Repellat!&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Qui molestias culpa ipsam rem, saepe. Inventore aliquam ab ducimus accusamus reiciendis saepe quidem nisi aliquid earum maiores voluptatum repellat dolore sequi magnam, labore dolorum placeat enim suscipit laborum veniam.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Fuga incidunt neque distinctio aliquid ut, ipsam officiis deleniti magni eveniet est dolor quam ab id, atque doloremque eos repudiandae architecto possimus minima nulla ea labore consequatur maxime cum. Dolores.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Sapiente harum rem reprehenderit ex accusamus, vero ducimus. Accusantium ullam quia, et id nam tempora nulla recusandae eligendi minima perspiciatis nostrum, numquam molestias, repellat fuga distinctio autem, consequatur dolorem. Iste.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Odio molestiae harum aperiam officiis hic, at assumenda, incidunt iusto est totam commodi quidem perspiciatis dolorum ab ducimus recusandae eius doloribus! Molestias quasi ea suscipit, perspiciatis numquam quos itaque obcaecati.&lt;\\/p&gt;"}', '{"1":""}', '{"1":""}', '{"1":""}');
+(1, 'home', 'index', 'front', 'default', 1, '', '{\"1\":\"Maktab\"}', '{\"1\":\"Maktab\"}', '{\"1\":\"Главная\"}', '{\"1\":\"\"}', '{\"1\":\"&lt;p&gt;Maktab&lt;\\/p&gt;\"}', '{\"1\":\"\"}', '{\"1\":\"\"}', '{\"1\":\"\"}'),
+(21, 'contact', 'index', 'front', 'default', 1, 'contact', '{\"1\":\"Контакты\"}', '{\"1\":\"Связаться с нами\"}', '{\"1\":\"Контакты\"}', '{\"1\":\"\"}', '{\"1\":\"\"}', '{\"1\":\"\"}', '{\"1\":\"\"}', '{\"1\":\"\"}'),
+(24, 'information', 'view', 'front', 'default', 1, 'rules.html', '{\"1\":\"Пользовательское соглашение\"}', '{\"1\":\"Пользовательское соглашение\"}', '{\"1\":\"Пользовательское соглашение\"}', '{\"1\":\"\"}', '{\"1\":\"&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Obcaecati fuga itaque debitis dolorum veritatis deserunt sit illum rerum fugit voluptatem, at odio, reprehenderit, dolores deleniti dignissimos qui dolor repudiandae ullam.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Praesentium modi voluptatibus velit excepturi qui reprehenderit rerum, totam, nesciunt, obcaecati neque quos quisquam! Ab molestiae qui veniam voluptatem deleniti in inventore, maxime itaque cumque recusandae odit nisi ut. Repellat!&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Qui molestias culpa ipsam rem, saepe. Inventore aliquam ab ducimus accusamus reiciendis saepe quidem nisi aliquid earum maiores voluptatum repellat dolore sequi magnam, labore dolorum placeat enim suscipit laborum veniam.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Fuga incidunt neque distinctio aliquid ut, ipsam officiis deleniti magni eveniet est dolor quam ab id, atque doloremque eos repudiandae architecto possimus minima nulla ea labore consequatur maxime cum. Dolores.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Sapiente harum rem reprehenderit ex accusamus, vero ducimus. Accusantium ullam quia, et id nam tempora nulla recusandae eligendi minima perspiciatis nostrum, numquam molestias, repellat fuga distinctio autem, consequatur dolorem. Iste.&lt;\\/p&gt;\\r\\n\\r\\n&lt;p&gt;Odio molestiae harum aperiam officiis hic, at assumenda, incidunt iusto est totam commodi quidem perspiciatis dolorum ab ducimus recusandae eius doloribus! Molestias quasi ea suscipit, perspiciatis numquam quos itaque obcaecati.&lt;\\/p&gt;\"}', '{\"1\":\"\"}', '{\"1\":\"\"}', '{\"1\":\"\"}');
 
 -- --------------------------------------------------------
 
@@ -539,15 +521,14 @@ INSERT INTO `mktb_page` (`id`, `controller`, `method`, `side`, `layout`, `status
 -- Структура таблицы `mktb_page_module`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_page_module` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_page_module` (
+  `id` int(11) NOT NULL,
   `page_id` int(11) NOT NULL,
   `side` varchar(255) NOT NULL,
   `controller` varchar(255) NOT NULL,
   `action` varchar(255) NOT NULL,
-  `position` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `position` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -555,8 +536,8 @@ CREATE TABLE IF NOT EXISTS `mktb_page_module` (
 -- Структура таблицы `mktb_post`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_post` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_post` (
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `type` tinyint(3) NOT NULL,
@@ -573,9 +554,8 @@ CREATE TABLE IF NOT EXISTS `mktb_post` (
   `views` int(11) NOT NULL,
   `meta_t` text NOT NULL,
   `meta_d` text NOT NULL,
-  `meta_k` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `meta_k` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -583,8 +563,8 @@ CREATE TABLE IF NOT EXISTS `mktb_post` (
 -- Структура таблицы `mktb_product`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_product` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_product` (
+  `id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
   `category_type_id` int(11) NOT NULL,
   `brand_id` int(11) NOT NULL,
@@ -624,9 +604,8 @@ CREATE TABLE IF NOT EXISTS `mktb_product` (
   `date_modify` int(11) NOT NULL,
   `views` int(11) NOT NULL,
   `request_product` tinyint(1) NOT NULL DEFAULT '0',
-  `recommended` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `recommended` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -634,11 +613,10 @@ CREATE TABLE IF NOT EXISTS `mktb_product` (
 -- Структура таблицы `mktb_product_name`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_product_name` (
+CREATE TABLE `mktb_product_name` (
   `product_id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`product_id`,`lang_id`)
+  `lang_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -647,12 +625,11 @@ CREATE TABLE IF NOT EXISTS `mktb_product_name` (
 -- Структура таблицы `mktb_product_option`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_product_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_product_option` (
+  `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `type` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `type` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -660,10 +637,9 @@ CREATE TABLE IF NOT EXISTS `mktb_product_option` (
 -- Структура таблицы `mktb_product_option_to_product`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_product_option_to_product` (
+CREATE TABLE `mktb_product_option_to_product` (
   `product_option_value_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  PRIMARY KEY (`product_option_value_id`,`product_id`)
+  `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -672,15 +648,14 @@ CREATE TABLE IF NOT EXISTS `mktb_product_option_to_product` (
 -- Структура таблицы `mktb_product_option_value`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_product_option_value` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_product_option_value` (
+  `id` int(11) NOT NULL,
   `product_option_id` int(11) NOT NULL,
   `name` text NOT NULL,
   `price` decimal(11,2) NOT NULL,
   `file_id` int(11) NOT NULL,
-  `color` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `color` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -688,14 +663,11 @@ CREATE TABLE IF NOT EXISTS `mktb_product_option_value` (
 -- Структура таблицы `mktb_product_search`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_product_search` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_product_search` (
+  `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `search_text` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `product_id` (`product_id`),
-  FULLTEXT KEY `search_text` (`search_text`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
+  `search_text` text NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -703,8 +675,8 @@ CREATE TABLE IF NOT EXISTS `mktb_product_search` (
 -- Структура таблицы `mktb_review`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_review` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_review` (
+  `id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
@@ -713,9 +685,8 @@ CREATE TABLE IF NOT EXISTS `mktb_review` (
   `rating` tinyint(1) NOT NULL,
   `date_add` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `new` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `new` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -723,16 +694,15 @@ CREATE TABLE IF NOT EXISTS `mktb_review` (
 -- Структура таблицы `mktb_slider`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_slider` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_slider` (
+  `id` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sort_number` int(11) NOT NULL,
   `name` text NOT NULL,
   `url` text NOT NULL,
-  `descr_full` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `descr_full` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -740,37 +710,40 @@ CREATE TABLE IF NOT EXISTS `mktb_slider` (
 -- Структура таблицы `mktb_student_attendance`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_student_attendance` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_student_attendance` (
+  `id` int(11) NOT NULL,
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `attended` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=46 ;
+  `attended` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_student_attendance`
 --
 
 INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attended`) VALUES
+(4, 2, 13, 1),
+(5, 2, 14, 1),
+(6, 2, 25, 1),
+(10, 4, 13, 1),
+(11, 4, 14, 1),
+(12, 4, 25, 1),
+(22, 1, 13, 1),
+(23, 1, 14, 1),
+(24, 1, 25, 0),
+(25, 6, 13, 1),
+(26, 6, 14, 1),
+(27, 6, 25, 1),
 (28, 7, 27, 1),
-(29, 6, 13, 1),
-(30, 6, 14, 1),
-(31, 6, 25, 1),
-(32, 6, 31, 0),
-(33, 4, 13, 1),
-(34, 4, 14, 1),
-(35, 4, 25, 1),
-(36, 4, 31, 0),
-(37, 2, 13, 1),
-(38, 2, 14, 1),
-(39, 2, 25, 1),
-(40, 2, 31, 0),
-(41, 1, 13, 1),
-(42, 1, 14, 1),
-(43, 1, 25, 0),
-(44, 1, 31, 0),
-(45, 8, 26, 1);
+(29, 8, 26, 1),
+(30, 9, 13, 1),
+(31, 9, 14, 0),
+(32, 9, 25, 0),
+(33, 9, 31, 0),
+(34, 10, 13, 1),
+(35, 10, 14, 0),
+(36, 10, 25, 1),
+(37, 10, 31, 0);
 
 -- --------------------------------------------------------
 
@@ -778,37 +751,40 @@ INSERT INTO `mktb_student_attendance` (`id`, `lesson_id`, `student_id`, `attende
 -- Структура таблицы `mktb_student_mark`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_student_mark` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_student_mark` (
+  `id` int(11) NOT NULL,
   `lesson_id` int(11) NOT NULL,
   `student_id` int(11) NOT NULL,
-  `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=46 ;
+  `mark` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_student_mark`
 --
 
 INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
+(4, 2, 13, '4'),
+(5, 2, 14, '4'),
+(6, 2, 25, '5'),
+(10, 4, 13, '5'),
+(11, 4, 14, '5'),
+(12, 4, 25, '5'),
+(22, 1, 13, '3'),
+(23, 1, 14, '5'),
+(24, 1, 25, '0'),
+(25, 6, 13, '5'),
+(26, 6, 14, '4'),
+(27, 6, 25, '3'),
 (28, 7, 27, '5'),
-(29, 6, 13, '5'),
-(30, 6, 14, '4'),
-(31, 6, 25, '3'),
-(32, 6, 31, '0'),
-(33, 4, 13, '5'),
-(34, 4, 14, '5'),
-(35, 4, 25, '5'),
-(36, 4, 31, '0'),
-(37, 2, 13, '4'),
-(38, 2, 14, '4'),
-(39, 2, 25, '5'),
-(40, 2, 31, '0'),
-(41, 1, 13, '3'),
-(42, 1, 14, '5'),
-(43, 1, 25, '0'),
-(44, 1, 31, '0'),
-(45, 8, 26, '5');
+(29, 8, 26, '5'),
+(30, 9, 13, '5'),
+(31, 9, 14, '0'),
+(32, 9, 25, '0'),
+(33, 9, 31, '0'),
+(34, 10, 13, '2'),
+(35, 10, 14, '0'),
+(36, 10, 25, '5'),
+(37, 10, 31, '0');
 
 -- --------------------------------------------------------
 
@@ -816,10 +792,9 @@ INSERT INTO `mktb_student_mark` (`id`, `lesson_id`, `student_id`, `mark`) VALUES
 -- Структура таблицы `mktb_student_to_group`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_student_to_group` (
+CREATE TABLE `mktb_student_to_group` (
   `student_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`student_id`,`group_id`)
+  `group_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -831,8 +806,7 @@ INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
 (14, 3),
 (25, 3),
 (26, 1),
-(27, 6),
-(31, 3);
+(27, 6);
 
 -- --------------------------------------------------------
 
@@ -840,10 +814,9 @@ INSERT INTO `mktb_student_to_group` (`student_id`, `group_id`) VALUES
 -- Структура таблицы `mktb_student_to_user`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_student_to_user` (
+CREATE TABLE `mktb_student_to_user` (
   `student_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  PRIMARY KEY (`student_id`,`user_id`)
+  `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -851,7 +824,10 @@ CREATE TABLE IF NOT EXISTS `mktb_student_to_user` (
 --
 
 INSERT INTO `mktb_student_to_user` (`student_id`, `user_id`) VALUES
-(31, 30);
+(13, 39),
+(13, 41),
+(26, 39),
+(27, 38);
 
 -- --------------------------------------------------------
 
@@ -859,16 +835,15 @@ INSERT INTO `mktb_student_to_user` (`student_id`, `user_id`) VALUES
 -- Структура таблицы `mktb_study_period`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_study_period` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_study_period` (
+  `id` int(11) NOT NULL,
   `period` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `start_year` smallint(4) NOT NULL,
   `end_year` smallint(4) NOT NULL,
   `start_time` int(11) NOT NULL,
   `end_time` int(11) NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=5 ;
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_study_period`
@@ -886,12 +861,11 @@ INSERT INTO `mktb_study_period` (`id`, `period`, `start_year`, `end_year`, `star
 -- Структура таблицы `mktb_subject`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_subject` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_subject` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=4 ;
+  `status` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_subject`
@@ -908,10 +882,9 @@ INSERT INTO `mktb_subject` (`id`, `name`, `status`) VALUES
 -- Структура таблицы `mktb_subject_to_teacher`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_subject_to_teacher` (
+CREATE TABLE `mktb_subject_to_teacher` (
   `subject_id` int(11) NOT NULL,
-  `teacher_id` int(11) NOT NULL,
-  PRIMARY KEY (`subject_id`,`teacher_id`)
+  `teacher_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -919,9 +892,11 @@ CREATE TABLE IF NOT EXISTS `mktb_subject_to_teacher` (
 --
 
 INSERT INTO `mktb_subject_to_teacher` (`subject_id`, `teacher_id`) VALUES
-(1, 11),
-(2, 11),
-(3, 15);
+(1, 40),
+(1, 42),
+(2, 40),
+(2, 42),
+(3, 40);
 
 -- --------------------------------------------------------
 
@@ -929,13 +904,12 @@ INSERT INTO `mktb_subject_to_teacher` (`subject_id`, `teacher_id`) VALUES
 -- Структура таблицы `mktb_subscribe`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_subscribe` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_subscribe` (
+  `id` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `subscribe` tinyint(1) NOT NULL,
-  `type` tinyint(2) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `type` tinyint(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_subscribe`
@@ -950,12 +924,11 @@ INSERT INTO `mktb_subscribe` (`id`, `email`, `subscribe`, `type`) VALUES
 -- Структура таблицы `mktb_tag`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tag` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_tag` (
+  `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `lang_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `lang_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -963,10 +936,9 @@ CREATE TABLE IF NOT EXISTS `mktb_tag` (
 -- Структура таблицы `mktb_tag_to_product`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tag_to_product` (
+CREATE TABLE `mktb_tag_to_product` (
   `tag_id` int(11) NOT NULL,
-  `product_id` int(11) NOT NULL,
-  PRIMARY KEY (`tag_id`,`product_id`)
+  `product_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -975,10 +947,9 @@ CREATE TABLE IF NOT EXISTS `mktb_tag_to_product` (
 -- Структура таблицы `mktb_teacher_to_group`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_teacher_to_group` (
+CREATE TABLE `mktb_teacher_to_group` (
   `teacher_id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  PRIMARY KEY (`teacher_id`,`group_id`)
+  `group_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -986,12 +957,11 @@ CREATE TABLE IF NOT EXISTS `mktb_teacher_to_group` (
 --
 
 INSERT INTO `mktb_teacher_to_group` (`teacher_id`, `group_id`) VALUES
-(11, 3),
-(11, 6),
-(15, 1),
-(15, 2),
-(15, 5),
-(24, 0);
+(40, 1),
+(40, 2),
+(42, 2),
+(42, 3),
+(42, 6);
 
 -- --------------------------------------------------------
 
@@ -999,13 +969,12 @@ INSERT INTO `mktb_teacher_to_group` (`teacher_id`, `group_id`) VALUES
 -- Структура таблицы `mktb_tgbot_api_token`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_api_token` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_tgbot_api_token` (
+  `id` int(11) NOT NULL,
   `token` varchar(32) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `counter` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+  `counter` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1013,15 +982,13 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_api_token` (
 -- Структура таблицы `mktb_tgbot_botan_shortener`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_botan_shortener` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+CREATE TABLE `mktb_tgbot_botan_shortener` (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT 'Unique identifier for this entry',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `url` text NOT NULL COMMENT 'Original URL',
   `short_url` char(255) NOT NULL DEFAULT '' COMMENT 'Shortened URL',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1029,20 +996,58 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_botan_shortener` (
 -- Структура таблицы `mktb_tgbot_callback_query`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_callback_query` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Unique identifier for this query',
+CREATE TABLE `mktb_tgbot_callback_query` (
+  `id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Unique identifier for this query',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
-  `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
+  `message_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Unique message identifier',
   `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the message sent via the bot in inline mode, that originated the query',
   `data` char(255) NOT NULL DEFAULT '' COMMENT 'Data associated with the callback button',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `chat_id` (`chat_id`),
-  KEY `message_id` (`message_id`),
-  KEY `chat_id_2` (`chat_id`,`message_id`)
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_callback_query`
+--
+
+INSERT INTO `mktb_tgbot_callback_query` (`id`, `user_id`, `chat_id`, `message_id`, `inline_message_id`, `data`, `created_at`) VALUES
+(47760109454604512, 11120017, 11120017, 1254, NULL, 'mychildren_group_id_2', '2018-09-22 09:11:25'),
+(47760109891395381, 11120017, 11120017, 952, NULL, 'mychildren_group_id_6', '2018-09-17 14:24:37'),
+(47760110050686714, 11120017, 11120017, 954, NULL, 'mychildren_add_student_id_13', '2018-09-17 14:24:48'),
+(47760110429534463, 11120017, 11120017, 952, NULL, 'mychildren_group_id_3', '2018-09-17 14:24:39'),
+(47760110995474518, 11120017, 11120017, 1251, NULL, 'mychildren_view_lessons_27_2', '2018-09-22 09:10:22'),
+(47760111885069746, 11120017, 11120017, 1256, NULL, 'mychildren_add_student_id_13', '2018-09-22 09:11:32'),
+(47760112490378856, 11120017, 11120017, 1075, NULL, 'mychildren_group_id_6', '2018-09-18 12:32:25'),
+(47760112753918303, 11120017, 11120017, 1254, NULL, 'mychildren_group_id_3', '2018-09-22 09:11:29'),
+(47760113449259445, 11120017, 11120017, 1076, NULL, 'mychildren_add_student_id_27', '2018-09-18 12:32:27'),
+(47760113482159183, 11120017, 11120017, 1133, NULL, 'mychildren_group_id_3', '2018-09-21 13:15:21'),
+(47760113529054858, 11120017, 11120017, 1250, NULL, 'mychildren_view_student_id_27', '2018-09-22 09:10:18'),
+(192200744296022316, 44750223, 44750223, 1123, NULL, 'mychildren_group_id_1', '2018-09-21 13:06:53'),
+(192200745513811338, 44750223, 44750223, 1137, NULL, 'mychildren_view_student_id_13', '2018-09-21 13:15:36'),
+(192200745596093688, 44750223, 44750223, 1156, NULL, 'mychildren_view_student_id_13', '2018-09-21 13:16:38'),
+(192200746140874778, 44750223, 44750223, 1128, NULL, 'mychildren_add_student_id_13', '2018-09-21 13:14:45'),
+(192200746187145731, 44750223, 44750223, 1123, NULL, 'mychildren_group_id_2', '2018-09-21 13:08:27'),
+(192200746764989970, 44750223, 44750223, 1123, NULL, 'mychildren_group_id_3', '2018-09-21 13:14:37'),
+(192200747071524640, 44750223, 44750223, 1157, NULL, 'mychildren_view_lessons_13_2', '2018-09-21 13:16:42'),
+(192200747072189110, 44750223, 44750223, 1123, NULL, 'mychildren_group_id_5', '2018-09-21 13:06:39'),
+(192200747184440826, 44750223, 44750223, 1174, NULL, 'mychildren_view_lessons_26_1', '2018-09-21 13:29:03'),
+(192200747446885695, 44750223, 44750223, 1140, NULL, 'mychildren_view_lessons_13_1', '2018-09-21 13:15:40'),
+(192200748106140452, 44750223, 44750223, 1171, NULL, 'mychildren_view_student_id_26', '2018-09-21 13:28:47'),
+(192200748235015553, 44750223, 44750223, 1125, NULL, 'mychildren_add_student_id_26', '2018-09-21 13:06:58'),
+(1384169377249939841, 322277047, 322277047, 1213, NULL, 'mychildren_view_student_id_13', '2018-09-21 13:43:12'),
+(1384169377562257785, 322277047, 322277047, 1201, NULL, 'mychildren_group_id_3', '2018-09-21 13:37:42'),
+(1384169377871953373, 322277047, 322277047, 1209, NULL, 'mychildren_add_student_id_13', '2018-09-21 13:43:01'),
+(1384169377880352095, 322277047, 322277047, 1218, NULL, 'mychildren_view_student_id_13', '2018-09-21 14:21:02'),
+(1384169378265056532, 322277047, 322277047, 1207, NULL, 'mychildren_view_lessons_13_1', '2018-09-21 13:38:47'),
+(1384169379301554378, 322277047, 322277047, 1214, NULL, 'mychildren_view_lessons_13_1', '2018-09-21 13:43:14'),
+(1384169379934262267, 322277047, 322277047, 1263, NULL, 'mychildren_view_lessons_13_1', '2018-09-22 11:15:16'),
+(1384169380157782540, 322277047, 322277047, 1201, NULL, 'mychildren_group_id_3', '2018-09-21 13:41:09'),
+(1384169380197196120, 322277047, 322277047, 1225, NULL, 'mychildren_add_student_id_13', '2018-09-21 14:22:07'),
+(1384169380398224321, 322277047, 322277047, 1206, NULL, 'mychildren_view_student_id_13', '2018-09-21 13:38:42'),
+(1384169380398592159, 322277047, 322277047, 1202, NULL, 'mychildren_add_student_id_13', '2018-09-21 13:37:46'),
+(1384169380478262418, 322277047, 322277047, 1222, NULL, 'mychildren_group_id_2', '2018-09-21 14:21:27'),
+(1384169380778506732, 322277047, 322277047, 1222, NULL, 'mychildren_group_id_3', '2018-09-21 14:21:27'),
+(1384169380853332804, 322277047, 322277047, 1262, NULL, 'mychildren_view_student_id_13', '2018-09-22 11:15:11');
 
 -- --------------------------------------------------------
 
@@ -1050,7 +1055,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_callback_query` (
 -- Структура таблицы `mktb_tgbot_chat`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_chat` (
+CREATE TABLE `mktb_tgbot_chat` (
   `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier',
   `type` enum('private','group','supergroup','channel') NOT NULL COMMENT 'Chat type, either private, group, supergroup or channel',
   `title` char(255) DEFAULT '' COMMENT 'Chat (group) title, is null if chat type is private',
@@ -1058,10 +1063,25 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_chat` (
   `all_members_are_administrators` tinyint(1) DEFAULT '0' COMMENT 'True if a all members of this group are admins',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
-  `old_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier, this is filled when a group is converted to a supergroup',
-  PRIMARY KEY (`id`),
-  KEY `old_id` (`old_id`)
+  `old_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier, this is filled when a group is converted to a supergroup'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_chat`
+--
+
+INSERT INTO `mktb_tgbot_chat` (`id`, `type`, `title`, `username`, `all_members_are_administrators`, `created_at`, `updated_at`, `old_id`) VALUES
+(11120017, 'private', NULL, 'smartweb_uz', NULL, '2018-09-17 13:20:42', '2018-09-22 13:53:28', NULL),
+(44750223, 'private', NULL, 'ELFIYSAR', NULL, '2018-09-17 16:49:11', '2018-09-21 13:30:53', NULL),
+(51161476, 'private', NULL, 'intromax', NULL, '2018-09-18 06:57:23', '2018-09-18 06:58:10', NULL),
+(87703754, 'private', NULL, 'interintellect', NULL, '2018-09-15 17:10:39', '2018-09-21 13:16:57', NULL),
+(211654109, 'private', NULL, 'farruhkarimov', NULL, '2018-09-16 19:58:22', '2018-09-16 20:01:22', NULL),
+(263488083, 'private', NULL, NULL, NULL, '2018-09-22 05:49:37', '2018-09-22 05:49:37', NULL),
+(286558501, 'private', NULL, 'salamhotel', NULL, '2018-09-15 17:17:17', '2018-09-17 13:19:43', NULL),
+(322277047, 'private', NULL, NULL, NULL, '2018-09-21 13:36:52', '2018-09-22 11:15:11', NULL),
+(370140466, 'private', NULL, NULL, NULL, '2018-09-04 05:45:05', '2018-09-18 11:53:34', NULL),
+(381717598, 'private', NULL, 'Internet_Marketing_SMM', NULL, '2018-09-15 17:21:38', '2018-09-15 17:21:53', NULL),
+(691261462, 'private', NULL, NULL, NULL, '2018-09-07 21:35:49', '2018-09-07 21:35:49', NULL);
 
 -- --------------------------------------------------------
 
@@ -1069,17 +1089,15 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_chat` (
 -- Структура таблицы `mktb_tgbot_chosen_inline_result`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_chosen_inline_result` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+CREATE TABLE `mktb_tgbot_chosen_inline_result` (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT 'Unique identifier for this entry',
   `result_id` char(255) NOT NULL DEFAULT '' COMMENT 'Identifier for this result',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `location` char(255) DEFAULT NULL COMMENT 'Location object, user''s location',
   `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the sent inline message',
   `query` text NOT NULL COMMENT 'The query that was used to obtain the result',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1087,20 +1105,26 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_chosen_inline_result` (
 -- Структура таблицы `mktb_tgbot_conversation`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_conversation` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+CREATE TABLE `mktb_tgbot_conversation` (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT 'Unique identifier for this entry',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique user or chat identifier',
   `status` enum('active','cancelled','stopped') NOT NULL DEFAULT 'active' COMMENT 'Conversation state',
   `command` varchar(160) DEFAULT '' COMMENT 'Default command to execute',
   `notes` text COMMENT 'Data stored from command',
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  KEY `chat_id` (`chat_id`),
-  KEY `status` (`status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_conversation`
+--
+
+INSERT INTO `mktb_tgbot_conversation` (`id`, `user_id`, `chat_id`, `status`, `command`, `notes`, `created_at`, `updated_at`) VALUES
+(11, 211654109, 211654109, 'stopped', 'feedback', '{\"state\":0}', '2018-09-16 20:00:53', '2018-09-16 20:00:57'),
+(12, 11120017, 11120017, 'stopped', 'feedback', '{\"state\":0,\"type\":\"\\u0416\\u0430\\u043b\\u043e\\u0431\\u044b\",\"name\":\"Ulugbek +998908081239\",\"message\":\"Ggch\"}', '2018-09-18 12:20:27', '2018-09-18 12:31:53'),
+(13, 87703754, 87703754, 'active', 'feedback', '{\"state\":0}', '2018-09-21 13:16:57', '2018-09-21 13:16:57'),
+(14, 44750223, 44750223, 'stopped', 'feedback', '{\"state\":0,\"type\":\"Takliflar\",\"name\":\"\\u0413\\u0423\\u041b\\u0411\\u0410\\u0425\\u041e\\u0420 \\u0411\\u0430\\u0445\\u0442\\u0438\\u044f\\u0440\\u043e\\u0432\\u043d\\u0430 +998934430204\",\"message\":\"\\u041f\\u043f\\u0432\\u043b\\u0432\\u0434\\u0430\\u043e\\u0447\\u0442\\u0432\"}', '2018-09-21 13:30:28', '2018-09-21 13:30:54');
 
 -- --------------------------------------------------------
 
@@ -1108,21 +1132,29 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_conversation` (
 -- Структура таблицы `mktb_tgbot_edited_message`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_edited_message` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+CREATE TABLE `mktb_tgbot_edited_message` (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT 'Unique identifier for this entry',
   `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
-  `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
+  `message_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Unique message identifier',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `edit_date` timestamp NULL DEFAULT NULL COMMENT 'Date the message was edited in timestamp format',
   `text` text COMMENT 'For text messages, the actual UTF-8 text of the message max message length 4096 char utf8',
   `entities` text COMMENT 'For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text',
-  `caption` text COMMENT 'For message with caption, the actual UTF-8 text of the caption',
-  PRIMARY KEY (`id`),
-  KEY `chat_id` (`chat_id`),
-  KEY `message_id` (`message_id`),
-  KEY `user_id` (`user_id`),
-  KEY `chat_id_2` (`chat_id`,`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `caption` text COMMENT 'For message with caption, the actual UTF-8 text of the caption'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_edited_message`
+--
+
+INSERT INTO `mktb_tgbot_edited_message` (`id`, `chat_id`, `message_id`, `user_id`, `edit_date`, `text`, `entities`, `caption`) VALUES
+(55, 11120017, 952, 588857334, '2018-09-17 14:24:39', 'Выберите класс', NULL, NULL),
+(56, 44750223, 1123, 588857334, '2018-09-21 13:06:53', 'Выберите класс', NULL, NULL),
+(57, 44750223, 1123, 588857334, '2018-09-21 13:08:27', 'Выберите класс', NULL, NULL),
+(58, 44750223, 1123, 588857334, '2018-09-21 13:14:37', 'Выберите класс', NULL, NULL),
+(59, 322277047, 1201, 588857334, '2018-09-21 13:41:09', 'Выберите класс', NULL, NULL),
+(60, 322277047, 1222, 588857334, '2018-09-21 14:21:27', 'Выберите класс', NULL, NULL),
+(61, 11120017, 1254, 588857334, '2018-09-22 09:11:29', 'Выберите класс', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1130,12 +1162,11 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_edited_message` (
 -- Структура таблицы `mktb_tgbot_file`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_file` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_tgbot_file` (
+  `id` int(11) NOT NULL,
   `file_id` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
+  `url` varchar(255) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1143,16 +1174,15 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_file` (
 -- Структура таблицы `mktb_tgbot_information`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_information` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_tgbot_information` (
+  `id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `type` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
-  `sort_number` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=66 ;
+  `sort_number` int(11) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1160,15 +1190,13 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_information` (
 -- Структура таблицы `mktb_tgbot_inline_query`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_inline_query` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Unique identifier for this query',
+CREATE TABLE `mktb_tgbot_inline_query` (
+  `id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Unique identifier for this query',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `location` char(255) DEFAULT NULL COMMENT 'Location of the user',
   `query` text NOT NULL COMMENT 'Text of the query',
   `offset` char(255) DEFAULT NULL COMMENT 'Offset of the result',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -1177,9 +1205,9 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_inline_query` (
 -- Структура таблицы `mktb_tgbot_message`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
+CREATE TABLE `mktb_tgbot_message` (
   `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique chat identifier',
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Unique message identifier',
+  `id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Unique message identifier',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier',
   `date` timestamp NULL DEFAULT NULL COMMENT 'Date the message was sent in timestamp format',
   `forward_from` bigint(20) DEFAULT NULL COMMENT 'Unique user identifier, sender of the original message',
@@ -1187,7 +1215,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
   `forward_from_message_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier of the original message in the channel',
   `forward_date` timestamp NULL DEFAULT NULL COMMENT 'date the original message was sent in timestamp format',
   `reply_to_chat` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
-  `reply_to_message` bigint(20) unsigned DEFAULT NULL COMMENT 'Message that this message is reply to',
+  `reply_to_message` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Message that this message is reply to',
   `text` text COMMENT 'For text messages, the actual UTF-8 text of the message max message length 4096 char utf8',
   `entities` text COMMENT 'For text messages, special entities like usernames, URLs, bot commands, etc. that appear in the text',
   `audio` text COMMENT 'Audio object. Message is an audio file, information about the file',
@@ -1211,18 +1239,257 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
   `channel_chat_created` tinyint(1) DEFAULT '0' COMMENT 'Informs that the channel chat has been created',
   `migrate_to_chat_id` bigint(20) DEFAULT NULL COMMENT 'Migrate to chat identifier. The group has been migrated to a supergroup with the specified identifier',
   `migrate_from_chat_id` bigint(20) DEFAULT NULL COMMENT 'Migrate from chat identifier. The supergroup has been migrated from a group with the specified identifier',
-  `pinned_message` text COMMENT 'Message object. Specified message was pinned',
-  PRIMARY KEY (`chat_id`,`id`),
-  KEY `user_id` (`user_id`),
-  KEY `forward_from` (`forward_from`),
-  KEY `forward_from_chat` (`forward_from_chat`),
-  KEY `reply_to_chat` (`reply_to_chat`),
-  KEY `reply_to_message` (`reply_to_message`),
-  KEY `left_chat_member` (`left_chat_member`),
-  KEY `migrate_from_chat_id` (`migrate_from_chat_id`),
-  KEY `migrate_to_chat_id` (`migrate_to_chat_id`),
-  KEY `reply_to_chat_2` (`reply_to_chat`,`reply_to_message`)
+  `pinned_message` text COMMENT 'Message object. Specified message was pinned'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_message`
+--
+
+INSERT INTO `mktb_tgbot_message` (`chat_id`, `id`, `user_id`, `date`, `forward_from`, `forward_from_chat`, `forward_from_message_id`, `forward_date`, `reply_to_chat`, `reply_to_message`, `text`, `entities`, `audio`, `document`, `photo`, `sticker`, `video`, `voice`, `video_note`, `contact`, `location`, `venue`, `caption`, `new_chat_members`, `left_chat_member`, `new_chat_title`, `new_chat_photo`, `delete_chat_photo`, `group_chat_created`, `supergroup_chat_created`, `channel_chat_created`, `migrate_to_chat_id`, `migrate_from_chat_id`, `pinned_message`) VALUES
+(11120017, 926, 11120017, '2018-09-17 13:20:42', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 927, 588857334, '2018-09-17 13:20:46', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 928, 11120017, '2018-09-17 13:20:49', NULL, NULL, NULL, NULL, 11120017, 927, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"+998908081239\",\"first_name\":\"Ulugbek\",\"last_name\":\"Yusupxodjayev\",\"user_id\":11120017}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 931, 11120017, '2018-09-17 13:21:12', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 933, 11120017, '2018-09-17 13:21:14', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 935, 11120017, '2018-09-17 13:21:34', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 937, 11120017, '2018-09-17 13:21:37', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 939, 11120017, '2018-09-17 14:13:44', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 941, 11120017, '2018-09-17 14:22:25', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 943, 11120017, '2018-09-17 14:24:16', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 945, 11120017, '2018-09-17 14:24:25', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 947, 11120017, '2018-09-17 14:24:29', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 949, 11120017, '2018-09-17 14:24:30', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 951, 11120017, '2018-09-17 14:24:33', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 952, 588857334, '2018-09-17 14:24:34', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите класс', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 954, 588857334, '2018-09-17 14:24:40', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 995, 11120017, '2018-09-18 06:57:54', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1015, 11120017, '2018-09-18 12:11:03', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1017, 11120017, '2018-09-18 12:11:07', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1019, 11120017, '2018-09-18 12:11:09', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1021, 11120017, '2018-09-18 12:13:48', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1023, 11120017, '2018-09-18 12:20:09', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1025, 11120017, '2018-09-18 12:20:22', NULL, NULL, NULL, NULL, NULL, NULL, '/help', '[{\"offset\":0,\"length\":5,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1027, 11120017, '2018-09-18 12:20:27', NULL, NULL, NULL, NULL, NULL, NULL, '/feedback', '[{\"offset\":0,\"length\":9,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1029, 11120017, '2018-09-18 12:20:33', NULL, NULL, NULL, NULL, NULL, NULL, '/whoami', '[{\"offset\":0,\"length\":7,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1031, 11120017, '2018-09-18 12:20:47', NULL, NULL, NULL, NULL, NULL, NULL, '/others', '[{\"offset\":0,\"length\":7,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1033, 11120017, '2018-09-18 12:20:54', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1034, 588857334, '2018-09-18 12:20:54', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1035, 11120017, '2018-09-18 12:27:05', NULL, NULL, NULL, NULL, 11120017, 1034, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998908081239\",\"first_name\":\"Ulugbek\",\"last_name\":\"Yusupxodjayev\",\"user_id\":11120017}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1038, 11120017, '2018-09-18 12:30:43', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1039, 588857334, '2018-09-18 12:30:44', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1040, 11120017, '2018-09-18 12:30:46', NULL, NULL, NULL, NULL, 11120017, 1039, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998908081239\",\"first_name\":\"Ulugbek\",\"last_name\":\"Yusupxodjayev\",\"user_id\":11120017}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1043, 11120017, '2018-09-18 12:31:11', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1045, 11120017, '2018-09-18 12:31:14', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1047, 11120017, '2018-09-18 12:31:16', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1049, 11120017, '2018-09-18 12:31:21', NULL, NULL, NULL, NULL, NULL, NULL, '❌️ Удалить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1051, 11120017, '2018-09-18 12:31:24', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1053, 11120017, '2018-09-18 12:31:27', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1055, 11120017, '2018-09-18 12:31:30', NULL, NULL, NULL, NULL, NULL, NULL, '✏️ Обращение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1057, 11120017, '2018-09-18 12:31:40', NULL, NULL, NULL, NULL, NULL, NULL, 'Жалобы', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1059, 11120017, '2018-09-18 12:31:42', NULL, NULL, NULL, NULL, NULL, NULL, 'Ulugbek +998908081239', '[{\"offset\":8,\"length\":13,\"type\":\"phone_number\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1061, 11120017, '2018-09-18 12:31:48', NULL, NULL, NULL, NULL, NULL, NULL, 'Ggch', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1063, 11120017, '2018-09-18 12:31:53', NULL, NULL, NULL, NULL, NULL, NULL, '✔️ Подтвердить', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1066, 11120017, '2018-09-18 12:32:00', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1068, 11120017, '2018-09-18 12:32:12', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1070, 11120017, '2018-09-18 12:32:14', NULL, NULL, NULL, NULL, NULL, NULL, '?? O\'zbekcha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1072, 11120017, '2018-09-18 12:32:18', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1074, 11120017, '2018-09-18 12:32:23', NULL, NULL, NULL, NULL, NULL, NULL, '?️ O\'quvchi qo\'shish', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1075, 588857334, '2018-09-18 12:32:24', NULL, NULL, NULL, NULL, NULL, NULL, 'Sinfni tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1076, 588857334, '2018-09-18 12:32:26', NULL, NULL, NULL, NULL, NULL, NULL, 'O\'quvchini tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1130, 11120017, '2018-09-21 13:15:08', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1132, 11120017, '2018-09-21 13:15:10', NULL, NULL, NULL, NULL, NULL, NULL, '?️ O\'quvchi qo\'shish', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1133, 588857334, '2018-09-21 13:15:10', NULL, NULL, NULL, NULL, NULL, NULL, 'Sinfni tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1138, 11120017, '2018-09-21 13:15:34', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1142, 11120017, '2018-09-21 13:16:03', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1144, 11120017, '2018-09-21 13:16:13', NULL, NULL, NULL, NULL, NULL, NULL, '? Boshqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1221, 11120017, '2018-09-21 14:21:15', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1238, 11120017, '2018-09-22 09:09:40', NULL, NULL, NULL, NULL, NULL, NULL, '? Boshqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1240, 11120017, '2018-09-22 09:09:47', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1242, 11120017, '2018-09-22 09:09:50', NULL, NULL, NULL, NULL, NULL, NULL, '?? Русский', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1244, 11120017, '2018-09-22 09:09:53', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1246, 11120017, '2018-09-22 09:10:11', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1248, 11120017, '2018-09-22 09:10:13', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1250, 588857334, '2018-09-22 09:10:16', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1251, 588857334, '2018-09-22 09:10:18', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите предмет', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1253, 11120017, '2018-09-22 09:10:54', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1254, 588857334, '2018-09-22 09:10:56', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите класс', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1256, 588857334, '2018-09-22 09:11:29', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1258, 11120017, '2018-09-22 09:11:36', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1265, 11120017, '2018-09-22 13:20:51', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1266, 11120017, '2018-09-22 13:29:25', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1267, 11120017, '2018-09-22 13:42:46', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1269, 11120017, '2018-09-22 13:42:50', NULL, NULL, NULL, NULL, NULL, NULL, 'button_school_schedule', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1270, 11120017, '2018-09-22 13:46:57', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1272, 11120017, '2018-09-22 13:46:59', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1274, 11120017, '2018-09-22 13:47:00', NULL, NULL, NULL, NULL, NULL, NULL, 'button_school_schedule', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1275, 11120017, '2018-09-22 13:48:34', NULL, NULL, NULL, NULL, NULL, NULL, 'button_school_schedule', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1276, 11120017, '2018-09-22 13:49:28', NULL, NULL, NULL, NULL, NULL, NULL, 'button_school_schedule', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1277, 11120017, '2018-09-22 13:52:19', NULL, NULL, NULL, NULL, NULL, NULL, 'button_school_schedule', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1278, 11120017, '2018-09-22 13:53:09', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1280, 11120017, '2018-09-22 13:53:12', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1282, 11120017, '2018-09-22 13:53:13', NULL, NULL, NULL, NULL, NULL, NULL, 'button_school_schedule', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1284, 11120017, '2018-09-22 13:53:26', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(11120017, 1286, 11120017, '2018-09-22 13:53:28', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 956, 44750223, '2018-09-17 16:49:11', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 957, 588857334, '2018-09-17 16:49:13', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 958, 44750223, '2018-09-17 16:49:27', NULL, NULL, NULL, NULL, 44750223, 957, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998934430204\",\"first_name\":\"\\u0413\\u0423\\u041b\\u0411\\u0410\\u0425\\u041e\\u0420 \\u0411\\u0430\\u0445\\u0442\\u0438\\u044f\\u0440\\u043e\\u0432\\u043d\\u0430\",\"last_name\":\"\\u0410\\u0425\\u0418 \\u0410\\u0411\\u0414\\u0423\\u041a\\u0410\\u0420\\u0418\\u041c\\u041e\\u0412\\u0410\",\"user_id\":44750223}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 961, 44750223, '2018-09-17 16:50:00', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 963, 44750223, '2018-09-17 16:50:06', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 965, 44750223, '2018-09-17 16:50:14', NULL, NULL, NULL, NULL, NULL, NULL, 'Малика ф', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 966, 44750223, '2018-09-17 16:50:23', NULL, NULL, NULL, NULL, NULL, NULL, '❌️ Удалить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 967, 44750223, '2018-09-17 16:50:25', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 970, 44750223, '2018-09-17 16:50:32', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 972, 44750223, '2018-09-17 16:51:10', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 974, 44750223, '2018-09-17 16:51:23', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 976, 44750223, '2018-09-17 16:51:28', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 978, 44750223, '2018-09-17 16:51:30', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 980, 44750223, '2018-09-17 16:51:34', NULL, NULL, NULL, NULL, NULL, NULL, '?? Русский', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 982, 44750223, '2018-09-17 16:51:37', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1108, 44750223, '2018-09-21 12:55:36', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1109, 588857334, '2018-09-21 12:55:37', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1110, 44750223, '2018-09-21 12:55:39', NULL, NULL, NULL, NULL, 44750223, 1109, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998934430204\",\"first_name\":\"\\u0413\\u0423\\u041b\\u0411\\u0410\\u0425\\u041e\\u0420 \\u0411\\u0430\\u0445\\u0442\\u0438\\u044f\\u0440\\u043e\\u0432\\u043d\\u0430\",\"last_name\":\"\\u0410\\u0425\\u0418 \\u0410\\u0411\\u0414\\u0423\\u041a\\u0410\\u0420\\u0418\\u041c\\u041e\\u0412\\u0410\",\"user_id\":44750223}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1118, 44750223, '2018-09-21 13:06:07', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1120, 44750223, '2018-09-21 13:06:14', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1121, 44750223, '2018-09-21 13:06:17', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1123, 588857334, '2018-09-21 13:06:22', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите класс', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1125, 588857334, '2018-09-21 13:06:54', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1128, 588857334, '2018-09-21 13:14:37', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1135, 44750223, '2018-09-21 13:15:27', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1137, 588857334, '2018-09-21 13:15:30', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1140, 588857334, '2018-09-21 13:15:36', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите предмет', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1146, 44750223, '2018-09-21 13:16:20', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1148, 44750223, '2018-09-21 13:16:23', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1150, 44750223, '2018-09-21 13:16:26', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1152, 44750223, '2018-09-21 13:16:28', NULL, NULL, NULL, NULL, NULL, NULL, '?? O\'zbekcha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1154, 44750223, '2018-09-21 13:16:31', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1156, 588857334, '2018-09-21 13:16:32', NULL, NULL, NULL, NULL, NULL, NULL, 'O\'quvchini tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1157, 588857334, '2018-09-21 13:16:39', NULL, NULL, NULL, NULL, NULL, NULL, 'Fanni tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1161, 44750223, '2018-09-21 13:19:35', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1163, 44750223, '2018-09-21 13:19:40', NULL, NULL, NULL, NULL, NULL, NULL, '? Aloqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1165, 44750223, '2018-09-21 13:19:47', NULL, NULL, NULL, NULL, NULL, NULL, '? Boshqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1167, 44750223, '2018-09-21 13:28:35', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1169, 44750223, '2018-09-21 13:28:40', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1171, 588857334, '2018-09-21 13:28:41', NULL, NULL, NULL, NULL, NULL, NULL, 'O\'quvchini tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1172, 44750223, '2018-09-21 13:28:44', NULL, NULL, NULL, NULL, NULL, NULL, '?️ O\'quvchi qo\'shish', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1174, 588857334, '2018-09-21 13:28:47', NULL, NULL, NULL, NULL, NULL, NULL, 'Fanni tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1176, 44750223, '2018-09-21 13:29:45', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1178, 44750223, '2018-09-21 13:29:53', NULL, NULL, NULL, NULL, NULL, NULL, '? Boshqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1180, 44750223, '2018-09-21 13:30:11', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1182, 44750223, '2018-09-21 13:30:28', NULL, NULL, NULL, NULL, NULL, NULL, '✏️ Murojaat', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1184, 44750223, '2018-09-21 13:30:32', NULL, NULL, NULL, NULL, NULL, NULL, 'Takliflar', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1186, 44750223, '2018-09-21 13:30:40', NULL, NULL, NULL, NULL, NULL, NULL, 'ГУЛБАХОР Бахтияровна +998934430204', '[{\"offset\":21,\"length\":13,\"type\":\"phone_number\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1188, 44750223, '2018-09-21 13:30:48', NULL, NULL, NULL, NULL, NULL, NULL, 'Ппвлвдаочтв', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44750223, 1190, 44750223, '2018-09-21 13:30:53', NULL, NULL, NULL, NULL, NULL, NULL, '✔️ Tasdiqlash', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 984, 51161476, '2018-09-18 06:57:23', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 985, 588857334, '2018-09-18 06:57:24', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 986, 51161476, '2018-09-18 06:57:33', NULL, NULL, NULL, NULL, 51161476, 985, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"+998903263563\",\"first_name\":\"\\u041c\\u0430\\u043a\\u0441\\u0438\\u043c\",\"user_id\":51161476}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 989, 51161476, '2018-09-18 06:57:38', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 991, 51161476, '2018-09-18 06:57:40', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 993, 51161476, '2018-09-18 06:57:46', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 997, 51161476, '2018-09-18 06:58:01', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 999, 51161476, '2018-09-18 06:58:04', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 1001, 51161476, '2018-09-18 06:58:08', NULL, NULL, NULL, NULL, NULL, NULL, '❌️ Удалить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51161476, 1003, 51161476, '2018-09-18 06:58:10', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 746, 87703754, '2018-09-15 17:10:39', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 747, 588857334, '2018-09-15 17:10:43', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 748, 87703754, '2018-09-15 17:10:47', NULL, NULL, NULL, NULL, 87703754, 747, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"+998911660048\",\"first_name\":\"Umidjon\",\"user_id\":87703754}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 751, 87703754, '2018-09-15 17:10:56', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 753, 87703754, '2018-09-15 17:11:00', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 755, 87703754, '2018-09-15 17:11:25', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 757, 87703754, '2018-09-15 17:11:36', NULL, NULL, NULL, NULL, NULL, NULL, '❌️ Удалить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 758, 87703754, '2018-09-15 17:11:39', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 761, 87703754, '2018-09-15 17:11:59', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 763, 87703754, '2018-09-15 17:12:01', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 765, 87703754, '2018-09-15 17:12:06', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 782, 87703754, '2018-09-15 17:16:04', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 784, 87703754, '2018-09-15 17:16:19', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 786, 87703754, '2018-09-15 17:16:21', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1078, 87703754, '2018-09-21 12:53:17', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1079, 588857334, '2018-09-21 12:53:19', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1080, 87703754, '2018-09-21 12:53:23', NULL, NULL, NULL, NULL, 87703754, 1079, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998911660048\",\"first_name\":\"Umidjon\",\"user_id\":87703754}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1083, 87703754, '2018-09-21 12:53:29', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1084, 588857334, '2018-09-21 12:53:29', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1085, 87703754, '2018-09-21 12:53:33', NULL, NULL, NULL, NULL, 87703754, 1084, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998911660048\",\"first_name\":\"Umidjon\",\"user_id\":87703754}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1088, 87703754, '2018-09-21 12:53:39', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1089, 588857334, '2018-09-21 12:53:39', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1090, 87703754, '2018-09-21 12:53:42', NULL, NULL, NULL, NULL, 87703754, 1089, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998911660048\",\"first_name\":\"Umidjon\",\"user_id\":87703754}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1093, 87703754, '2018-09-21 12:53:46', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1095, 87703754, '2018-09-21 12:53:49', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1097, 87703754, '2018-09-21 12:53:54', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1099, 87703754, '2018-09-21 12:53:57', NULL, NULL, NULL, NULL, NULL, NULL, '?? O\'zbekcha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1101, 87703754, '2018-09-21 12:54:00', NULL, NULL, NULL, NULL, NULL, NULL, '? Aloqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1103, 87703754, '2018-09-21 12:54:02', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1104, 588857334, '2018-09-21 12:54:03', NULL, NULL, NULL, NULL, NULL, NULL, 'Telefon raqamingizni yuboring', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1105, 87703754, '2018-09-21 12:54:58', NULL, NULL, NULL, NULL, 87703754, 1104, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998911660048\",\"first_name\":\"Umidjon\",\"user_id\":87703754}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1113, 87703754, '2018-09-21 13:05:48', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1114, 588857334, '2018-09-21 13:05:52', NULL, NULL, NULL, NULL, NULL, NULL, 'Telefon raqamingizni yuboring', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1115, 87703754, '2018-09-21 13:05:55', NULL, NULL, NULL, NULL, 87703754, 1114, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998911660048\",\"first_name\":\"Umidjon\",\"user_id\":87703754}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(87703754, 1159, 87703754, '2018-09-21 13:16:57', NULL, NULL, NULL, NULL, NULL, NULL, '✏️ Murojaat', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 847, 211654109, '2018-09-16 19:58:22', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 848, 588857334, '2018-09-16 19:58:26', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 849, 211654109, '2018-09-16 19:58:31', NULL, NULL, NULL, NULL, 211654109, 848, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998949343836\",\"first_name\":\"\\u0424\\u0430\\u0440\\u0440\\u0443\\u04b3\",\"user_id\":211654109}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 852, 211654109, '2018-09-16 19:58:46', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 854, 211654109, '2018-09-16 20:00:52', NULL, NULL, NULL, NULL, NULL, NULL, '✏️ Обращение', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 856, 211654109, '2018-09-16 20:00:57', NULL, NULL, NULL, NULL, NULL, NULL, '⬅️ Назад', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 858, 211654109, '2018-09-16 20:00:58', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 860, 211654109, '2018-09-16 20:01:04', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 862, 211654109, '2018-09-16 20:01:05', NULL, NULL, NULL, NULL, NULL, NULL, '?? O\'zbekcha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 864, 211654109, '2018-09-16 20:01:10', NULL, NULL, NULL, NULL, NULL, NULL, '? Boshqa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 866, 211654109, '2018-09-16 20:01:14', NULL, NULL, NULL, NULL, NULL, NULL, '? Bosh sahifa', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 868, 211654109, '2018-09-16 20:01:17', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(211654109, 870, 211654109, '2018-09-16 20:01:22', NULL, NULL, NULL, NULL, NULL, NULL, '?️ O\'quvchi qo\'shish', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(263488083, 1237, 263488083, '2018-09-22 05:49:37', NULL, NULL, NULL, NULL, NULL, NULL, 'Нималар бор тугарак ишланмаси борми жисмоний тарбия фанидан стол тенниси буйича керак', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `mktb_tgbot_message` (`chat_id`, `id`, `user_id`, `date`, `forward_from`, `forward_from_chat`, `forward_from_message_id`, `forward_date`, `reply_to_chat`, `reply_to_message`, `text`, `entities`, `audio`, `document`, `photo`, `sticker`, `video`, `voice`, `video_note`, `contact`, `location`, `venue`, `caption`, `new_chat_members`, `left_chat_member`, `new_chat_title`, `new_chat_photo`, `delete_chat_photo`, `group_chat_created`, `supergroup_chat_created`, `channel_chat_created`, `migrate_to_chat_id`, `migrate_from_chat_id`, `pinned_message`) VALUES
+(286558501, 793, 286558501, '2018-09-15 17:17:17', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(286558501, 794, 588857334, '2018-09-15 17:17:17', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(286558501, 795, 286558501, '2018-09-15 17:17:21', NULL, NULL, NULL, NULL, 286558501, 794, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998903261137\",\"first_name\":\"SalamHotel\",\"user_id\":286558501}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(286558501, 798, 286558501, '2018-09-15 17:17:27', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(286558501, 800, 286558501, '2018-09-15 17:17:29', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(286558501, 924, 286558501, '2018-09-17 13:19:43', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1193, 322277047, '2018-09-21 13:36:52', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1194, 588857334, '2018-09-21 13:36:53', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1195, 322277047, '2018-09-21 13:37:27', NULL, NULL, NULL, NULL, 322277047, 1194, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998916122080\",\"first_name\":\"Izzatillo\",\"last_name\":\"Ismoilov\",\"user_id\":322277047}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1198, 322277047, '2018-09-21 13:37:35', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1200, 322277047, '2018-09-21 13:37:39', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1201, 588857334, '2018-09-21 13:37:39', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите класс', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1202, 588857334, '2018-09-21 13:37:44', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1204, 322277047, '2018-09-21 13:38:35', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1206, 588857334, '2018-09-21 13:38:36', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1207, 588857334, '2018-09-21 13:38:43', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите предмет', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1209, 588857334, '2018-09-21 13:41:09', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1211, 322277047, '2018-09-21 13:43:08', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1213, 588857334, '2018-09-21 13:43:10', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1214, 588857334, '2018-09-21 13:43:12', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите предмет', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1216, 322277047, '2018-09-21 14:20:52', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1218, 588857334, '2018-09-21 14:20:54', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1220, 322277047, '2018-09-21 14:21:15', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1222, 588857334, '2018-09-21 14:21:16', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите класс', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1225, 588857334, '2018-09-21 14:21:28', NULL, NULL, NULL, NULL, NULL, NULL, 'Выберите ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1227, 322277047, '2018-09-21 14:22:16', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1229, 322277047, '2018-09-21 14:22:19', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1231, 322277047, '2018-09-21 14:22:31', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1233, 322277047, '2018-09-21 14:22:36', NULL, NULL, NULL, NULL, NULL, NULL, '? Tilni tanlash / Выбрать язык', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1235, 322277047, '2018-09-21 14:22:39', NULL, NULL, NULL, NULL, NULL, NULL, '?? O\'zbekcha', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1260, 322277047, '2018-09-22 11:14:55', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? O\'quvchilarim', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1262, 588857334, '2018-09-22 11:15:04', NULL, NULL, NULL, NULL, NULL, NULL, 'O\'quvchini tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(322277047, 1263, 588857334, '2018-09-22 11:15:11', NULL, NULL, NULL, NULL, NULL, NULL, 'Fanni tanlang', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 172, 370140466, '2018-09-03 23:15:03', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 173, 370140466, '2018-09-04 05:45:05', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 175, 588857334, '2018-09-04 05:45:32', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 176, 370140466, '2018-09-04 05:47:38', NULL, NULL, NULL, NULL, 370140466, 175, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"+998911667886\",\"first_name\":\"KLeoPaTRa\",\"last_name\":\"123\",\"user_id\":370140466}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 179, 370140466, '2018-09-04 05:49:07', NULL, NULL, NULL, NULL, NULL, NULL, '? Контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 1005, 370140466, '2018-09-18 11:52:21', NULL, NULL, NULL, NULL, NULL, NULL, '? Прочее', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 1007, 370140466, '2018-09-18 11:53:02', NULL, NULL, NULL, NULL, NULL, NULL, '? Главная', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 1009, 370140466, '2018-09-18 11:53:08', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 1011, 370140466, '2018-09-18 11:53:21', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(370140466, 1013, 370140466, '2018-09-18 11:53:34', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(381717598, 838, 381717598, '2018-09-15 17:21:38', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(381717598, 839, 588857334, '2018-09-15 17:21:41', NULL, NULL, NULL, NULL, NULL, NULL, 'Отправьте ваши контакты', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(381717598, 840, 381717598, '2018-09-15 17:21:44', NULL, NULL, NULL, NULL, 381717598, 839, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '{\"phone_number\":\"998946453799\",\"first_name\":\"Bobur Kodirjonov\",\"user_id\":381717598}', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(381717598, 843, 381717598, '2018-09-15 17:21:50', NULL, NULL, NULL, NULL, NULL, NULL, '?‍?‍? Мои ученики', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(381717598, 845, 381717598, '2018-09-15 17:21:53', NULL, NULL, NULL, NULL, NULL, NULL, '?️ Добавить ученика', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(691261462, 493, 691261462, '2018-09-07 21:35:49', NULL, NULL, NULL, NULL, NULL, NULL, '/start', '[{\"offset\":0,\"length\":6,\"type\":\"bot_command\"}]', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1230,14 +1497,232 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_message` (
 -- Структура таблицы `mktb_tgbot_request_limiter`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_request_limiter` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry',
+CREATE TABLE `mktb_tgbot_request_limiter` (
+  `id` bigint(20) UNSIGNED NOT NULL COMMENT 'Unique identifier for this entry',
   `chat_id` char(255) DEFAULT NULL COMMENT 'Unique chat identifier',
   `inline_message_id` char(255) DEFAULT NULL COMMENT 'Identifier of the sent inline message',
   `method` char(255) DEFAULT NULL COMMENT 'Request method',
-  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_request_limiter`
+--
+
+INSERT INTO `mktb_tgbot_request_limiter` (`id`, `chat_id`, `inline_message_id`, `method`, `created_at`) VALUES
+(442, '286558501', NULL, 'sendMessage', '2018-09-17 13:19:46'),
+(443, '11120017', NULL, 'sendMessage', '2018-09-17 13:20:43'),
+(444, '11120017', NULL, 'sendMessage', '2018-09-17 13:20:49'),
+(445, '11120017', NULL, 'sendMessage', '2018-09-17 13:20:50'),
+(446, '11120017', NULL, 'sendMessage', '2018-09-17 13:21:13'),
+(447, '11120017', NULL, 'sendMessage', '2018-09-17 13:21:14'),
+(448, '11120017', NULL, 'sendMessage', '2018-09-17 13:21:34'),
+(449, '11120017', NULL, 'sendMessage', '2018-09-17 13:21:37'),
+(450, '11120017', NULL, 'sendMessage', '2018-09-17 14:13:47'),
+(451, '11120017', NULL, 'sendMessage', '2018-09-17 14:22:25'),
+(452, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:23'),
+(453, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:25'),
+(454, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:29'),
+(455, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:30'),
+(456, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:33'),
+(457, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:37'),
+(458, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:39'),
+(459, '11120017', NULL, 'sendMessage', '2018-09-17 14:24:48'),
+(460, '44750223', NULL, 'sendMessage', '2018-09-17 16:49:13'),
+(461, '44750223', NULL, 'sendMessage', '2018-09-17 16:49:27'),
+(462, '44750223', NULL, 'sendMessage', '2018-09-17 16:49:28'),
+(463, '44750223', NULL, 'sendMessage', '2018-09-17 16:50:01'),
+(464, '44750223', NULL, 'sendMessage', '2018-09-17 16:50:06'),
+(465, '44750223', NULL, 'sendMessage', '2018-09-17 16:50:25'),
+(466, '44750223', NULL, 'sendMessage', '2018-09-17 16:50:26'),
+(467, '44750223', NULL, 'sendMessage', '2018-09-17 16:50:32'),
+(468, '44750223', NULL, 'sendMessage', '2018-09-17 16:51:11'),
+(469, '44750223', NULL, 'sendMessage', '2018-09-17 16:51:25'),
+(470, '44750223', NULL, 'sendMessage', '2018-09-17 16:51:29'),
+(471, '44750223', NULL, 'sendMessage', '2018-09-17 16:51:30'),
+(472, '44750223', NULL, 'sendMessage', '2018-09-17 16:51:34'),
+(473, '44750223', NULL, 'sendMessage', '2018-09-17 16:51:37'),
+(474, '51161476', NULL, 'sendMessage', '2018-09-18 06:57:24'),
+(475, '51161476', NULL, 'sendMessage', '2018-09-18 06:57:33'),
+(476, '51161476', NULL, 'sendMessage', '2018-09-18 06:57:34'),
+(477, '51161476', NULL, 'sendMessage', '2018-09-18 06:57:38'),
+(478, '51161476', NULL, 'sendMessage', '2018-09-18 06:57:40'),
+(479, '51161476', NULL, 'sendMessage', '2018-09-18 06:57:46'),
+(480, '11120017', NULL, 'sendMessage', '2018-09-18 06:57:55'),
+(481, '51161476', NULL, 'sendMessage', '2018-09-18 06:58:01'),
+(482, '51161476', NULL, 'sendMessage', '2018-09-18 06:58:04'),
+(483, '51161476', NULL, 'sendMessage', '2018-09-18 06:58:08'),
+(484, '51161476', NULL, 'sendMessage', '2018-09-18 06:58:11'),
+(485, '370140466', NULL, 'sendMessage', '2018-09-18 11:52:23'),
+(486, '370140466', NULL, 'sendMessage', '2018-09-18 11:53:05'),
+(487, '370140466', NULL, 'sendMessage', '2018-09-18 11:53:08'),
+(488, '370140466', NULL, 'sendMessage', '2018-09-18 11:53:22'),
+(489, '370140466', NULL, 'sendMessage', '2018-09-18 11:53:36'),
+(490, '11120017', NULL, 'sendMessage', '2018-09-18 12:11:06'),
+(491, '11120017', NULL, 'sendMessage', '2018-09-18 12:11:07'),
+(492, '11120017', NULL, 'sendMessage', '2018-09-18 12:11:09'),
+(493, '11120017', NULL, 'sendMessage', '2018-09-18 12:13:50'),
+(494, '11120017', NULL, 'sendMessage', '2018-09-18 12:20:10'),
+(495, '11120017', NULL, 'sendMessage', '2018-09-18 12:20:23'),
+(496, '11120017', NULL, 'sendMessage', '2018-09-18 12:20:27'),
+(497, '11120017', NULL, 'sendPhoto', '2018-09-18 12:20:40'),
+(498, '11120017', NULL, 'sendMessage', '2018-09-18 12:20:47'),
+(499, '11120017', NULL, 'sendMessage', '2018-09-18 12:20:54'),
+(500, '11120017', NULL, 'sendMessage', '2018-09-18 12:27:06'),
+(501, '11120017', NULL, 'sendMessage', '2018-09-18 12:27:07'),
+(502, '11120017', NULL, 'sendMessage', '2018-09-18 12:30:44'),
+(503, '11120017', NULL, 'sendMessage', '2018-09-18 12:30:46'),
+(504, '11120017', NULL, 'sendMessage', '2018-09-18 12:30:47'),
+(505, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:12'),
+(506, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:14'),
+(507, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:17'),
+(508, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:21'),
+(509, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:24'),
+(510, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:27'),
+(511, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:36'),
+(512, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:40'),
+(513, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:42'),
+(514, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:49'),
+(515, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:53'),
+(516, '11120017', NULL, 'sendMessage', '2018-09-18 12:31:54'),
+(517, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:04'),
+(518, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:13'),
+(519, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:14'),
+(520, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:19'),
+(521, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:23'),
+(522, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:25'),
+(523, '11120017', NULL, 'sendMessage', '2018-09-18 12:32:27'),
+(524, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:19'),
+(525, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:23'),
+(526, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:24'),
+(527, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:29'),
+(528, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:33'),
+(529, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:34'),
+(530, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:39'),
+(531, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:42'),
+(532, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:43'),
+(533, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:46'),
+(534, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:49'),
+(535, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:54'),
+(536, '87703754', NULL, 'sendMessage', '2018-09-21 12:53:57'),
+(537, '87703754', NULL, 'sendMessage', '2018-09-21 12:54:00'),
+(538, '87703754', NULL, 'sendMessage', '2018-09-21 12:54:02'),
+(539, '87703754', NULL, 'sendMessage', '2018-09-21 12:54:59'),
+(540, '87703754', NULL, 'sendMessage', '2018-09-21 12:55:00'),
+(541, '44750223', NULL, 'sendMessage', '2018-09-21 12:55:36'),
+(542, '44750223', NULL, 'sendMessage', '2018-09-21 12:55:40'),
+(543, '44750223', NULL, 'sendMessage', '2018-09-21 12:55:41'),
+(544, '87703754', NULL, 'sendMessage', '2018-09-21 13:05:51'),
+(545, '87703754', NULL, 'sendMessage', '2018-09-21 13:05:55'),
+(546, '87703754', NULL, 'sendMessage', '2018-09-21 13:05:57'),
+(547, '44750223', NULL, 'sendMessage', '2018-09-21 13:06:08'),
+(548, '44750223', NULL, 'sendMessage', '2018-09-21 13:06:21'),
+(549, '44750223', NULL, 'sendMessage', '2018-09-21 13:06:22'),
+(550, '44750223', NULL, 'sendMessage', '2018-09-21 13:06:39'),
+(551, '44750223', NULL, 'sendMessage', '2018-09-21 13:06:53'),
+(552, '44750223', NULL, 'sendMessage', '2018-09-21 13:06:58'),
+(553, '44750223', NULL, 'sendMessage', '2018-09-21 13:08:27'),
+(554, '44750223', NULL, 'sendMessage', '2018-09-21 13:14:37'),
+(555, '44750223', NULL, 'sendMessage', '2018-09-21 13:14:45'),
+(556, '11120017', NULL, 'sendMessage', '2018-09-21 13:15:08'),
+(557, '11120017', NULL, 'sendMessage', '2018-09-21 13:15:10'),
+(558, '11120017', NULL, 'sendMessage', '2018-09-21 13:15:21'),
+(559, '44750223', NULL, 'sendMessage', '2018-09-21 13:15:28'),
+(560, '44750223', NULL, 'sendMessage', '2018-09-21 13:15:29'),
+(561, '11120017', NULL, 'sendMessage', '2018-09-21 13:15:34'),
+(562, '44750223', NULL, 'sendMessage', '2018-09-21 13:15:36'),
+(563, '44750223', NULL, 'sendMessage', '2018-09-21 13:15:40'),
+(564, '11120017', NULL, 'sendMessage', '2018-09-21 13:16:03'),
+(565, '11120017', NULL, 'sendMessage', '2018-09-21 13:16:17'),
+(566, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:20'),
+(567, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:24'),
+(568, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:26'),
+(569, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:29'),
+(570, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:31'),
+(571, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:32'),
+(572, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:38'),
+(573, '44750223', NULL, 'sendMessage', '2018-09-21 13:16:42'),
+(574, '87703754', NULL, 'sendMessage', '2018-09-21 13:16:57'),
+(575, '44750223', NULL, 'sendMessage', '2018-09-21 13:19:36'),
+(576, '44750223', NULL, 'sendMessage', '2018-09-21 13:19:40'),
+(577, '44750223', NULL, 'sendMessage', '2018-09-21 13:19:50'),
+(578, '44750223', NULL, 'sendMessage', '2018-09-21 13:28:37'),
+(579, '44750223', NULL, 'sendMessage', '2018-09-21 13:28:40'),
+(580, '44750223', NULL, 'sendMessage', '2018-09-21 13:28:41'),
+(581, '44750223', NULL, 'sendMessage', '2018-09-21 13:28:44'),
+(582, '44750223', NULL, 'sendMessage', '2018-09-21 13:28:47'),
+(583, '44750223', NULL, 'sendMessage', '2018-09-21 13:29:03'),
+(584, '44750223', NULL, 'sendMessage', '2018-09-21 13:29:50'),
+(585, '44750223', NULL, 'sendMessage', '2018-09-21 13:29:54'),
+(586, '44750223', NULL, 'sendMessage', '2018-09-21 13:30:12'),
+(587, '44750223', NULL, 'sendMessage', '2018-09-21 13:30:28'),
+(588, '44750223', NULL, 'sendMessage', '2018-09-21 13:30:32'),
+(589, '44750223', NULL, 'sendMessage', '2018-09-21 13:30:40'),
+(590, '44750223', NULL, 'sendMessage', '2018-09-21 13:30:48'),
+(591, '11120017', NULL, 'sendMessage', '2018-09-21 13:30:53'),
+(592, '44750223', NULL, 'sendMessage', '2018-09-21 13:30:54'),
+(593, '322277047', NULL, 'sendMessage', '2018-09-21 13:36:53'),
+(594, '322277047', NULL, 'sendMessage', '2018-09-21 13:37:28'),
+(595, '322277047', NULL, 'sendMessage', '2018-09-21 13:37:29'),
+(596, '322277047', NULL, 'sendMessage', '2018-09-21 13:37:36'),
+(597, '322277047', NULL, 'sendMessage', '2018-09-21 13:37:39'),
+(598, '322277047', NULL, 'sendMessage', '2018-09-21 13:37:42'),
+(599, '322277047', NULL, 'sendMessage', '2018-09-21 13:37:46'),
+(600, '322277047', NULL, 'sendMessage', '2018-09-21 13:38:35'),
+(601, '322277047', NULL, 'sendMessage', '2018-09-21 13:38:36'),
+(602, '322277047', NULL, 'sendMessage', '2018-09-21 13:38:42'),
+(603, '322277047', NULL, 'sendMessage', '2018-09-21 13:38:47'),
+(604, '322277047', NULL, 'sendMessage', '2018-09-21 13:41:09'),
+(605, '322277047', NULL, 'sendMessage', '2018-09-21 13:43:01'),
+(606, '322277047', NULL, 'sendMessage', '2018-09-21 13:43:08'),
+(607, '322277047', NULL, 'sendMessage', '2018-09-21 13:43:09'),
+(608, '322277047', NULL, 'sendMessage', '2018-09-21 13:43:12'),
+(609, '322277047', NULL, 'sendMessage', '2018-09-21 13:43:14'),
+(610, '322277047', NULL, 'sendMessage', '2018-09-21 14:20:53'),
+(611, '322277047', NULL, 'sendMessage', '2018-09-21 14:20:54'),
+(612, '322277047', NULL, 'sendMessage', '2018-09-21 14:21:02'),
+(613, '322277047', NULL, 'sendMessage', '2018-09-21 14:21:15'),
+(614, '322277047', NULL, 'sendMessage', '2018-09-21 14:21:27'),
+(615, '11120017', NULL, 'sendMessage', '2018-09-21 14:21:27'),
+(616, '322277047', NULL, 'sendMessage', '2018-09-21 14:21:28'),
+(617, '322277047', NULL, 'sendMessage', '2018-09-21 14:22:07'),
+(618, '322277047', NULL, 'sendMessage', '2018-09-21 14:22:16'),
+(619, '322277047', NULL, 'sendMessage', '2018-09-21 14:22:20'),
+(620, '322277047', NULL, 'sendMessage', '2018-09-21 14:22:31'),
+(621, '322277047', NULL, 'sendMessage', '2018-09-21 14:22:36'),
+(622, '322277047', NULL, 'sendMessage', '2018-09-21 14:22:39'),
+(623, '11120017', NULL, 'sendMessage', '2018-09-22 09:09:41'),
+(624, '11120017', NULL, 'sendMessage', '2018-09-22 09:09:49'),
+(625, '11120017', NULL, 'sendMessage', '2018-09-22 09:09:50'),
+(626, '11120017', NULL, 'sendMessage', '2018-09-22 09:09:54'),
+(627, '11120017', NULL, 'sendMessage', '2018-09-22 09:10:11'),
+(628, '11120017', NULL, 'sendMessage', '2018-09-22 09:10:14'),
+(629, '11120017', NULL, 'sendMessage', '2018-09-22 09:10:16'),
+(630, '11120017', NULL, 'sendMessage', '2018-09-22 09:10:18'),
+(631, '11120017', NULL, 'sendMessage', '2018-09-22 09:10:22'),
+(632, '11120017', NULL, 'sendMessage', '2018-09-22 09:10:55'),
+(633, '11120017', NULL, 'sendMessage', '2018-09-22 09:11:25'),
+(634, '11120017', NULL, 'sendMessage', '2018-09-22 09:11:29'),
+(635, '11120017', NULL, 'sendMessage', '2018-09-22 09:11:32'),
+(636, '11120017', NULL, 'sendMessage', '2018-09-22 09:11:36'),
+(637, '322277047', NULL, 'sendMessage', '2018-09-22 11:15:03'),
+(638, '322277047', NULL, 'sendMessage', '2018-09-22 11:15:04'),
+(639, '322277047', NULL, 'sendMessage', '2018-09-22 11:15:11'),
+(640, '322277047', NULL, 'sendMessage', '2018-09-22 11:15:16'),
+(641, '11120017', NULL, 'sendMessage', '2018-09-22 13:42:47'),
+(642, '11120017', NULL, 'sendPhoto', '2018-09-22 13:42:50'),
+(643, '11120017', NULL, 'sendMessage', '2018-09-22 13:46:58'),
+(644, '11120017', NULL, 'sendMessage', '2018-09-22 13:46:59'),
+(645, '11120017', NULL, 'sendPhoto', '2018-09-22 13:47:01'),
+(646, '11120017', NULL, 'sendPhoto', '2018-09-22 13:48:35'),
+(647, '11120017', NULL, 'sendPhoto', '2018-09-22 13:49:28'),
+(648, '11120017', NULL, 'sendPhoto', '2018-09-22 13:52:20'),
+(649, '11120017', NULL, 'sendMessage', '2018-09-22 13:53:10'),
+(650, '11120017', NULL, 'sendMessage', '2018-09-22 13:53:12'),
+(651, '11120017', NULL, 'sendPhoto', '2018-09-22 13:53:14'),
+(652, '11120017', NULL, 'sendMessage', '2018-09-22 13:53:26'),
+(653, '11120017', NULL, 'sendMessage', '2018-09-22 13:53:29'),
+(654, '11120017', NULL, 'sendMessage', '2018-09-22 13:53:30');
 
 -- --------------------------------------------------------
 
@@ -1245,12 +1730,10 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_request_limiter` (
 -- Структура таблицы `mktb_tgbot_store_cart`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier',
-  `user_id` bigint(20) DEFAULT NULL COMMENT 'User ID',
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+CREATE TABLE `mktb_tgbot_store_cart` (
+  `id` bigint(20) NOT NULL COMMENT 'Unique cart identifier',
+  `user_id` bigint(20) DEFAULT NULL COMMENT 'User ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1258,15 +1741,12 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart` (
 -- Структура таблицы `mktb_tgbot_store_cart_item`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart_item` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart item identifier',
+CREATE TABLE `mktb_tgbot_store_cart_item` (
+  `id` bigint(20) NOT NULL COMMENT 'Unique cart item identifier',
   `cart_id` bigint(20) NOT NULL COMMENT 'Cart identifier',
   `product_id` bigint(20) NOT NULL COMMENT 'Product identifier',
-  `quantity` int(10) NOT NULL COMMENT 'Product quantity in cart',
-  PRIMARY KEY (`id`),
-  KEY `cart_id` (`cart_id`),
-  KEY `product_id` (`product_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `quantity` int(10) NOT NULL COMMENT 'Product quantity in cart'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1274,16 +1754,15 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_cart_item` (
 -- Структура таблицы `mktb_tgbot_store_order`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier',
+CREATE TABLE `mktb_tgbot_store_order` (
+  `id` bigint(20) NOT NULL COMMENT 'Unique cart identifier',
   `user_id` bigint(20) DEFAULT NULL COMMENT 'User identifier',
   `date_created` int(11) NOT NULL COMMENT 'Date order placed timestamp',
   `total` decimal(15,2) NOT NULL COMMENT 'Order total price',
   `phone` char(255) DEFAULT '' COMMENT 'Phone number',
   `address` text NOT NULL COMMENT 'Order address',
-  `status` tinyint(2) NOT NULL COMMENT 'Order status',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `status` tinyint(2) NOT NULL COMMENT 'Order status'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1291,16 +1770,14 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order` (
 -- Структура таблицы `mktb_tgbot_store_order_item`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order_item` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Order item identifier',
+CREATE TABLE `mktb_tgbot_store_order_item` (
+  `id` bigint(20) NOT NULL COMMENT 'Order item identifier',
   `order_id` bigint(20) NOT NULL COMMENT 'Order identifier',
   `product_id` bigint(20) NOT NULL COMMENT 'Product identifier',
   `title` char(255) DEFAULT '' COMMENT 'Product title',
   `price` decimal(10,2) NOT NULL COMMENT 'Product price',
-  `quantity` int(10) NOT NULL COMMENT 'Product quantity in order',
-  PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `quantity` int(10) NOT NULL COMMENT 'Product quantity in order'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1308,15 +1785,14 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_order_item` (
 -- Структура таблицы `mktb_tgbot_store_product`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_product` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique product identifier',
+CREATE TABLE `mktb_tgbot_store_product` (
+  `id` bigint(20) NOT NULL COMMENT 'Unique product identifier',
   `price` decimal(10,2) NOT NULL COMMENT 'Product price',
   `title` char(255) DEFAULT '' COMMENT 'Product title',
   `description` varchar(5000) NOT NULL COMMENT 'Product description',
   `image_file_id` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `url` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1324,21 +1800,368 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_store_product` (
 -- Структура таблицы `mktb_tgbot_telegram_update`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_telegram_update` (
-  `id` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT 'Update''s unique identifier',
+CREATE TABLE `mktb_tgbot_telegram_update` (
+  `id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Update''s unique identifier',
   `chat_id` bigint(20) DEFAULT NULL COMMENT 'Unique chat identifier',
-  `message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique message identifier',
-  `inline_query_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique inline query identifier',
-  `chosen_inline_result_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local chosen inline result identifier',
-  `callback_query_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Unique callback query identifier',
-  `edited_message_id` bigint(20) unsigned DEFAULT NULL COMMENT 'Local edited message identifier',
-  PRIMARY KEY (`id`),
-  KEY `message_id` (`chat_id`,`message_id`),
-  KEY `inline_query_id` (`inline_query_id`),
-  KEY `chosen_inline_result_id` (`chosen_inline_result_id`),
-  KEY `callback_query_id` (`callback_query_id`),
-  KEY `edited_message_id` (`edited_message_id`)
+  `message_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Unique message identifier',
+  `inline_query_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Unique inline query identifier',
+  `chosen_inline_result_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Local chosen inline result identifier',
+  `callback_query_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Unique callback query identifier',
+  `edited_message_id` bigint(20) UNSIGNED DEFAULT NULL COMMENT 'Local edited message identifier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_telegram_update`
+--
+
+INSERT INTO `mktb_tgbot_telegram_update` (`id`, `chat_id`, `message_id`, `inline_query_id`, `chosen_inline_result_id`, `callback_query_id`, `edited_message_id`) VALUES
+(989110529, 370140466, 172, NULL, NULL, NULL, NULL),
+(989110530, 370140466, 173, NULL, NULL, NULL, NULL),
+(989110531, 370140466, 176, NULL, NULL, NULL, NULL),
+(989110532, 370140466, 179, NULL, NULL, NULL, NULL),
+(989110700, NULL, NULL, NULL, NULL, 47760110505424934, NULL),
+(989110701, NULL, NULL, NULL, NULL, 47760112885709575, NULL),
+(989110702, NULL, NULL, NULL, NULL, 47760110898384855, NULL),
+(989110704, NULL, NULL, NULL, NULL, 47760112890180517, NULL),
+(989110705, NULL, NULL, NULL, NULL, 47760113406132666, NULL),
+(989110707, NULL, NULL, NULL, NULL, 47760112673742210, NULL),
+(989110709, NULL, NULL, NULL, NULL, 47760110303131435, NULL),
+(989110710, NULL, NULL, NULL, NULL, 47760113425283301, NULL),
+(989110711, 691261462, 493, NULL, NULL, NULL, NULL),
+(989110713, NULL, NULL, NULL, NULL, 47760110365138892, NULL),
+(989110714, NULL, NULL, NULL, NULL, 47760110828434502, NULL),
+(989110715, NULL, NULL, NULL, NULL, 47760110223997033, NULL),
+(989110716, NULL, NULL, NULL, NULL, 47760111789410056, NULL),
+(989110717, NULL, NULL, NULL, NULL, 47760110990787472, NULL),
+(989110718, NULL, NULL, NULL, NULL, 47760113581422062, NULL),
+(989110719, NULL, NULL, NULL, NULL, 47760112738278338, NULL),
+(989110720, NULL, NULL, NULL, NULL, 47760111202594639, NULL),
+(989110721, NULL, NULL, NULL, NULL, 47760110303804578, NULL),
+(989110722, NULL, NULL, NULL, NULL, 47760111867921996, NULL),
+(989110726, NULL, NULL, NULL, NULL, 47760109913471721, NULL),
+(989110727, NULL, NULL, NULL, NULL, 47760109688207332, NULL),
+(989110729, NULL, NULL, NULL, NULL, 47760109486716918, NULL),
+(989110730, NULL, NULL, NULL, NULL, 47760110343323080, NULL),
+(989110733, NULL, NULL, NULL, NULL, 47760110566033698, NULL),
+(989110734, NULL, NULL, NULL, NULL, 47760112746790649, NULL),
+(989110736, NULL, NULL, NULL, NULL, 47760109488236591, NULL),
+(989110740, NULL, NULL, NULL, NULL, 47760110863485749, NULL),
+(989110742, NULL, NULL, NULL, NULL, 47760110532554043, NULL),
+(989110743, NULL, NULL, NULL, NULL, 47760110043760145, NULL),
+(989110744, NULL, NULL, NULL, NULL, 47760109848510152, NULL),
+(989110746, NULL, NULL, NULL, NULL, 47760111271715136, NULL),
+(989110747, NULL, NULL, NULL, NULL, 47760111987451021, NULL),
+(989110748, NULL, NULL, NULL, NULL, 47760109652529881, NULL),
+(989110750, NULL, NULL, NULL, NULL, 47760112518512172, NULL),
+(989110751, NULL, NULL, NULL, NULL, 47760113446949678, NULL),
+(989110752, NULL, NULL, NULL, NULL, 47760110983484948, NULL),
+(989110753, NULL, NULL, NULL, NULL, 47760111814276720, NULL),
+(989110754, NULL, NULL, NULL, NULL, 47760110349194928, NULL),
+(989110755, NULL, NULL, NULL, NULL, 47760111514514948, NULL),
+(989110756, NULL, NULL, NULL, NULL, 47760111675382341, NULL),
+(989110757, NULL, NULL, NULL, NULL, 47760110696124570, NULL),
+(989110759, NULL, NULL, NULL, NULL, 47760111398241088, NULL),
+(989110760, NULL, NULL, NULL, NULL, 47760112899788431, NULL),
+(989110761, NULL, NULL, NULL, NULL, 47760110224013938, NULL),
+(989110762, NULL, NULL, NULL, NULL, 47760112998724905, NULL),
+(989110763, NULL, NULL, NULL, NULL, 47760110588366043, NULL),
+(989110764, NULL, NULL, NULL, NULL, 47760113485324632, NULL),
+(989110765, NULL, NULL, NULL, NULL, 47760110515455239, NULL),
+(989110766, NULL, NULL, NULL, NULL, 47760110486501955, NULL),
+(989110767, NULL, NULL, NULL, NULL, 47760112720895256, NULL),
+(989110768, NULL, NULL, NULL, NULL, 47760113004391681, NULL),
+(989110769, NULL, NULL, NULL, NULL, 47760110276080720, NULL),
+(989110770, NULL, NULL, NULL, NULL, 47760110014379183, NULL),
+(989110771, NULL, NULL, NULL, NULL, 47760112640241516, NULL),
+(989110772, NULL, NULL, NULL, NULL, 47760109417118744, NULL),
+(989110773, NULL, NULL, NULL, NULL, 47760111349483324, NULL),
+(989110775, NULL, NULL, NULL, NULL, 47760113272277272, NULL),
+(989110776, NULL, NULL, NULL, NULL, 47760112800895757, NULL),
+(989110777, NULL, NULL, NULL, NULL, 47760110334719244, NULL),
+(989110778, NULL, NULL, NULL, NULL, 47760111825292518, NULL),
+(989110779, NULL, NULL, NULL, NULL, 47760109433540933, NULL),
+(989110792, NULL, NULL, NULL, NULL, 47760113630473393, NULL),
+(989110793, NULL, NULL, NULL, NULL, 47760113142677444, NULL),
+(989110796, NULL, NULL, NULL, NULL, 47760109983557490, NULL),
+(989110797, NULL, NULL, NULL, NULL, 47760112033872800, NULL),
+(989110798, NULL, NULL, NULL, NULL, 47760112185839377, NULL),
+(989110799, NULL, NULL, NULL, NULL, 47760110458540144, NULL),
+(989110800, NULL, NULL, NULL, NULL, 47760110575918156, NULL),
+(989110801, NULL, NULL, NULL, NULL, 47760112448929926, NULL),
+(989110802, NULL, NULL, NULL, NULL, 47760111231111203, NULL),
+(989110808, NULL, NULL, NULL, NULL, 47760109447221258, NULL),
+(989110809, NULL, NULL, NULL, NULL, 47760110448415427, NULL),
+(989110810, NULL, NULL, NULL, NULL, 47760110950487166, NULL),
+(989110811, NULL, NULL, NULL, NULL, 47760112951787281, NULL),
+(989110812, NULL, NULL, NULL, NULL, 47760110474806762, NULL),
+(989110814, NULL, NULL, NULL, NULL, 47760112763724425, NULL),
+(989110815, NULL, NULL, NULL, NULL, 47760113268250051, NULL),
+(989110816, NULL, NULL, NULL, NULL, 47760111173505922, NULL),
+(989110818, NULL, NULL, NULL, NULL, 47760112022040189, NULL),
+(989110819, NULL, NULL, NULL, NULL, 47760109932403221, NULL),
+(989110820, NULL, NULL, NULL, NULL, 47760110294841903, NULL),
+(989110821, NULL, NULL, NULL, NULL, 47760113217385270, NULL),
+(989110822, NULL, NULL, NULL, NULL, 47760112226403561, NULL),
+(989110827, NULL, NULL, NULL, NULL, 47760111223971195, NULL),
+(989110828, NULL, NULL, NULL, NULL, 47760112568235981, NULL),
+(989110831, NULL, NULL, NULL, NULL, 47760112178563440, NULL),
+(989110832, NULL, NULL, NULL, NULL, 47760111396180570, NULL),
+(989110838, NULL, NULL, NULL, NULL, 47760112303576889, NULL),
+(989110864, NULL, NULL, NULL, NULL, 47760112968639326, NULL),
+(989110865, NULL, NULL, NULL, NULL, 47760109505921658, NULL),
+(989110867, NULL, NULL, NULL, NULL, 47760109798513455, NULL),
+(989110868, NULL, NULL, NULL, NULL, 47760112047623616, NULL),
+(989110870, NULL, NULL, NULL, NULL, 47760113180775689, NULL),
+(989110871, NULL, NULL, NULL, NULL, 47760112710062548, NULL),
+(989110873, NULL, NULL, NULL, NULL, 47760112391311912, NULL),
+(989110874, NULL, NULL, NULL, NULL, 47760111425976606, NULL),
+(989110877, NULL, NULL, NULL, NULL, 47760112591091170, NULL),
+(989110880, NULL, NULL, NULL, NULL, 47760113509248921, NULL),
+(989110881, NULL, NULL, NULL, NULL, 47760112186394750, NULL),
+(989110882, NULL, NULL, NULL, NULL, 47760112100502337, NULL),
+(989110883, NULL, NULL, NULL, NULL, 47760110749940648, NULL),
+(989110887, NULL, NULL, NULL, NULL, 47760111111677438, NULL),
+(989110888, NULL, NULL, NULL, NULL, 47760112521511626, NULL),
+(989110889, NULL, NULL, NULL, NULL, 47760110487969881, NULL),
+(989110893, NULL, NULL, NULL, NULL, 47760110151501584, NULL),
+(989110894, NULL, NULL, NULL, NULL, 47760111754014115, NULL),
+(989110896, 87703754, 746, NULL, NULL, NULL, NULL),
+(989110897, 87703754, 748, NULL, NULL, NULL, NULL),
+(989110898, 87703754, 751, NULL, NULL, NULL, NULL),
+(989110899, 87703754, 753, NULL, NULL, NULL, NULL),
+(989110900, 87703754, 755, NULL, NULL, NULL, NULL),
+(989110901, 87703754, 757, NULL, NULL, NULL, NULL),
+(989110902, 87703754, 758, NULL, NULL, NULL, NULL),
+(989110903, 87703754, 761, NULL, NULL, NULL, NULL),
+(989110904, 87703754, 763, NULL, NULL, NULL, NULL),
+(989110905, 87703754, 765, NULL, NULL, NULL, NULL),
+(989110912, 87703754, 782, NULL, NULL, NULL, NULL),
+(989110913, 87703754, 784, NULL, NULL, NULL, NULL),
+(989110914, 87703754, 786, NULL, NULL, NULL, NULL),
+(989110917, 286558501, 793, NULL, NULL, NULL, NULL),
+(989110918, 286558501, 795, NULL, NULL, NULL, NULL),
+(989110919, 286558501, 798, NULL, NULL, NULL, NULL),
+(989110920, 286558501, 800, NULL, NULL, NULL, NULL),
+(989110924, NULL, NULL, NULL, NULL, 47760109567962995, NULL),
+(989110925, NULL, NULL, NULL, NULL, 47760113624026602, NULL),
+(989110927, NULL, NULL, NULL, NULL, 47760112517818079, NULL),
+(989110928, NULL, NULL, NULL, NULL, 47760110090954590, NULL),
+(989110929, NULL, NULL, NULL, NULL, 47760109371637533, NULL),
+(989110940, 381717598, 838, NULL, NULL, NULL, NULL),
+(989110941, 381717598, 840, NULL, NULL, NULL, NULL),
+(989110942, 381717598, 843, NULL, NULL, NULL, NULL),
+(989110943, 381717598, 845, NULL, NULL, NULL, NULL),
+(989110944, 211654109, 847, NULL, NULL, NULL, NULL),
+(989110945, 211654109, 849, NULL, NULL, NULL, NULL),
+(989110946, 211654109, 852, NULL, NULL, NULL, NULL),
+(989110947, 211654109, 854, NULL, NULL, NULL, NULL),
+(989110948, 211654109, 856, NULL, NULL, NULL, NULL),
+(989110949, 211654109, 858, NULL, NULL, NULL, NULL),
+(989110950, 211654109, 860, NULL, NULL, NULL, NULL),
+(989110951, 211654109, 862, NULL, NULL, NULL, NULL),
+(989110952, 211654109, 864, NULL, NULL, NULL, NULL),
+(989110953, 211654109, 866, NULL, NULL, NULL, NULL),
+(989110954, 211654109, 868, NULL, NULL, NULL, NULL),
+(989110955, 211654109, 870, NULL, NULL, NULL, NULL),
+(989110958, NULL, NULL, NULL, NULL, 47760110385882946, NULL),
+(989110960, NULL, NULL, NULL, NULL, 47760112000148408, NULL),
+(989110962, NULL, NULL, NULL, NULL, 47760110893510026, NULL),
+(989110966, NULL, NULL, NULL, NULL, 47760109945413341, NULL),
+(989110967, NULL, NULL, NULL, NULL, 47760112792388178, NULL),
+(989110983, 286558501, 924, NULL, NULL, NULL, NULL),
+(989110984, 11120017, 926, NULL, NULL, NULL, NULL),
+(989110985, 11120017, 928, NULL, NULL, NULL, NULL),
+(989110986, 11120017, 931, NULL, NULL, NULL, NULL),
+(989110987, 11120017, 933, NULL, NULL, NULL, NULL),
+(989110988, 11120017, 935, NULL, NULL, NULL, NULL),
+(989110989, 11120017, 937, NULL, NULL, NULL, NULL),
+(989110990, 11120017, 939, NULL, NULL, NULL, NULL),
+(989110991, 11120017, 941, NULL, NULL, NULL, NULL),
+(989110992, 11120017, 943, NULL, NULL, NULL, NULL),
+(989110993, 11120017, 945, NULL, NULL, NULL, NULL),
+(989110994, 11120017, 947, NULL, NULL, NULL, NULL),
+(989110995, 11120017, 949, NULL, NULL, NULL, NULL),
+(989110996, 11120017, 951, NULL, NULL, NULL, NULL),
+(989110997, NULL, NULL, NULL, NULL, 47760109891395381, NULL),
+(989110998, NULL, NULL, NULL, NULL, 47760110429534463, NULL),
+(989110999, NULL, NULL, NULL, NULL, 47760110050686714, NULL),
+(989111000, 44750223, 956, NULL, NULL, NULL, NULL),
+(989111001, 44750223, 958, NULL, NULL, NULL, NULL),
+(989111002, 44750223, 961, NULL, NULL, NULL, NULL),
+(989111003, 44750223, 963, NULL, NULL, NULL, NULL),
+(989111004, 44750223, 965, NULL, NULL, NULL, NULL),
+(989111005, 44750223, 966, NULL, NULL, NULL, NULL),
+(989111006, 44750223, 967, NULL, NULL, NULL, NULL),
+(989111007, 44750223, 970, NULL, NULL, NULL, NULL),
+(989111008, 44750223, 972, NULL, NULL, NULL, NULL),
+(989111009, 44750223, 974, NULL, NULL, NULL, NULL),
+(989111010, 44750223, 976, NULL, NULL, NULL, NULL),
+(989111011, 44750223, 978, NULL, NULL, NULL, NULL),
+(989111012, 44750223, 980, NULL, NULL, NULL, NULL),
+(989111013, 44750223, 982, NULL, NULL, NULL, NULL),
+(989111014, 51161476, 984, NULL, NULL, NULL, NULL),
+(989111015, 51161476, 986, NULL, NULL, NULL, NULL),
+(989111016, 51161476, 989, NULL, NULL, NULL, NULL),
+(989111017, 51161476, 991, NULL, NULL, NULL, NULL),
+(989111018, 51161476, 993, NULL, NULL, NULL, NULL),
+(989111019, 11120017, 995, NULL, NULL, NULL, NULL),
+(989111020, 51161476, 997, NULL, NULL, NULL, NULL),
+(989111021, 51161476, 999, NULL, NULL, NULL, NULL),
+(989111022, 51161476, 1001, NULL, NULL, NULL, NULL),
+(989111023, 51161476, 1003, NULL, NULL, NULL, NULL),
+(989111024, 370140466, 1005, NULL, NULL, NULL, NULL),
+(989111025, 370140466, 1007, NULL, NULL, NULL, NULL),
+(989111026, 370140466, 1009, NULL, NULL, NULL, NULL),
+(989111027, 370140466, 1011, NULL, NULL, NULL, NULL),
+(989111028, 370140466, 1013, NULL, NULL, NULL, NULL),
+(989111029, 11120017, 1015, NULL, NULL, NULL, NULL),
+(989111030, 11120017, 1017, NULL, NULL, NULL, NULL),
+(989111031, 11120017, 1019, NULL, NULL, NULL, NULL),
+(989111032, 11120017, 1021, NULL, NULL, NULL, NULL),
+(989111033, 11120017, 1023, NULL, NULL, NULL, NULL),
+(989111034, 11120017, 1025, NULL, NULL, NULL, NULL),
+(989111035, 11120017, 1027, NULL, NULL, NULL, NULL),
+(989111036, 11120017, 1029, NULL, NULL, NULL, NULL),
+(989111037, 11120017, 1031, NULL, NULL, NULL, NULL),
+(989111038, 11120017, 1033, NULL, NULL, NULL, NULL),
+(989111039, 11120017, 1035, NULL, NULL, NULL, NULL),
+(989111040, 11120017, 1038, NULL, NULL, NULL, NULL),
+(989111041, 11120017, 1040, NULL, NULL, NULL, NULL),
+(989111042, 11120017, 1043, NULL, NULL, NULL, NULL),
+(989111043, 11120017, 1045, NULL, NULL, NULL, NULL),
+(989111044, 11120017, 1047, NULL, NULL, NULL, NULL),
+(989111045, 11120017, 1049, NULL, NULL, NULL, NULL),
+(989111046, 11120017, 1051, NULL, NULL, NULL, NULL),
+(989111047, 11120017, 1053, NULL, NULL, NULL, NULL),
+(989111048, 11120017, 1055, NULL, NULL, NULL, NULL),
+(989111049, 11120017, 1057, NULL, NULL, NULL, NULL),
+(989111050, 11120017, 1059, NULL, NULL, NULL, NULL),
+(989111051, 11120017, 1061, NULL, NULL, NULL, NULL),
+(989111052, 11120017, 1063, NULL, NULL, NULL, NULL),
+(989111053, 11120017, 1066, NULL, NULL, NULL, NULL),
+(989111054, 11120017, 1068, NULL, NULL, NULL, NULL),
+(989111055, 11120017, 1070, NULL, NULL, NULL, NULL),
+(989111056, 11120017, 1072, NULL, NULL, NULL, NULL),
+(989111057, 11120017, 1074, NULL, NULL, NULL, NULL),
+(989111058, NULL, NULL, NULL, NULL, 47760112490378856, NULL),
+(989111059, NULL, NULL, NULL, NULL, 47760113449259445, NULL),
+(989111060, 87703754, 1078, NULL, NULL, NULL, NULL),
+(989111061, 87703754, 1080, NULL, NULL, NULL, NULL),
+(989111062, 87703754, 1083, NULL, NULL, NULL, NULL),
+(989111063, 87703754, 1085, NULL, NULL, NULL, NULL),
+(989111064, 87703754, 1088, NULL, NULL, NULL, NULL),
+(989111065, 87703754, 1090, NULL, NULL, NULL, NULL),
+(989111066, 87703754, 1093, NULL, NULL, NULL, NULL),
+(989111067, 87703754, 1095, NULL, NULL, NULL, NULL),
+(989111068, 87703754, 1097, NULL, NULL, NULL, NULL),
+(989111069, 87703754, 1099, NULL, NULL, NULL, NULL),
+(989111070, 87703754, 1101, NULL, NULL, NULL, NULL),
+(989111071, 87703754, 1103, NULL, NULL, NULL, NULL),
+(989111072, 87703754, 1105, NULL, NULL, NULL, NULL),
+(989111073, 44750223, 1108, NULL, NULL, NULL, NULL),
+(989111074, 44750223, 1110, NULL, NULL, NULL, NULL),
+(989111075, 87703754, 1113, NULL, NULL, NULL, NULL),
+(989111076, 87703754, 1115, NULL, NULL, NULL, NULL),
+(989111077, 44750223, 1118, NULL, NULL, NULL, NULL),
+(989111078, 44750223, 1120, NULL, NULL, NULL, NULL),
+(989111079, 44750223, 1121, NULL, NULL, NULL, NULL),
+(989111080, NULL, NULL, NULL, NULL, 192200747072189110, NULL),
+(989111081, NULL, NULL, NULL, NULL, 192200744296022316, NULL),
+(989111082, NULL, NULL, NULL, NULL, 192200748235015553, NULL),
+(989111083, NULL, NULL, NULL, NULL, 192200746187145731, NULL),
+(989111084, NULL, NULL, NULL, NULL, 192200746764989970, NULL),
+(989111085, NULL, NULL, NULL, NULL, 192200746140874778, NULL),
+(989111086, 11120017, 1130, NULL, NULL, NULL, NULL),
+(989111087, 11120017, 1132, NULL, NULL, NULL, NULL),
+(989111088, NULL, NULL, NULL, NULL, 47760113482159183, NULL),
+(989111089, 44750223, 1135, NULL, NULL, NULL, NULL),
+(989111090, 11120017, 1138, NULL, NULL, NULL, NULL),
+(989111091, NULL, NULL, NULL, NULL, 192200745513811338, NULL),
+(989111092, NULL, NULL, NULL, NULL, 192200747446885695, NULL),
+(989111093, 11120017, 1142, NULL, NULL, NULL, NULL),
+(989111094, 11120017, 1144, NULL, NULL, NULL, NULL),
+(989111095, 44750223, 1146, NULL, NULL, NULL, NULL),
+(989111096, 44750223, 1148, NULL, NULL, NULL, NULL),
+(989111097, 44750223, 1150, NULL, NULL, NULL, NULL),
+(989111098, 44750223, 1152, NULL, NULL, NULL, NULL),
+(989111099, 44750223, 1154, NULL, NULL, NULL, NULL),
+(989111100, NULL, NULL, NULL, NULL, 192200745596093688, NULL),
+(989111101, NULL, NULL, NULL, NULL, 192200747071524640, NULL),
+(989111102, 87703754, 1159, NULL, NULL, NULL, NULL),
+(989111103, 44750223, 1161, NULL, NULL, NULL, NULL),
+(989111104, 44750223, 1163, NULL, NULL, NULL, NULL),
+(989111105, 44750223, 1165, NULL, NULL, NULL, NULL),
+(989111106, 44750223, 1167, NULL, NULL, NULL, NULL),
+(989111107, 44750223, 1169, NULL, NULL, NULL, NULL),
+(989111108, 44750223, 1172, NULL, NULL, NULL, NULL),
+(989111109, NULL, NULL, NULL, NULL, 192200748106140452, NULL),
+(989111110, NULL, NULL, NULL, NULL, 192200747184440826, NULL),
+(989111111, 44750223, 1176, NULL, NULL, NULL, NULL),
+(989111112, 44750223, 1178, NULL, NULL, NULL, NULL),
+(989111113, 44750223, 1180, NULL, NULL, NULL, NULL),
+(989111114, 44750223, 1182, NULL, NULL, NULL, NULL),
+(989111115, 44750223, 1184, NULL, NULL, NULL, NULL),
+(989111116, 44750223, 1186, NULL, NULL, NULL, NULL),
+(989111117, 44750223, 1188, NULL, NULL, NULL, NULL),
+(989111118, 44750223, 1190, NULL, NULL, NULL, NULL),
+(989111119, 322277047, 1193, NULL, NULL, NULL, NULL),
+(989111120, 322277047, 1195, NULL, NULL, NULL, NULL),
+(989111121, 322277047, 1198, NULL, NULL, NULL, NULL),
+(989111122, 322277047, 1200, NULL, NULL, NULL, NULL),
+(989111123, NULL, NULL, NULL, NULL, 1384169377562257785, NULL),
+(989111124, NULL, NULL, NULL, NULL, 1384169380398592159, NULL),
+(989111125, 322277047, 1204, NULL, NULL, NULL, NULL),
+(989111126, NULL, NULL, NULL, NULL, 1384169380398224321, NULL),
+(989111127, NULL, NULL, NULL, NULL, 1384169378265056532, NULL),
+(989111128, NULL, NULL, NULL, NULL, 1384169380157782540, NULL),
+(989111129, NULL, NULL, NULL, NULL, 1384169377871953373, NULL),
+(989111130, 322277047, 1211, NULL, NULL, NULL, NULL),
+(989111131, NULL, NULL, NULL, NULL, 1384169377249939841, NULL),
+(989111132, NULL, NULL, NULL, NULL, 1384169379301554378, NULL),
+(989111133, 322277047, 1216, NULL, NULL, NULL, NULL),
+(989111134, NULL, NULL, NULL, NULL, 1384169377880352095, NULL),
+(989111135, 322277047, 1220, NULL, NULL, NULL, NULL),
+(989111136, 11120017, 1221, NULL, NULL, NULL, NULL),
+(989111137, NULL, NULL, NULL, NULL, 1384169380478262418, NULL),
+(989111138, NULL, NULL, NULL, NULL, 1384169380778506732, NULL),
+(989111139, NULL, NULL, NULL, NULL, 1384169380197196120, NULL),
+(989111140, 322277047, 1227, NULL, NULL, NULL, NULL),
+(989111141, 322277047, 1229, NULL, NULL, NULL, NULL),
+(989111142, 322277047, 1231, NULL, NULL, NULL, NULL),
+(989111143, 322277047, 1233, NULL, NULL, NULL, NULL),
+(989111144, 322277047, 1235, NULL, NULL, NULL, NULL),
+(989111145, 263488083, 1237, NULL, NULL, NULL, NULL),
+(989111146, 11120017, 1238, NULL, NULL, NULL, NULL),
+(989111147, 11120017, 1240, NULL, NULL, NULL, NULL),
+(989111148, 11120017, 1242, NULL, NULL, NULL, NULL),
+(989111149, 11120017, 1244, NULL, NULL, NULL, NULL),
+(989111150, 11120017, 1246, NULL, NULL, NULL, NULL),
+(989111151, 11120017, 1248, NULL, NULL, NULL, NULL),
+(989111152, NULL, NULL, NULL, NULL, 47760113529054858, NULL),
+(989111153, NULL, NULL, NULL, NULL, 47760110995474518, NULL),
+(989111154, 11120017, 1253, NULL, NULL, NULL, NULL),
+(989111155, NULL, NULL, NULL, NULL, 47760109454604512, NULL),
+(989111156, NULL, NULL, NULL, NULL, 47760112753918303, NULL),
+(989111157, NULL, NULL, NULL, NULL, 47760111885069746, NULL),
+(989111158, 11120017, 1258, NULL, NULL, NULL, NULL),
+(989111159, 322277047, 1260, NULL, NULL, NULL, NULL),
+(989111160, NULL, NULL, NULL, NULL, 1384169380853332804, NULL),
+(989111161, NULL, NULL, NULL, NULL, 1384169379934262267, NULL),
+(989111162, 11120017, 1265, NULL, NULL, NULL, NULL),
+(989111163, 11120017, 1266, NULL, NULL, NULL, NULL),
+(989111164, 11120017, 1267, NULL, NULL, NULL, NULL),
+(989111165, 11120017, 1269, NULL, NULL, NULL, NULL),
+(989111166, 11120017, 1270, NULL, NULL, NULL, NULL),
+(989111167, 11120017, 1272, NULL, NULL, NULL, NULL),
+(989111168, 11120017, 1274, NULL, NULL, NULL, NULL),
+(989111169, 11120017, 1275, NULL, NULL, NULL, NULL),
+(989111170, 11120017, 1276, NULL, NULL, NULL, NULL),
+(989111171, 11120017, 1277, NULL, NULL, NULL, NULL),
+(989111172, 11120017, 1278, NULL, NULL, NULL, NULL),
+(989111173, 11120017, 1280, NULL, NULL, NULL, NULL),
+(989111174, 11120017, 1282, NULL, NULL, NULL, NULL),
+(989111175, 11120017, 1284, NULL, NULL, NULL, NULL),
+(989111176, 11120017, 1286, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1346,7 +2169,7 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_telegram_update` (
 -- Структура таблицы `mktb_tgbot_user`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_user` (
+CREATE TABLE `mktb_tgbot_user` (
   `id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user identifier',
   `is_bot` tinyint(1) DEFAULT '0' COMMENT 'True if this user is a bot',
   `first_name` char(255) NOT NULL DEFAULT '' COMMENT 'User''s first name',
@@ -1356,10 +2179,26 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_user` (
   `created_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date creation',
   `updated_at` timestamp NULL DEFAULT NULL COMMENT 'Entry date update',
   `phone` varchar(255) NOT NULL DEFAULT '',
-  `language_id` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  KEY `username` (`username`)
+  `language_id` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_user`
+--
+
+INSERT INTO `mktb_tgbot_user` (`id`, `is_bot`, `first_name`, `last_name`, `username`, `language_code`, `created_at`, `updated_at`, `phone`, `language_id`) VALUES
+(11120017, 0, 'Ulugbek', 'Yusupxodjayev', 'smartweb_uz', 'ru-RU', '2018-09-18 12:30:43', '2018-09-22 13:53:28', '+998908081239', 1),
+(44750223, 0, 'ГУЛБАХОР Бахтияровна', 'АХИ АБДУКАРИМОВА', 'ELFIYSAR', 'ru', '2018-09-17 16:49:11', '2018-09-21 13:30:53', '+998934430204', 2),
+(51161476, 0, 'Максим', NULL, 'intromax', 'ru', '2018-09-18 06:57:23', '2018-09-18 06:58:10', '+998903263563', 1),
+(87703754, 0, 'Umidjon', NULL, 'interintellect', 'en-us', '2018-09-21 12:53:17', '2018-09-21 13:16:57', '+998911660048', 2),
+(211654109, 0, 'Фарруҳ', NULL, 'farruhkarimov', 'ru', '2018-09-16 19:58:22', '2018-09-16 20:01:22', '+998949343836', 2),
+(263488083, 0, 'Заррина', 'Нарзуллоева', NULL, 'ru', '2018-09-22 05:49:37', '2018-09-22 05:49:37', '', 1),
+(286558501, 0, 'SalamHotel', NULL, 'salamhotel', 'ru-RU', '2018-09-15 17:17:17', '2018-09-17 13:19:43', '+998903261137', 1),
+(322277047, 0, 'Izzatillo', 'Ismoilov', NULL, 'ru', '2018-09-21 13:36:52', '2018-09-22 11:15:16', '+998916122080', 2),
+(370140466, 0, 'KLeoPaTRa', '123', NULL, 'ru', '2018-09-04 05:45:05', '2018-09-18 11:53:34', '+998911667886', 1),
+(381717598, 0, 'Bobur Kodirjonov', NULL, 'Internet_Marketing_SMM', 'ru', '2018-09-15 17:21:38', '2018-09-15 17:21:53', '+998946453799', 1),
+(588857334, 1, 'Maktab', NULL, 'maktabuzbot', NULL, '2018-09-04 05:45:32', '2018-09-22 11:15:11', '', 1),
+(691261462, 0, 'Бахром', 'Батыров', NULL, 'ru-RU', '2018-09-07 21:35:49', '2018-09-07 21:35:49', '', 1);
 
 -- --------------------------------------------------------
 
@@ -1367,12 +2206,36 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_user` (
 -- Структура таблицы `mktb_tgbot_user_chat`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_tgbot_user_chat` (
+CREATE TABLE `mktb_tgbot_user_chat` (
   `user_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user identifier',
-  `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier',
-  PRIMARY KEY (`user_id`,`chat_id`),
-  KEY `chat_id` (`chat_id`)
+  `chat_id` bigint(20) NOT NULL DEFAULT '0' COMMENT 'Unique user or chat identifier'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `mktb_tgbot_user_chat`
+--
+
+INSERT INTO `mktb_tgbot_user_chat` (`user_id`, `chat_id`) VALUES
+(11120017, 11120017),
+(588857334, 11120017),
+(44750223, 44750223),
+(588857334, 44750223),
+(51161476, 51161476),
+(588857334, 51161476),
+(87703754, 87703754),
+(588857334, 87703754),
+(211654109, 211654109),
+(588857334, 211654109),
+(263488083, 263488083),
+(286558501, 286558501),
+(588857334, 286558501),
+(322277047, 322277047),
+(588857334, 322277047),
+(370140466, 370140466),
+(588857334, 370140466),
+(381717598, 381717598),
+(588857334, 381717598),
+(691261462, 691261462);
 
 -- --------------------------------------------------------
 
@@ -1380,14 +2243,13 @@ CREATE TABLE IF NOT EXISTS `mktb_tgbot_user_chat` (
 -- Структура таблицы `mktb_translation`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_translation` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_translation` (
+  `id` int(11) NOT NULL,
   `lang` tinyint(2) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content` text NOT NULL,
-  `context` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1327 ;
+  `context` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_translation`
@@ -2211,8 +3073,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (835, 1, 'return policy', 'Условия возврата', 'front'),
 (836, 1, 'privacy policy', 'Конфиденциальность', 'front'),
 (837, 1, 'certificates and partners', 'Сертификаты и партнеры', 'front'),
-(838, 1, 'filters', 'Фильтры', 'front');
-INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALUES
+(838, 1, 'filters', 'Фильтры', 'front'),
 (839, 1, 'apply', 'Применить', 'front'),
 (840, 1, 'clear filter', 'Очистить фильтр', 'front'),
 (841, 1, 'subscribe', 'Подписаться', 'front'),
@@ -2363,7 +3224,8 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (996, 1, 'close', 'Закрыть', 'back'),
 (997, 1, 'gallery images', 'Картинки из галереи', 'back'),
 (998, 1, 'add from gallery', 'Добавить из галереи', 'back'),
-(999, 1, 'added from gallery images', 'Добавлено из галереи', 'back'),
+(999, 1, 'added from gallery images', 'Добавлено из галереи', 'back');
+INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALUES
 (1000, 1, 'import products result page', 'Страница результатов импорта', 'back'),
 (1001, 1, 'products import results', 'Результаты импорта', 'back'),
 (1002, 1, 'error file importproducts', 'Ошибка при импорте товаров', 'back'),
@@ -2502,7 +3364,7 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1137, 2, 'your name', 'your name', 'front'),
 (1138, 2, 'review', 'review', 'front'),
 (1139, 2, 'similar products', 'similar products', 'front'),
-(1141, 1, 'By clicking the "Register" button, I accept the terms of the %s User Agreement %s and agree to the processing of my personal information on the terms set forth in the %s Privacy Policy %s', 'Нажимая кнопку &quot;Регистрация&quot;, я принимаю условия %s Пользовательского соглашения %s и даю своё согласие  на обработку моей персональной информации на условиях, определенных %s Политикой конфиденциальности %s.', 'front'),
+(1141, 1, 'By clicking the \"Register\" button, I accept the terms of the %s User Agreement %s and agree to the processing of my personal information on the terms set forth in the %s Privacy Policy %s', 'Нажимая кнопку &quot;Регистрация&quot;, я принимаю условия %s Пользовательского соглашения %s и даю своё согласие  на обработку моей персональной информации на условиях, определенных %s Политикой конфиденциальности %s.', 'front'),
 (1142, 1, 'contact us', 'Контакты', 'front'),
 (1143, 1, 'our contacts and feedback', 'Наши контакты и обратная связь', 'front'),
 (1144, 1, 'choose project', 'Выбрать проект', 'front'),
@@ -2675,7 +3537,12 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 (1323, 1, 'teacher', 'Учитель', 'front'),
 (1324, 1, 'lesson start time', 'Время начала урока', 'back'),
 (1325, 1, 'menu lesson', 'Уроки', 'back'),
-(1326, 1, 'main bottom menu', 'main bottom menu', 'front');
+(1326, 1, 'main bottom menu', 'main bottom menu', 'front'),
+(1327, 1, 'success delete group', 'success delete group', 'back'),
+(1328, 1, 'btn upload', 'btn upload', 'back'),
+(1329, 1, 'error schedule file upload', 'error schedule file upload', 'back'),
+(1330, 1, 'error file not uploaded', 'error file not uploaded', 'back'),
+(1331, 1, 'success schedule file upload', 'success schedule file upload', 'back');
 
 -- --------------------------------------------------------
 
@@ -2683,14 +3550,11 @@ INSERT INTO `mktb_translation` (`id`, `lang`, `name`, `content`, `context`) VALU
 -- Структура таблицы `mktb_url`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_url` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_url` (
+  `id` int(11) NOT NULL,
   `alias` varchar(255) NOT NULL,
-  `route` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `url` (`alias`),
-  UNIQUE KEY `route` (`route`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=554 ;
+  `route` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_url`
@@ -2708,8 +3572,8 @@ INSERT INTO `mktb_url` (`id`, `alias`, `route`) VALUES
 -- Структура таблицы `mktb_user`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_user` (
+  `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(32) NOT NULL,
   `usergroup` smallint(6) NOT NULL DEFAULT '10',
@@ -2749,32 +3613,32 @@ CREATE TABLE IF NOT EXISTS `mktb_user` (
   `activationkey` varchar(32) NOT NULL,
   `last_login` int(11) NOT NULL,
   `last_ip` varchar(255) NOT NULL,
-  `phpsessid` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
+  `phpsessid` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_user`
 --
 
 INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `rank`, `status`, `image`, `phone`, `address`, `info`, `created_at`, `updated_at`, `activity_at`, `avatar`, `date_birth`, `gender`, `name`, `firstname`, `lastname`, `middlename`, `company_name`, `inn`, `bank_name`, `checking_account`, `mfo`, `okonx`, `requisites`, `contract_number`, `contract_date_start`, `contract_date_end`, `address_jur`, `address_phy`, `license_number`, `license_date_end`, `balance`, `forgetkey`, `activationkey`, `last_login`, `last_ip`, `phpsessid`) VALUES
-(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1536392938, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1536392938, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
-(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1537179801, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1537179801, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(11, 'teacher1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'teacher@test.com', '', 1, 'teacher/teacher_11.jpg', '+998000000000', '', '', 0, 1535626392, 1536996641, '', -21600, 0, '', 'Tesha', 'Boltayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1536996641, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
-(12, 'sodiqov-abdulla', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'test2@test.com', '', 1, '', '', '', '', 1534364728, 1535626386, 0, '', 179085600, 0, '', 'Abdulla', 'Sodiqov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(1, 'admin', 'f5c67f2fb8ef39fc764da654adaddb51', 2, 'info@domain.com', 'AdminS', 1, 'user/user_1.jpg', '1234567', '', '', 1489106941, 0, 1537613032, '', 0, 1, 'Администратор', 'Иван', 'Иванов', 'Иванович', '', '111111111', '', '', '', '', '', '1', '2017/01/01', '2020/01/01', 'г.Ташкент, ул.Тест, 1.', 'г.Ташкент, ул.Тест, 1.', '11111', '', 15001185, '', '', 1537613032, '217.29.114.102', 'gv4cq0hk45q8klavu0v85onpo7'),
+(2, 'admin2', '778e8245dd04fe3dce6522bad90fc1d6', 1, 'ulugbek.yu@gmail.com', 'Модератор', 1, '', '', '', '', 1489306941, 0, 1537019848, '', 0, 1, '', 'Улугбек', 'Юсупходжаев', '', '', '', '', '', '', '', '', '', '0', '0', 'г.Ташкент, ул.Тест, 4.', 'г.Ташкент, ул.Тест, 4.', '5555', '0', 0, '', '', 1537019848, '217.29.114.102', '5tcsoqth9fbsgob4cvda7o2dm6'),
 (13, 'olimov-aziz-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1534574994, 1535626118, 0, '', 1230750000, 0, '', 'Aziz', 'Olimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (14, 'saidova-dilnoza-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, 'sa1@test.com', '', 1, '', '', '', '', 1534575515, 1535626106, 1535375356, '', 1230836400, 0, '', 'Dilnoza', 'Saidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1535375356, '127.0.0.1', 'e5jdfndfj7q3vek1d2hr8c3po5'),
-(15, 'kd1', '0992a103ec11bc5618c10f2cc7d5c775', 5, 'kd1@test.com', '', 1, '', '', '', '', 1534576158, 1537183783, 1537183805, '', -21600, 0, '', 'Dilshod', 'Karimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1537183805, '127.0.0.1', 'krnd4tnj4s3pa9icjah0urfj25'),
 (22, 'test2', '0992a103ec11bc5618c10f2cc7d5c775', 10, '', '', 1, '', '', '', '', 1534598344, 1534598344, 0, '', 0, 0, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(24, 'test3', '0992a103ec11bc5618c10f2cc7d5c775', 5, '', '', 1, '', '', '', '', 1535011435, 1535193943, 1535194265, '', 0, 0, '', 'test3', 'test3', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '5050', 0, '', '', 1535194265, '127.0.0.1', '8vp0a8q42omuap2c6aotphm673'),
 (25, 'xamidova-zilola-2009', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535282739, 1535626141, 0, '', 1236020400, 0, '', 'Zilola', 'Xamidova', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (26, 'test-student-2010', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535283043, 1535626130, 0, '', 1272654000, 0, '', 'student', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (27, 'abdurahimov-abdurayim', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1535626765, 1535626765, 0, '', 1, 0, '', 'Abdurayim', 'Abdurahimov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (28, 'test', '5a5b2fccb9259c5975a0c6c7de7e0cb7', 10, '', '', 1, '', '', '', '', 1535630559, 1535630665, 0, '', 431802000, 0, '', 'test', 'test', 'test', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
 (29, '+998911667886', 'fd1710261f03135079fde2be41b053ae', 10, '', '', 1, '', '', '', '', 1536029265, 1536029265, 0, '', 0, 0, '', 'KLeoPaTRa', '123', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(30, '+998908081239', '5b87692dd9f3b3e83123efc98ea15d6f', 10, '', '', 1, '', '', '', '', 1536061331, 1536062176, 0, '', 1, 0, '', 'Ulugbek', 'Yusupxodjayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
-(31, 'abdullayeva-durdona', '0992a103ec11bc5618c10f2cc7d5c775', 11, '', '', 1, '', '', '', '', 1536324603, 1536324603, 0, '', 1252436400, 0, '', 'Durdona', 'Abdullayeva', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', '');
+(32, 'kii', 'fea261f0e2605506cf9f36a6eb6641b2', 5, '', '', 1, 'teacher/teacher_32.png', '+98982000', '', '', 1536416568, 1536416568, 0, '', 15, 0, '', 'saa', 'sdsc', 'sdd', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(33, '007', '97a66b52704f1b1a1d4d6b4dfb44d00e', 5, '', '', 1, 'teacher/teacher_33.png', '', '', '', 1536417380, 1536417419, 0, '', 1, 0, '', 'kd', 'ko', 'ks', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(34, 'salom', '6f7b5f1b3f9ad925cd0bf94e741f7508', 5, '', '', 1, 'teacher/teacher_34.png', '', '', '', 1536417536, 1536417536, 1536418334, '', 15, 0, '', 'kl', 'dk', 'ko', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1536418334, '213.230.94.107', '5f2ighrkda8th3rafbalhaleu5'),
+(38, '+998908081239', 'a2a45bac796268f0a7d504ff9f778e4a', 10, '', '', 1, '', '+998908081239', '', '', 1537263046, 1537263046, 0, '', 0, 0, '', 'Ulugbek', 'Yusupxodjayev', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(39, '+998934430204', '56123db50a244ca4e5da4c76a477099d', 10, '', '', 1, '', '+998934430204', '', '', 1537523740, 1537523740, 0, '', 0, 0, '', 'ГУЛБАХОР Бахтияровна', 'АХИ АБДУКАРИМОВА', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(40, 'umidjon', 'a9f8aef266682cd21c4437321dfeba42', 5, 'umidahun@gmail.com', '', 1, '', '911660048', 'andijon', '', 1537525504, 1537525504, 1537525554, '', 589654800, 0, '', 'Umid', 'Ahunjonov', 'Maxamadumarov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1537525554, '213.230.78.185', '5f2ighrkda8th3rafbalhaleu5'),
+(41, '+998916122080', 'c6fe972df5eccb491691138fb0d977a6', 10, '', '', 1, '', '+998916122080', '', '', 1537526248, 1537526248, 0, '', 0, 0, '', 'Izzatillo', 'Ismoilov', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 0, '', ''),
+(43, 'umid', '6f07ae7c298989731cdf5f4d3cd0fbda', 4, '', '', 1, '', '22222', 'ddd', '', 1537527672, 1537527672, 1537527693, '', 433702800, 0, '', 'Umid', 'Ahun', 'Maxammadumarovich', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, '', '', 1537527693, '213.230.78.185', '5f2ighrkda8th3rafbalhaleu5');
 
 -- --------------------------------------------------------
 
@@ -2782,8 +3646,8 @@ INSERT INTO `mktb_user` (`id`, `username`, `password`, `usergroup`, `email`, `ra
 -- Структура таблицы `mktb_usercontract`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_usercontract` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_usercontract` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `contract_year` smallint(4) NOT NULL,
   `contract_number` varchar(255) NOT NULL,
@@ -2791,18 +3655,17 @@ CREATE TABLE IF NOT EXISTS `mktb_usercontract` (
   `quarter_2` text NOT NULL,
   `quarter_3` text NOT NULL,
   `quarter_4` text NOT NULL,
-  `price` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `price` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_usercontract`
 --
 
 INSERT INTO `mktb_usercontract` (`id`, `user_id`, `contract_year`, `contract_number`, `quarter_1`, `quarter_2`, `quarter_3`, `quarter_4`, `price`) VALUES
-(3, 4, 2017, '60', '{"17":1000,"16":4000,"18":500}', '{"17":2000,"16":5000,"18":500}', '{"17":2000,"16":5000,"18":500}', '{"17":1000,"16":4000,"18":500}', '{"17":65000,"16":190000,"18":386000}'),
-(4, 3, 2017, '20', '{"17":4000,"16":13000,"18":1000}', '{"17":3500,"16":12000,"18":500}', '{"17":3500,"16":12000,"18":500}', '{"17":4000,"16":13000,"18":1000}', '{"17":65000,"16":190000,"18":386000}'),
-(5, 5, 2017, '55', '{"17":2000,"16":7000,"18":600}', '{"17":1500,"16":6000,"18":400}', '{"17":1500,"16":6000,"18":400}', '{"17":2000,"16":7000,"18":600}', '{"17":65000,"16":190000,"18":386000}');
+(3, 4, 2017, '60', '{\"17\":1000,\"16\":4000,\"18\":500}', '{\"17\":2000,\"16\":5000,\"18\":500}', '{\"17\":2000,\"16\":5000,\"18\":500}', '{\"17\":1000,\"16\":4000,\"18\":500}', '{\"17\":65000,\"16\":190000,\"18\":386000}'),
+(4, 3, 2017, '20', '{\"17\":4000,\"16\":13000,\"18\":1000}', '{\"17\":3500,\"16\":12000,\"18\":500}', '{\"17\":3500,\"16\":12000,\"18\":500}', '{\"17\":4000,\"16\":13000,\"18\":1000}', '{\"17\":65000,\"16\":190000,\"18\":386000}'),
+(5, 5, 2017, '55', '{\"17\":2000,\"16\":7000,\"18\":600}', '{\"17\":1500,\"16\":6000,\"18\":400}', '{\"17\":1500,\"16\":6000,\"18\":400}', '{\"17\":2000,\"16\":7000,\"18\":600}', '{\"17\":65000,\"16\":190000,\"18\":386000}');
 
 -- --------------------------------------------------------
 
@@ -2810,12 +3673,11 @@ INSERT INTO `mktb_usercontract` (`id`, `user_id`, `contract_year`, `contract_num
 -- Структура таблицы `mktb_usergroup`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_usergroup` (
-  `id` tinyint(2) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_usergroup` (
+  `id` tinyint(2) NOT NULL,
   `alias` varchar(255) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `mktb_usergroup`
@@ -2836,23 +3698,26 @@ INSERT INTO `mktb_usergroup` (`id`, `alias`, `name`) VALUES
 -- Структура таблицы `mktb_user_request`
 --
 
-CREATE TABLE IF NOT EXISTS `mktb_user_request` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mktb_user_request` (
+  `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `target_id` int(11) NOT NULL,
   `date` int(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `information` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=2 ;
+  `information` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Дамп данных таблицы `mktb_user_request`
 --
 
 INSERT INTO `mktb_user_request` (`id`, `user_id`, `type`, `target_id`, `date`, `status`, `information`) VALUES
-(1, 30, 'add student to user', 31, 1536386009, 1, '');
+(2, 38, 'add student to user', 27, 1537263147, 1, '{\"source\":\"telegram-bot\",\"chat_id\":11120017}'),
+(3, 39, 'add student to user', 26, 1537524418, 1, '{\"source\":\"telegram-bot\",\"chat_id\":44750223}'),
+(4, 39, 'add student to user', 13, 1537524885, 1, '{\"source\":\"telegram-bot\",\"chat_id\":44750223}'),
+(5, 41, 'add student to user', 13, 1537526266, 1, '{\"source\":\"telegram-bot\",\"chat_id\":322277047}'),
+(6, 38, 'add student to user', 13, 1537596692, 0, '{\"source\":\"telegram-bot\",\"chat_id\":11120017}');
 
 -- --------------------------------------------------------
 
@@ -2860,8 +3725,8 @@ INSERT INTO `mktb_user_request` (`id`, `user_id`, `type`, `target_id`, `date`, `
 -- Структура таблицы `transactions`
 --
 
-CREATE TABLE IF NOT EXISTS `transactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
   `paycom_transaction_id` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
   `paycom_time` varchar(13) COLLATE utf8_unicode_ci NOT NULL,
   `paycom_time_datetime` datetime NOT NULL,
@@ -2872,9 +3737,772 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `state` tinyint(2) NOT NULL,
   `reason` tinyint(2) DEFAULT NULL,
   `receivers` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'JSON array of receivers',
-  `order_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;
+  `order_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `mktb_banner`
+--
+ALTER TABLE `mktb_banner`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_brand`
+--
+ALTER TABLE `mktb_brand`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_category`
+--
+ALTER TABLE `mktb_category`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_category_name`
+--
+ALTER TABLE `mktb_category_name`
+  ADD PRIMARY KEY (`category_id`,`lang_id`);
+
+--
+-- Индексы таблицы `mktb_category_search`
+--
+ALTER TABLE `mktb_category_search`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_id` (`category_id`);
+ALTER TABLE `mktb_category_search` ADD FULLTEXT KEY `search_text` (`search_text`);
+
+--
+-- Индексы таблицы `mktb_contact`
+--
+ALTER TABLE `mktb_contact`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_file`
+--
+ALTER TABLE `mktb_file`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_file_name`
+--
+ALTER TABLE `mktb_file_name`
+  ADD PRIMARY KEY (`file_id`,`lang_id`);
+
+--
+-- Индексы таблицы `mktb_filter`
+--
+ALTER TABLE `mktb_filter`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_filter_to_category`
+--
+ALTER TABLE `mktb_filter_to_category`
+  ADD PRIMARY KEY (`filter_id`,`category_id`);
+
+--
+-- Индексы таблицы `mktb_filter_to_product`
+--
+ALTER TABLE `mktb_filter_to_product`
+  ADD PRIMARY KEY (`filter_value_id`,`product_id`);
+
+--
+-- Индексы таблицы `mktb_filter_value`
+--
+ALTER TABLE `mktb_filter_value`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_group`
+--
+ALTER TABLE `mktb_group`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_lang`
+--
+ALTER TABLE `mktb_lang`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_lesson`
+--
+ALTER TABLE `mktb_lesson`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_module`
+--
+ALTER TABLE `mktb_module`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_module_to_usergroup`
+--
+ALTER TABLE `mktb_module_to_usergroup`
+  ADD PRIMARY KEY (`usergroup_id`,`module_id`);
+
+--
+-- Индексы таблицы `mktb_option`
+--
+ALTER TABLE `mktb_option`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_order`
+--
+ALTER TABLE `mktb_order`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_order_change`
+--
+ALTER TABLE `mktb_order_change`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_page`
+--
+ALTER TABLE `mktb_page`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_page_module`
+--
+ALTER TABLE `mktb_page_module`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_post`
+--
+ALTER TABLE `mktb_post`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product`
+--
+ALTER TABLE `mktb_product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product_name`
+--
+ALTER TABLE `mktb_product_name`
+  ADD PRIMARY KEY (`product_id`,`lang_id`);
+
+--
+-- Индексы таблицы `mktb_product_option`
+--
+ALTER TABLE `mktb_product_option`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product_option_to_product`
+--
+ALTER TABLE `mktb_product_option_to_product`
+  ADD PRIMARY KEY (`product_option_value_id`,`product_id`);
+
+--
+-- Индексы таблицы `mktb_product_option_value`
+--
+ALTER TABLE `mktb_product_option_value`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_product_search`
+--
+ALTER TABLE `mktb_product_search`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `product_id` (`product_id`);
+ALTER TABLE `mktb_product_search` ADD FULLTEXT KEY `search_text` (`search_text`);
+
+--
+-- Индексы таблицы `mktb_review`
+--
+ALTER TABLE `mktb_review`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_slider`
+--
+ALTER TABLE `mktb_slider`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_student_attendance`
+--
+ALTER TABLE `mktb_student_attendance`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_student_mark`
+--
+ALTER TABLE `mktb_student_mark`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_student_to_group`
+--
+ALTER TABLE `mktb_student_to_group`
+  ADD PRIMARY KEY (`student_id`,`group_id`);
+
+--
+-- Индексы таблицы `mktb_student_to_user`
+--
+ALTER TABLE `mktb_student_to_user`
+  ADD PRIMARY KEY (`student_id`,`user_id`);
+
+--
+-- Индексы таблицы `mktb_study_period`
+--
+ALTER TABLE `mktb_study_period`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_subject`
+--
+ALTER TABLE `mktb_subject`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_subject_to_teacher`
+--
+ALTER TABLE `mktb_subject_to_teacher`
+  ADD PRIMARY KEY (`subject_id`,`teacher_id`);
+
+--
+-- Индексы таблицы `mktb_subscribe`
+--
+ALTER TABLE `mktb_subscribe`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tag`
+--
+ALTER TABLE `mktb_tag`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tag_to_product`
+--
+ALTER TABLE `mktb_tag_to_product`
+  ADD PRIMARY KEY (`tag_id`,`product_id`);
+
+--
+-- Индексы таблицы `mktb_teacher_to_group`
+--
+ALTER TABLE `mktb_teacher_to_group`
+  ADD PRIMARY KEY (`teacher_id`,`group_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_api_token`
+--
+ALTER TABLE `mktb_tgbot_api_token`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_botan_shortener`
+--
+ALTER TABLE `mktb_tgbot_botan_shortener`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_callback_query`
+--
+ALTER TABLE `mktb_tgbot_callback_query`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `message_id` (`message_id`),
+  ADD KEY `chat_id_2` (`chat_id`,`message_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_chat`
+--
+ALTER TABLE `mktb_tgbot_chat`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `old_id` (`old_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_chosen_inline_result`
+--
+ALTER TABLE `mktb_tgbot_chosen_inline_result`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_conversation`
+--
+ALTER TABLE `mktb_tgbot_conversation`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `status` (`status`);
+
+--
+-- Индексы таблицы `mktb_tgbot_edited_message`
+--
+ALTER TABLE `mktb_tgbot_edited_message`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `chat_id` (`chat_id`),
+  ADD KEY `message_id` (`message_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `chat_id_2` (`chat_id`,`message_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_file`
+--
+ALTER TABLE `mktb_tgbot_file`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_information`
+--
+ALTER TABLE `mktb_tgbot_information`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_inline_query`
+--
+ALTER TABLE `mktb_tgbot_inline_query`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_message`
+--
+ALTER TABLE `mktb_tgbot_message`
+  ADD PRIMARY KEY (`chat_id`,`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `forward_from` (`forward_from`),
+  ADD KEY `forward_from_chat` (`forward_from_chat`),
+  ADD KEY `reply_to_chat` (`reply_to_chat`),
+  ADD KEY `reply_to_message` (`reply_to_message`),
+  ADD KEY `left_chat_member` (`left_chat_member`),
+  ADD KEY `migrate_from_chat_id` (`migrate_from_chat_id`),
+  ADD KEY `migrate_to_chat_id` (`migrate_to_chat_id`),
+  ADD KEY `reply_to_chat_2` (`reply_to_chat`,`reply_to_message`);
+
+--
+-- Индексы таблицы `mktb_tgbot_request_limiter`
+--
+ALTER TABLE `mktb_tgbot_request_limiter`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_cart`
+--
+ALTER TABLE `mktb_tgbot_store_cart`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_cart_item`
+--
+ALTER TABLE `mktb_tgbot_store_cart_item`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `cart_id` (`cart_id`),
+  ADD KEY `product_id` (`product_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_order`
+--
+ALTER TABLE `mktb_tgbot_store_order`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_order_item`
+--
+ALTER TABLE `mktb_tgbot_store_order_item`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `order_id` (`order_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_store_product`
+--
+ALTER TABLE `mktb_tgbot_store_product`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_telegram_update`
+--
+ALTER TABLE `mktb_tgbot_telegram_update`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `message_id` (`chat_id`,`message_id`),
+  ADD KEY `inline_query_id` (`inline_query_id`),
+  ADD KEY `chosen_inline_result_id` (`chosen_inline_result_id`),
+  ADD KEY `callback_query_id` (`callback_query_id`),
+  ADD KEY `edited_message_id` (`edited_message_id`);
+
+--
+-- Индексы таблицы `mktb_tgbot_user`
+--
+ALTER TABLE `mktb_tgbot_user`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`);
+
+--
+-- Индексы таблицы `mktb_tgbot_user_chat`
+--
+ALTER TABLE `mktb_tgbot_user_chat`
+  ADD PRIMARY KEY (`user_id`,`chat_id`),
+  ADD KEY `chat_id` (`chat_id`);
+
+--
+-- Индексы таблицы `mktb_translation`
+--
+ALTER TABLE `mktb_translation`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_url`
+--
+ALTER TABLE `mktb_url`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `url` (`alias`),
+  ADD UNIQUE KEY `route` (`route`);
+
+--
+-- Индексы таблицы `mktb_user`
+--
+ALTER TABLE `mktb_user`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`);
+
+--
+-- Индексы таблицы `mktb_usercontract`
+--
+ALTER TABLE `mktb_usercontract`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_usergroup`
+--
+ALTER TABLE `mktb_usergroup`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `mktb_user_request`
+--
+ALTER TABLE `mktb_user_request`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT для сохранённых таблиц
+--
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_banner`
+--
+ALTER TABLE `mktb_banner`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_brand`
+--
+ALTER TABLE `mktb_brand`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_category`
+--
+ALTER TABLE `mktb_category`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_category_search`
+--
+ALTER TABLE `mktb_category_search`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_contact`
+--
+ALTER TABLE `mktb_contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_file`
+--
+ALTER TABLE `mktb_file`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_filter`
+--
+ALTER TABLE `mktb_filter`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_filter_value`
+--
+ALTER TABLE `mktb_filter_value`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_group`
+--
+ALTER TABLE `mktb_group`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_lang`
+--
+ALTER TABLE `mktb_lang`
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_lesson`
+--
+ALTER TABLE `mktb_lesson`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_module`
+--
+ALTER TABLE `mktb_module`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_option`
+--
+ALTER TABLE `mktb_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_order`
+--
+ALTER TABLE `mktb_order`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_order_change`
+--
+ALTER TABLE `mktb_order_change`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_page`
+--
+ALTER TABLE `mktb_page`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_page_module`
+--
+ALTER TABLE `mktb_page_module`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_post`
+--
+ALTER TABLE `mktb_post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_product`
+--
+ALTER TABLE `mktb_product`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_product_option`
+--
+ALTER TABLE `mktb_product_option`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_product_option_value`
+--
+ALTER TABLE `mktb_product_option_value`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_product_search`
+--
+ALTER TABLE `mktb_product_search`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_review`
+--
+ALTER TABLE `mktb_review`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_slider`
+--
+ALTER TABLE `mktb_slider`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_student_attendance`
+--
+ALTER TABLE `mktb_student_attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_student_mark`
+--
+ALTER TABLE `mktb_student_mark`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_study_period`
+--
+ALTER TABLE `mktb_study_period`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_subject`
+--
+ALTER TABLE `mktb_subject`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_subscribe`
+--
+ALTER TABLE `mktb_subscribe`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tag`
+--
+ALTER TABLE `mktb_tag`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_api_token`
+--
+ALTER TABLE `mktb_tgbot_api_token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_botan_shortener`
+--
+ALTER TABLE `mktb_tgbot_botan_shortener`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_chosen_inline_result`
+--
+ALTER TABLE `mktb_tgbot_chosen_inline_result`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_conversation`
+--
+ALTER TABLE `mktb_tgbot_conversation`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry', AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_edited_message`
+--
+ALTER TABLE `mktb_tgbot_edited_message`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry', AUTO_INCREMENT=62;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_file`
+--
+ALTER TABLE `mktb_tgbot_file`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_information`
+--
+ALTER TABLE `mktb_tgbot_information`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_request_limiter`
+--
+ALTER TABLE `mktb_tgbot_request_limiter`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Unique identifier for this entry', AUTO_INCREMENT=655;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_cart`
+--
+ALTER TABLE `mktb_tgbot_store_cart`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_cart_item`
+--
+ALTER TABLE `mktb_tgbot_store_cart_item`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart item identifier';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_order`
+--
+ALTER TABLE `mktb_tgbot_store_order`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique cart identifier';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_order_item`
+--
+ALTER TABLE `mktb_tgbot_store_order_item`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Order item identifier';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_tgbot_store_product`
+--
+ALTER TABLE `mktb_tgbot_store_product`
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Unique product identifier';
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_translation`
+--
+ALTER TABLE `mktb_translation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1332;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_url`
+--
+ALTER TABLE `mktb_url`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=554;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_user`
+--
+ALTER TABLE `mktb_user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_usercontract`
+--
+ALTER TABLE `mktb_usercontract`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_usergroup`
+--
+ALTER TABLE `mktb_usergroup`
+  MODIFY `id` tinyint(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT для таблицы `mktb_user_request`
+--
+ALTER TABLE `mktb_user_request`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT для таблицы `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
@@ -2891,7 +4519,7 @@ ALTER TABLE `mktb_tgbot_botan_shortener`
 --
 ALTER TABLE `mktb_tgbot_callback_query`
   ADD CONSTRAINT `mktb_tgbot_callback_query_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`),
-  ADD CONSTRAINT `mktb_tgbot_callback_query_ibfk_2` FOREIGN KEY (`chat_id`, `message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`);
+  ADD CONSTRAINT `mktb_tgbot_callback_query_ibfk_2` FOREIGN KEY (`chat_id`,`message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`);
 
 --
 -- Ограничения внешнего ключа таблицы `mktb_tgbot_chosen_inline_result`
@@ -2911,7 +4539,7 @@ ALTER TABLE `mktb_tgbot_conversation`
 --
 ALTER TABLE `mktb_tgbot_edited_message`
   ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_1` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`),
-  ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_2` FOREIGN KEY (`chat_id`, `message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
+  ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_2` FOREIGN KEY (`chat_id`,`message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
   ADD CONSTRAINT `mktb_tgbot_edited_message_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`);
 
 --
@@ -2928,7 +4556,7 @@ ALTER TABLE `mktb_tgbot_message`
   ADD CONSTRAINT `mktb_tgbot_message_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`),
   ADD CONSTRAINT `mktb_tgbot_message_ibfk_3` FOREIGN KEY (`forward_from`) REFERENCES `mktb_tgbot_user` (`id`),
   ADD CONSTRAINT `mktb_tgbot_message_ibfk_4` FOREIGN KEY (`forward_from_chat`) REFERENCES `mktb_tgbot_chat` (`id`),
-  ADD CONSTRAINT `mktb_tgbot_message_ibfk_5` FOREIGN KEY (`reply_to_chat`, `reply_to_message`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
+  ADD CONSTRAINT `mktb_tgbot_message_ibfk_5` FOREIGN KEY (`reply_to_chat`,`reply_to_message`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
   ADD CONSTRAINT `mktb_tgbot_message_ibfk_6` FOREIGN KEY (`forward_from`) REFERENCES `mktb_tgbot_user` (`id`),
   ADD CONSTRAINT `mktb_tgbot_message_ibfk_7` FOREIGN KEY (`left_chat_member`) REFERENCES `mktb_tgbot_user` (`id`);
 
@@ -2955,7 +4583,7 @@ ALTER TABLE `mktb_tgbot_store_order_item`
 -- Ограничения внешнего ключа таблицы `mktb_tgbot_telegram_update`
 --
 ALTER TABLE `mktb_tgbot_telegram_update`
-  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_1` FOREIGN KEY (`chat_id`, `message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
+  ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_1` FOREIGN KEY (`chat_id`,`message_id`) REFERENCES `mktb_tgbot_message` (`chat_id`, `id`),
   ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_2` FOREIGN KEY (`inline_query_id`) REFERENCES `mktb_tgbot_inline_query` (`id`),
   ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_3` FOREIGN KEY (`chosen_inline_result_id`) REFERENCES `mktb_tgbot_chosen_inline_result` (`id`),
   ADD CONSTRAINT `mktb_tgbot_telegram_update_ibfk_4` FOREIGN KEY (`callback_query_id`) REFERENCES `mktb_tgbot_callback_query` (`id`),
@@ -2967,6 +4595,7 @@ ALTER TABLE `mktb_tgbot_telegram_update`
 ALTER TABLE `mktb_tgbot_user_chat`
   ADD CONSTRAINT `mktb_tgbot_user_chat_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `mktb_tgbot_user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `mktb_tgbot_user_chat_ibfk_2` FOREIGN KEY (`chat_id`) REFERENCES `mktb_tgbot_chat` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

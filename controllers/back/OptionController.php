@@ -111,7 +111,7 @@ class OptionController extends Controller {
                     $result = $model->save(true);
                 }
             }
-            if($result){
+            if(!empty($result)){
                 $model->index();
                 $viewFile = 'option-list';
             }

@@ -40,6 +40,7 @@ class SubjectModel extends Model
         $this->document->addScript(THEMEURL_ADMIN . '/plugins/mixitup-3/dist/mixitup.min.js');
         
         $controls = [];
+        $controls['save-schedule'] = $this->linker->getUrl($this->control . '/save-schedule', true);
         $controls['list_ajax'] = $this->linker->getUrl($this->control . '/list_ajax', true);
         $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $controls['delete'] = $this->linker->getUrl($this->control . '/delete', true);
@@ -369,6 +370,64 @@ class SubjectModel extends Model
         }
 
         return $return;
+    }
+
+    public function saveSchedule()
+    {
+        $rules = [ 
+            'post' => [
+
+            ],
+            'files' => [
+                'new_file' => [ ['isImage', ['isRequired' => 1]] ]
+            ]
+
+        ];
+        $_POST = $this->cleanForm($_POST);
+
+        $data['post'] = $_POST;
+        $data['files'] = $_FILES;
+
+        $valid = $this->validator->validate($rules, $data);
+        if(!$valid){
+            $this->errorText = $this->t('error schedule file upload', 'back');
+            $this->errors = $this->validator->lastErrors;
+            return false;
+        }
+        else{
+            $update = [];
+            
+            $file = $_FILES['new_file'];
+            
+            $ext = substr(strrchr($file['name'], '.'), 1);
+            $mimeType = $file['type'];
+            $tmpName = $file['tmp_name'];
+
+            $currentFileName = $this->getOption('school_schedule_file');
+            $currentFile = BASEPATH . '/uploads/' . $currentFileName;
+
+            $update['content'] = $fileName;
+
+            if(file_exists($currentFile)){
+                unlink($currentFile);
+            }
+
+            $newFileName = 'schedule' . rand(10000, 99999) . '.' . $ext;
+            $newFile = BASEPATH . '/uploads/' . $newFileName;
+            $uploadResult = move_uploaded_file($tmpName, $newFile);
+
+            $updateResult = $this->qb->where('name', 'school_schedule_file')->update('??option', ['content' => $newFileName]);
+
+            if(!$uploadResult || !$updateResult){
+                $this->errorText = $this->t('error schedule file upload', 'back');
+                $this->errors['error db'] = $this->t('error db', 'back');
+                return false;
+            }
+            else{                    
+                $this->successText = $this->t('success schedule file upload', 'back');
+                return true;
+            }
+        }
     }
 
 }

@@ -514,8 +514,6 @@ class SynchroModel extends Model {
                                 $resp = $client->request('GET', $currentFile);
                                 $fileContent = $resp->getBody();
                                 if(!$fileContent){
-                                    file_put_contents('ppp1.txt', $currentFile);
-                                    file_put_contents('ppp.txt', $saveFile);
                                     exit;
                                 }
                                 $resource = fopen($saveFile, 'w');

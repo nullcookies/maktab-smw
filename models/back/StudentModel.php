@@ -219,10 +219,6 @@ class StudentModel extends Model
         $query .= ' ORDER BY ' . $order . ' ' . $orderDir . ' ' . (!empty($order2) && !empty($orderDir2) ? (', ' . $order2 . ' ' . $orderDir2) : '') . ' ';
         $query .= ' LIMIT ' . $offset . ', ' . $limit . ' ';
 
-
-        file_put_contents('ppp1.txt', print_R($query,true));
-        file_put_contents('ppp2.txt', print_R($where_params,true));
-
         $getItems = $this->qb->prepare($query);
         $getItems->execute($where_params);
 

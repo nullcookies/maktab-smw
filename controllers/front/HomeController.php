@@ -47,6 +47,12 @@ class HomeController extends Controller {
         $viewFile = 'home';
 
         switch($_SESSION['usergroup']){
+            case 1: 
+            case 2: 
+            case 3: 
+            case 4: 
+                $viewFile = 'home-admin';
+                break;
             case $teacher->usergroup: 
                 $viewFile = 'home-teacher';
                 break;

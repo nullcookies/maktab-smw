@@ -131,6 +131,10 @@ class GenericmessageCommand extends SystemCommand
             $update['message']['text'] = '/others contacts';
             return (new OthersCommand($this->telegram, new Update($update)))->preExecute();
         }
+        elseif($text === self::t($lang_id, 'button_school_schedule')){
+            $update['message']['text'] = '/others school_schedule';
+            return (new OthersCommand($this->telegram, new Update($update)))->preExecute();
+        }
         // elseif($text === self::t($lang_id, 'cart')){
         //     $update['message']['text'] = '/cart';
         //     return (new CartCommand($this->telegram, new Update($update)))->preExecute();

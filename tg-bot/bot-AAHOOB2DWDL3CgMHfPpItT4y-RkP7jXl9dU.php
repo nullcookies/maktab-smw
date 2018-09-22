@@ -28,7 +28,8 @@ $botDir = 'tg-bot';
 $serverName = 'http' . ((isset($_SERVER['HTTPS'])) ? 's' : '') . '://' . $_SERVER['SERVER_NAME'];
 define('BASEPATH', dirname(__DIR__));
 define('BOTPATH', BASEPATH . '/' . $botDir);
-define('BASEURL', $serverName . '/' . $botDir);
+define('BASEURL', $serverName);
+define('BOTURL', $serverName . '/' . $botDir);
 
 //language constants
 define('LANG_MAIN', '1');

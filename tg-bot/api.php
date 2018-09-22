@@ -19,7 +19,8 @@ else{
 
 $serverName = 'http' . ((isset($_SERVER['HTTPS'])) ? 's' : '') . '://' . $_SERVER['SERVER_NAME'];
 define('BASEPATH', dirname(__DIR__));
-define('BASEURL', $serverName . '/tg-bot');
+define('BASEURL', $serverName);
+define('BOTURL', $serverName . '/tg-bot');
 
 require BASEPATH . '/vendor/autoload.php';
 require BASEPATH . 'tg-bot//ApiClass.php';

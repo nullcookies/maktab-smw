@@ -26,7 +26,7 @@
                                     <select id="group_id" name="lesson[group_id]" class="custom-select">
                                         <option value=""><?=$this->t('choose...', 'front')?></option>
                                         <?php foreach ($groups as $value) { ?>
-                                        <option value="<?=$value['id']?>"><?=$value['grade']?></option>
+                                        <option value="<?=$value['id']?>"><?=$value['grade']?> - <?=$value['name']?></option>
                                         <?php } ?>
                                     </select>
                                 </div>

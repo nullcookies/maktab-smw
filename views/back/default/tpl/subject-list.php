@@ -18,6 +18,26 @@
       
       <?=$this->renderNotifications($successText, $errorText)?>
 
+      <div class="box box-success">
+          <div class="box-header">
+              <h3 class="box-title">Загрузить файл расписания (картинка)</h3>
+          </div>
+          <div class="box-body">
+              <form action="<?=$controls['save-schedule']?>" method="post" enctype="multipart/form-data" >
+                <div class="form-group <?php if(isset($errors['new_file'])){ ?>has-error<?php } ?>">
+                    <input type="file" name="new_file">
+                    <?php if(isset($errors['new_file'])){ ?>
+                    <div class="help-block"><?=$this->t($errors['new_file'], 'back')?></div>
+                    <?php } ?>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-success" type="submit" value="<?=$this->t('btn upload', 'back')?>">
+                </div>
+              </form>
+          </div>
+            
+      </div>
+      <br>
       <div>
           <p>
               <a href="<?=$controls['view']?>" class="btn btn-app btn-success">

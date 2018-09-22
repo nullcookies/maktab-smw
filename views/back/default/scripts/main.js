@@ -205,9 +205,10 @@ $(document).ready(function () {
               // }
               // d.testControl = 'control';
             },
-            error: function (xhr, error, thrown) {
-                // console.log(xhr);
-            }
+	        error: function(err, status){
+	            // what error is seen(it could be either server side or client side.
+	            console.log(err);
+	        }
         }
 
     });

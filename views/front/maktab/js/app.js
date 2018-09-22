@@ -1472,8 +1472,13 @@ $(function () {
                 "url": dataTableAjaxUrl,
                 "type": "POST",
                 "data": function(d){
-
-                }
+                	// console.log(d);
+                },
+		        error: function(err, status){
+		            // what error is seen(it could be either server side or client side.
+		            console.log(err);
+		            console.log(status);
+		        }
             }
         });
         dataTableAjax.on( 'page.dt order.dt search.dt',  function (e){ 

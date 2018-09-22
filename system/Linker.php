@@ -4,10 +4,12 @@ namespace system;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Linker {
+class Linker
+{
     
-    private $url;
     public $lang_prefix;
+
+    private $url;
     private $extensions;
 
     public function __construct($lang_prefix = false){
@@ -118,4 +120,3 @@ class Linker {
     }
 
 }
-

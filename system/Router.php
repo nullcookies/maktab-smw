@@ -4,7 +4,8 @@ namespace system;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Router extends Component {
+class Router extends Component
+{
 
     
     public $route;
@@ -125,6 +126,9 @@ class Router extends Component {
                     exit('Access Error');
                 }
             }
+
+
+
             if(!$adminAccess){
                 $urlPieces = ['user', 'login'];
                 //header('Location: ' . BASEURL . '/' . $this->config['adminAccess'] . '/user/login/' );
@@ -132,6 +136,12 @@ class Router extends Component {
             }
         }
         else{
+            // no admin url
+            //TEMP: redirect to admin
+            if(!empty($_SESSION['usergroup']) && ($_SESSION['usergroup'] == 2 || $_SESSION['usergroup'] == 3)){
+                $this->redirect(BASEURL . '/' . $this->config['adminAccess'] . '/');
+            }
+
             //если не админка и включена режим обслуживания выходим
             if($this->getOption('maintainance') == 1){
                 exit('Site under maintainance');

@@ -16,7 +16,7 @@
 	            <div>
 	            	<ul class="list-group">
 	            		<li class="list-group-item">
-	            			<?=$teacher->lastname?> <?=$teacher->firstname?> <?=$teacher->middlename?>
+	            			<?=$user->lastname?> <?=$user->firstname?> <?=$user->middlename?>
 	            		</li>
 	            	</ul>
 	            </div>

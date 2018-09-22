@@ -4,6 +4,7 @@ namespace controllers\front;
 
 use \system\Controller;
 use \models\front\LessonModel;
+use \models\objects\Teacher;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -31,12 +32,28 @@ class LessonController extends Controller {
             ],
         ];
         
-        $model = new LessonModel;
+        $model = new LessonModel();
         $model->index();
         $this->data = $model->data;
         $this->document = $model->document;
 
-        $viewFile = 'lesson';
+        $teacher = new Teacher();
+
+        $viewFile = 'lesson-all';
+
+        switch($_SESSION['usergroup']){
+            case 1: 
+            case 2: 
+            case 3: 
+            case 4: 
+                $viewFile = 'lesson-all';
+                break;
+            case $teacher->usergroup: 
+                $viewFile = 'lesson';
+                break;
+            default: 
+                exit('Access Error!');
+        }
 
         $this->content = $this->render($viewFile);
     }
@@ -45,6 +62,15 @@ class LessonController extends Controller {
         $model = new LessonModel;
 
         $model->list_ajax();
+        $this->data = $model->data;
+            
+        $this->json($this->data);
+    }
+
+    public function list_ajax_full() {
+        $model = new LessonModel;
+
+        $model->list_ajax_full();
         $this->data = $model->data;
             
         $this->json($this->data);
@@ -80,7 +106,21 @@ class LessonController extends Controller {
         $this->data = $model->data;
         $this->document = $model->document;
 
-        $viewFile = 'lesson-view';
+        $viewFile = 'lesson-view-all';
+
+        switch($_SESSION['usergroup']){
+            case 1: 
+            case 2: 
+            case 3: 
+            case 4: 
+                $viewFile = 'lesson-view-all';
+                break;
+            case $teacher->usergroup: 
+                $viewFile = 'lesson-view';
+                break;
+            default: 
+                exit('Access Error!');
+        }
 
         $this->content = $this->render($viewFile);
     }

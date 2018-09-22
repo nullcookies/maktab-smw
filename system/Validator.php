@@ -237,31 +237,43 @@ class Validator {
         return $return;
 	}
     
-    public function isImage($file) {
+    public function isImage($file, $params = ['isRequired' => false]) {
+
 		$return = true;
-		foreach($this->blacklist as $val){
-			if(preg_match("/$val/i",strrchr($file["name"],"."))){
-				$return = false;
-				$this->lastError = 'error not allowed file';
-				break;
-			}
-		}
 		$size = $file["size"];
 		$type = $file["type"];
-		if(($type != "image/jpeg") && ($type != "image/jpg") && ($type != "image/png") && ($type != "image/gif")){
+		if(isset($params['isRequired']) && $params['isRequired'] && $file['error'] > 0){
+			$return = false;
+			$this->lastError = 'error file not uploaded';
+		}
+		if ($return && count($this->blacklist)){
+			foreach($this->blacklist as $val){
+				if(preg_match("/$val/i", strrchr($file["name"], "."))){
+					$return = false;
+					$this->lastError = 'error not allowed file';
+					break;
+				}
+			}
+		}
+		if($return && ($type != "image/jpeg") && ($type != "image/jpg") && ($type != "image/png") && ($type != "image/gif")){
 			$return = false;
 			$this->lastError = 'error not allowed file';
 		}
-		if($size > $this->config['params']['max_image_size']){
+		if($return && $size > $this->config['params']['max_image_size']){
 			$return = false;
 			$this->lastError = 'error max image size: ' . ($this->config['max_image_size'] / 1024 / 1024) . 'mb';
 		}
 
-		list($width, $height) = getimagesize($file['tmp_name']);
-		if($width > $this->config['params']['max_image_width'] || $height > $this->config['params']['max_image_height']){
-			$return = false;
-			$this->lastError = 'error max image dimensions: ' . $this->config['params']['max_image_width'] . 'x' . $this->config['params']['max_image_height'];
+		if($return && $file['error'] === 0) {
+			//than check image sizes
+			list($width, $height) = getimagesize($file['tmp_name']);
+			if($width > $this->config['params']['max_image_width'] || $height > $this->config['params']['max_image_height']){
+				$return = false;
+				$this->lastError = 'error max image dimensions: ' . $this->config['params']['max_image_width'] . 'x' . $this->config['params']['max_image_height'];
+			}
 		}
+			
+
 		return $return;
 	}
     

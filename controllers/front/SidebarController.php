@@ -35,6 +35,7 @@ class SidebarController extends Controller {
             case 1:
             case 2:
             case 3:
+            case 4:
                 $viewFile = 'sidebar-admin';
                 break;
             default: 

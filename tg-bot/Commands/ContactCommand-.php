@@ -93,7 +93,6 @@ class ContactCommand extends UserCommand
     	$offices  = self::getOffices($id, $lang_id);
     	if($offices){
     		foreach($offices as $value){
-                file_put_contents('ppp.txt', $value['content']);
     			$value['content'] = json_decode($value['content'], true);
     			foreach ($value['content'] as $key1 => $value1) {
     				$regionText .= self::t($lang_id, $key1) . ": " . $value1 . "\n";

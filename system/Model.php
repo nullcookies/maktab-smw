@@ -14,7 +14,8 @@ use SQLBuilder\Universal\Query\DeleteQuery;
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Model extends Component {
+class Model extends Component
+{
 
     public $data;
     public $errors;

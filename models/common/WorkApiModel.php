@@ -16,7 +16,7 @@ class WorkApiModel extends Model
 	/**
 	 * App host name
 	 */
-	public $host = 'http://python.quitebuy.com';
+	public $host = 'http://domain.com';
 
 	/**
 	 * cookie file path

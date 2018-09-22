@@ -8,9 +8,11 @@ use \models\back\SubjectModel;
 defined('BASEPATH') OR exit('No direct script access allowed');
 defined('BASEURL_ADMIN') OR exit('No direct script access allowed');
 
-class SubjectController extends Controller {
+class SubjectController extends Controller
+{
     
-    public function index() {
+    public function index()
+    {
         
         $this->modules = [
             [
@@ -41,7 +43,8 @@ class SubjectController extends Controller {
         $this->content = $this->render('subject-list');
     }
 
-    public function list_ajax() {
+    public function list_ajax()
+    {
         $model = new SubjectModel;
 
         $model->list_ajax();
@@ -50,7 +53,8 @@ class SubjectController extends Controller {
         $this->json($this->data);
     }
     
-    public function view() {    
+    public function view()
+    {    
         
         $this->modules = [
             [
@@ -86,15 +90,16 @@ class SubjectController extends Controller {
         $this->document = $model->document;
 
         $this->content = $this->render($viewFile);
-        
     }
 
-    public function toggle() {
+    public function toggle()
+    {
         $model = new SubjectModel;
         $this->content = $model->toggle();
     }
 
-    public function delete() {
+    public function delete()
+    {
         $this->modules = [
             [
                 'side' => 'back',
@@ -128,5 +133,36 @@ class SubjectController extends Controller {
         $this->content = $this->render('subject-list');
     }
 
+    public function saveSchedule()
+    {
+        $this->modules = [
+            [
+                'side' => 'back',
+                'controller' => 'header',
+                'action' => 'index',
+                'position' => 'header'
+            ],
+            [
+                'side' => 'back',
+                'controller' => 'footer',
+                'action' => 'index',
+                'position' => 'footer'
+            ],
+            [
+                'side' => 'back',
+                'controller' => 'sidebar',
+                'action' => 'index',
+                'position' => 'sidebar'
+            ]
+        ];
+        
+        $model = new SubjectModel;
+        $model->saveSchedule();
+        $model->index();
+        $this->data = $model->data;
+        $this->document = $model->document;
+
+        $this->content = $this->render('subject-list');
+    }
 
 }

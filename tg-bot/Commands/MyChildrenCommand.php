@@ -379,6 +379,17 @@ class MyChildrenCommand extends UserCommand
 	        }
 
         }
+        else{
+        	//send contacts to save main user
+        	$keyboard = StartCommand::getContactKeyboard($lang_id);
+	        $data = [
+	            'chat_id'      	=> $chat_id,
+	            'reply_markup' 	=> $keyboard,
+                'text'    		=> self::t($lang_id, 'send_your_contacts'),
+	        ];
+	        return Request::sendMessage($data);
+        }
+
 
 		$sendtext = '';
         $sendStudentsKeyboard = false;
