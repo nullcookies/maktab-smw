@@ -232,8 +232,8 @@ class StartCommand extends SystemCommand
             }
         }
 
-        $user->firstname = $contact->getFirstName();
-        $user->lastname = $contact->getLastName();
+        $user->firstname = (NULL != $contact->getFirstName()) ? $contact->getFirstName() : '';
+        $user->lastname = (NULL != $contact->getLastName()) ? $contact->getLastName() : '';
         $user->username = $phoneNumber;
         $user->phone = $phoneNumber;
         $user->status = 1;

@@ -103,7 +103,7 @@ class FeedbackCommand extends UserCommand
             $notes['state']--;
             $text = '';
         }
-        if($text == self::t($lang_id, 'button_cancel') || $notes['state'] < 0) {
+        if($text == self::t($lang_id, 'button_cancel') || ( isset($notes['state']) && $notes['state'] < 0 )) {
             $data['text'] = self::t($lang_id, 'feedback_cancelled');
             $data['reply_markup'] = StartCommand::getKeyboard($lang_id);
 

@@ -108,6 +108,8 @@ class LessonController extends Controller {
 
         $viewFile = 'lesson-view-all';
 
+        $teacher = new Teacher();
+
         switch($_SESSION['usergroup']){
             case 1: 
             case 2: 
