@@ -322,12 +322,13 @@ class LessonModel extends Model
         $controls['view'] = $this->linker->getUrl($this->control . '/view', true);
         $data['controls'] = $controls;
 
+        $groupModel = new GroupModel();
         $groups = [];
         $getGroups = $this->qb->get('??group');
         if($getGroups->rowCount() > 0){
             $groups = $getGroups->fetchAll();
             foreach ($groups as $key => $value) {
-                $groups[$key]['grade'] = $this->getGrade($value['start_year'], $value['end_year']) . ' - ' . $value['name'];
+                $groups[$key]['grade'] = $groupModel->getGrade($value['start_year'], $value['end_year']) . ' - ' . $value['name'];
             }
         }
         $data['groups'] = $groups;
@@ -352,7 +353,7 @@ class LessonModel extends Model
 
         $students = [];
         if(!$this->errors){
-            $getStudents = $this->qb->select('u.id, u.firstname, u.lastname')->where('s2g.group_id', '?')->join('??student_to_group s2g', 's2g.student_id = u.id')->get('??user u', [$lesson->group_id]);
+            $getStudents = $this->qb->select('u.id, u.firstname, u.lastname')->where('s2g.group_id', '?')->join('??student_to_group s2g', 's2g.student_id = u.id')->order('u.lastname')->order('u.firstname')->get('??user u', [$lesson->group_id]);
             $students = $getStudents->fetchAll();
         }
 
